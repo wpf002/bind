@@ -19,6 +19,10 @@ export type SeedCase = {
   analysis?: string;
   /** Primary first. Taken from the source taxonomy table. */
   shapes: string[];
+  /** Why the current shapes were chosen, when someone other than the source author chose them. */
+  shapeRationale?: string;
+  /** Superseded assignments, kept so case history survives taxonomy changes. */
+  shapeHistory?: { shape: string; from: string; until: string; rationale: string }[];
   resolvability: "unresolvable" | "resolvable_costly" | "tech_gap";
   resolution?: "legislative" | "judicial" | "engineering" | "abandonment";
   resolvedBy?: string;
@@ -76,6 +80,8 @@ export const shapes = [
     definition: "Law presumes location; system computes it at runtime.",
     boundaryCriteria: "Not truly unresolvable, but costly. Owner: Architect.",
     provenanceNote: "Its only case (C1) fails the strict inclusion test and sits in the corpus as a boundary case.",
+    retiredAt: new Date("2026-10-31"),
+    retiredNote: "Retired in taxonomy v2. Every case of this shape is resolvable by pinning data in-country, so none can pass the inclusion test. C1 stays as a boundary case with no shape.",
   },
   {
     slug: "deliberate-blindness",
@@ -258,7 +264,8 @@ export const cases: SeedCase[] = [
     ref: "C1",
     title: "Data localization vs. anycast + global load balancing",
     statement: "The law asks a question the system cannot answer without giving up the property (global failover, latency) it was built for.",
-    shapes: ["locality-emergent-placement"],
+    shapes: [],
+    shapeHistory: [{ shape: "locality-emergent-placement", from: "2026-01-12", until: "2026-10-31", rationale: "Shape retired in taxonomy v2." }],
     resolvability: "resolvable_costly",
     inclusionVerdict: "fails",
     inclusionReasoning: "Yes, expensively, by abandoning the architecture. So it fails the strict inclusion test and sits here as a boundary case.",
@@ -446,9 +453,10 @@ export const cases: SeedCase[] = [
     ref: "H1",
     title: "EU data retention mandates vs. minimization",
     statement: "Member states keep re-legislating retention regimes the CJEU keeps striking (Digital Rights Ireland, Tele2, La Quadrature). Structural, cyclical.",
-    shapes: [],
+    shapes: ["sovereign-contradiction"],
+    shapeRationale: "Taxonomy v2, assigned by claude-opus-5-5 pending review. National legislatures mandate retention; the CJEU, applying the Charter, strikes it. Two authorities, opposite commands, one dataset.",
     resolvability: "unresolvable",
-    inclusionVerdict: "undecided",
+    inclusionVerdict: "passes",
     instruments: [
       { key: "euRetention", role: "mandating" },
       { key: "gdpr5c", role: "conflicting" },
@@ -459,9 +467,10 @@ export const cases: SeedCase[] = [
     ref: "H2",
     title: "PCI DSS 10.x / SOC2 logging vs. deletion rights over IPs and access records",
     statement: "Legitimate interest usually carries this, but the tension is permanent.",
-    shapes: [],
+    shapes: ["mandate-mutation"],
+    shapeRationale: "Taxonomy v2, assigned by claude-opus-5-5 pending review. Tamper-evident audit logs (PCI DSS Req. 10) forbid the deletion an Art. 17 request asks for. Fails inclusion: Art. 17(3)(e) and legitimate-interest balancing let the controller refuse, so a legal mechanism already carries it.",
     resolvability: "unresolvable",
-    inclusionVerdict: "undecided",
+    inclusionVerdict: "fails",
     instruments: [
       { key: "pci10", role: "mandating" },
       { key: "soc2", role: "mandating" },
@@ -473,9 +482,10 @@ export const cases: SeedCase[] = [
     title: "FRCP 37(e) litigation hold vs. ephemeral messaging",
     statement: "Auto-delete defaults are a security control and a spoliation risk simultaneously.",
     analysis: "Sanctions have landed (Google Chat retention; Uber's Wickr use).",
-    shapes: [],
+    shapes: ["mandate-mutation"],
+    shapeRationale: "Taxonomy v2, assigned by claude-opus-5-5 pending review. Inverse direction of shape 1: preservation duties forbid the deletion that ephemeral messaging uses as a security control. Passes for data under hold. Shape 1 definition should be widened to cover both directions.",
     resolvability: "unresolvable",
-    inclusionVerdict: "undecided",
+    inclusionVerdict: "passes",
     instruments: [{ key: "frcp37e", role: "mandating" }],
     property: prop("Ephemeral Messaging", "Auto-delete defaults are a security control."),
   },

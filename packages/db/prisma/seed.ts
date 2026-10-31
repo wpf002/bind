@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { audits, cases, instruments, jurisdictions, rejections, shapes } from "./corpus";
+import { instrumentVerifications as iv, sourceVerifications as sv, type Verification } from "./verifications";
 
 const prisma = new PrismaClient();
 const slugOf = (i: number) => `bind-${String(i + 1).padStart(4, "0")}`;
@@ -23,7 +24,10 @@ async function main() {
   const inst = new Map<string, string>();
   for (const [key, i] of Object.entries(instruments)) {
     const { jurisdiction, ...rest } = i;
-    const row = await prisma.legalInstrument.create({ data: { ...rest, sourceUrl: "", jurisdictionId: jur.get(jurisdiction)! } });
+    const v = iv[key];
+    const row = await prisma.legalInstrument.create({
+      data: { ...rest, provision: v?.provision ?? rest.provision, sourceUrl: v?.url ?? "", jurisdictionId: jur.get(jurisdiction)! },
+    });
     inst.set(key, row.id);
   }
 
@@ -64,7 +68,12 @@ async function main() {
         status: "draft",
         firstSeenAt: seenAt,
         sortKey: i + 1,
-        shapes: { create: c.shapes.map((s, n) => ({ shapeId: shape.get(s)!, isPrimary: n === 0 })) },
+        shapes: {
+          create: [
+            ...c.shapes.map((s, n) => ({ shapeId: shape.get(s)!, isPrimary: n === 0, rationale: c.shapeRationale, taxonomyVersion: c.shapeRationale || c.shapeHistory ? "v2" : "v1" })),
+            ...(c.shapeHistory ?? []).map((h) => ({ shapeId: shape.get(h.shape)!, isPrimary: true, rationale: h.rationale, taxonomyVersion: "v1", assignedAt: new Date(h.from), supersededAt: new Date(h.until) })),
+          ],
+        },
         instruments: { create: c.instruments.map((x) => ({ instrumentId: inst.get(x.key)!, role: x.role, note: x.note })) },
         properties: propertyId ? { create: [{ propertyId }] } : undefined,
         paperingOvers: { create: c.paperingOvers ?? [] },
@@ -74,22 +83,28 @@ async function main() {
     const cites = [
       ...c.instruments.map((x) => {
         const d = instruments[x.key]!;
-        return { label: `${d.instrument}, ${d.provision}`, note: c.flags?.[x.key] };
+        const v = iv[x.key];
+        return { label: `${d.instrument}, ${v?.provision ?? d.provision}`, note: c.flags?.[x.key], v };
       }),
-      ...(c.sources ?? []),
-    ];
+      ...(c.sources ?? []).map((s) => ({ ...s, v: sv[s.label] })),
+    ] as { label: string; note?: string; v?: Verification }[];
     for (const s of cites) {
       await prisma.citation.create({
         data: {
           targetType: "case",
           targetId: row.id,
           label: s.label,
-          url: "",
-          verificationStatus: "unverified",
-          verificationNote: s.note ?? "Source states citations are from working memory and need verification.",
+          url: s.v?.url ?? "",
+          publisher: s.v?.publisher,
+          quote: s.v?.quote,
+          retrieved: s.v ? new Date(s.v.verifiedAt) : undefined,
+          verificationStatus: s.v?.status ?? "unverified",
+          verifiedAt: s.v ? new Date(s.v.verifiedAt) : undefined,
+          verifiedBy: s.v?.verifiedBy,
+          verificationNote: s.v?.note ?? s.note ?? "Source states citations are from working memory and need verification.",
         },
       });
-      citations++;
+      if (!s.v) citations++;
     }
   }
 
@@ -97,7 +112,7 @@ async function main() {
     await prisma.rejection.create({ data: { ...r, decidedAt: new Date(base + (i * 5 + 2) * 86_400_000) } });
   }
 
-  console.log(`seeded ${shapes.length} shapes, ${cases.length} cases (0 published), ${citations} unverified citations, ${rejections.length} rejections`);
+  console.log(`seeded ${shapes.length} shapes, ${cases.length} cases (0 published), ${citations} unverified citations, ${Object.keys(iv).length + Object.keys(sv).length} ledger entries, ${rejections.length} rejections`);
 }
 
 main()

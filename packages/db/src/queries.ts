@@ -82,8 +82,9 @@ export async function getCase(slug: string) {
 
 export type CaseDetail = NonNullable<Awaited<ReturnType<typeof getCase>>>;
 
-export async function listShapes() {
+export async function listShapes(opts: { includeRetired?: boolean } = {}) {
   const shapes = await prisma.shape.findMany({
+    where: opts.includeRetired ? undefined : { retiredAt: null },
     orderBy: { ordinal: "asc" },
     include: {
       audits: { orderBy: { runAt: "desc" }, take: 1 },
@@ -143,7 +144,7 @@ export async function stats() {
     prisma.case.groupBy({ by: ["resolution"], _count: true }),
     prisma.citation.count({ where: { verificationStatus: { in: ["unverified", "disputed"] } } }),
     prisma.rejection.count(),
-    prisma.shape.count(),
+    prisma.shape.count({ where: { retiredAt: null } }),
     prisma.caseTransition.count(),
   ]);
   const res = Object.fromEntries(byResolution.map((r) => [r.resolution, r._count]));

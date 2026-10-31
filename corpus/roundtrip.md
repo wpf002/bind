@@ -4,7 +4,7 @@
 - **Incompatibility:** Erasure requires the operation the threat model forbids.
 - **Current papering-over:** Off-chain storage: Off-chain storage with on-chain hash pointers. Crypto-shredding: Destroy the key, leave the ciphertext. CNIL's 2018 guidance treated key destruction as a possible route. I don't believe the EDPB has ever endorsed it, which leaves it legally untested.
 - **Resolvable?** resolvable_costly. Partially, but only by moving personal data out of the architecture, i.e. by not using the property you adopted the ledger for.
-- **Sources:** EDPB position on crypto-shredding: ⚠ in source: no EDPB endorsement is believed to exist. Confirm.
+- **Sources:** EDPB position on crypto-shredding: The EDPB has now addressed it: Guidelines 02/2025 on blockchain (consultation version April 2025, section 5.2). It does not endorse key destruction as erasure and says technical impossibility can't justify non-compliance. This strengthens A1. Read from the April 2025 version; the final version adopted in 2026 needs a check for changes to section 5.2.
 
 ### A2. Erasure/deletion rights vs. mandatory retention
 - **Legal:** GDPR Art. 17; CCPA Deletion; SEC 17a-4; FRCP 37(e) (Litigation hold.)
@@ -34,11 +34,11 @@
 - **Resolvable?** unresolvable. No. This is a legal conflict that merely surfaces in architecture.
 
 ### B2. eIDAS 2.0 QWAC trust-root mandate vs. root program distrust authority
-- **Legal:** eIDAS 2.0 QWAC trust-root mandate
+- **Legal:** eIDAS 2.0 Art. 45(1a), Art. 45a
 - **Architectural:** The Web PKI's only real security mechanism is the ability to distrust a misbehaving CA quickly.
 - **Incompatibility:** A trust root you cannot remove is not a trust decision.
 - **Resolvable?** unresolvable. No. Mozilla/Google's public objections were the tell.
-- **Sources:** eIDAS 2.0, QWAC trust-root mandate: ⚠ in source: least confident on the specific provision.
+- **Sources:** eIDAS 2.0, Art. 45(1a), Art. 45a: Regulation (EU) 2024/1183 amends Art. 45 and inserts Art. 45a. The adopted text requires recognition and display of QWAC identity data. Recital 65 keeps browser control over TLS trust, and Art. 45a(2) lets browsers take precautionary measures against a certificate, subject to notification and supervisory review. The case's claim that browsers must trust member-state CAs describes the draft, not the adopted text. B2 needs a rewrite or a move to a resolved-legislatively transition.
 
 ### C1. Data localization vs. anycast + global load balancing
 - **Legal:** 242-FZ Localization; PIPL/CSL Localization; RBI Payments localization
@@ -54,12 +54,12 @@
 - **Resolvable?** unresolvable. No. Either the operator can inspect user data or it can't.
 
 ### D2. UK Online Safety Act s.121 scanning notices vs. E2EE
-- **Legal:** UK OSA s.121
+- **Legal:** UK OSA s.121(2)(a)(iii)
 - **Architectural:** The architecture exists to preclude detection capability.
 - **Incompatibility:** Same shape, different direction: the law requires detection capability that the architecture exists to preclude.
 - **Note:** Deferred in practice ("when technically feasible"), which is a legislature admitting the incompatibility without repealing the clause.
 - **Resolvable?** unresolvable
-- **Sources:** Online Safety Act, s.121: ⚠ in source: least confident on the specific provision.
+- **Sources:** Online Safety Act, s.121(2)(a)(iii): Section number is correct. 'When technically feasible' is not in the statute. It comes from a ministerial statement, which needs its own Hansard citation before D2's 'deferred in practice' claim can stand. s.122 requires a skilled person's report before a notice.
 
 ### D3. Exposure notification: DP-3T/GAEN vs. epidemiological need
 - **Legal:** Public Health Linkage data (Legal/institutional.)
@@ -69,11 +69,11 @@
 - **Resolvable?** unresolvable
 
 ### E1. Right to repair vs. parts pairing / attested firmware
-- **Legal:** EU R2R Directive 2024/1799; US States Right to repair
+- **Legal:** EU R2R Art. 5(6); US States Right to repair
 - **Architectural:** Secure boot and component attestation work by rejecting unattested parts.
 - **Incompatibility:** Secure boot and component attestation work by rejecting unattested parts. Repair requires installing exactly those.
 - **Resolvable?** unresolvable. No, not without a plural attestation model that doesn't currently exist.
-- **Sources:** Directive (EU) 2024/1799, Directive 2024/1799: ⚠ in source: least confident on the specific provision.
+- **Sources:** Directive (EU) 2024/1799, Art. 5(6): Directive number is correct. The anti-pairing rule is Art. 5(6). It carries an exception for 'legitimate and objective factors'. Whether security attestation qualifies is the open question, and it decides E1's inclusion verdict. Scope is limited to goods in Annex II.
 
 ### E2. DMA Art. 6(4) sideloading vs. single-root iOS distribution model
 - **Legal:** DMA Art. 6(4)
@@ -132,7 +132,7 @@
 - **Incompatibility:** Testing for bias against protected classes requires processing special-category data that Art. 9 prohibits.
 - **Note:** It was resolved by an explicit statutory carve-out. It's the corpus's only worked example of what resolution actually looks like: a legislature patching the conflict, not an engineer.
 - **Resolvable?** unresolvable
-- **Sources:** AI Act, Art. 10(5): ⚠ in source: least confident on the specific provision.
+- **Sources:** AI Act, Art. 10(5): Provision is correct (Regulation (EU) 2024/1689, Art. 10(5)). Conditions (a) to (f) apply 'in addition to' the GDPR, so the carve-out narrows the conflict with Art. 9 without removing it.
 
 ### H1. EU data retention mandates vs. minimization
 - **Legal:** EU Retention Retention mandates; GDPR Art. 5(1)(c); CJEU Retention rulings
