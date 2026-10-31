@@ -195,7 +195,7 @@ export const cases: SeedCase[] = [
     ],
     property: prop("WORM Media", "WORM media and immutable backup snapshots are physically/cryptographically non-erasable by design."),
     paperingOvers: [
-      { technique: "Deletion debt", description: "Scope backups out of deletion; delete on restore.", standing: "untested", residual: "" },
+      { technique: "Deletion debt", description: "Scope backups out of deletion; delete on restore (\"deletion debt\").", standing: "untested", residual: "" },
       { technique: "Put beyond use", description: "ICO's \"put beyond use\" position.", standing: "endorsed_by_regulator", residual: "" },
     ],
   },
@@ -392,10 +392,11 @@ export const cases: SeedCase[] = [
     shapes: ["binary-continuum"],
     resolvability: "unresolvable",
     inclusionVerdict: "passes",
+    analysis: "Live in SCHUFA (C-634/21) and Nowak.",
     instruments: [
       { key: "gdpr16", role: "mandating" },
-      { key: "schufa", role: "context", note: "Live in SCHUFA (C-634/21)." },
-      { key: "nowak", role: "context", note: "Live in Nowak." },
+      { key: "schufa", role: "context" },
+      { key: "nowak", role: "context" },
     ],
   },
   {
@@ -498,13 +499,5 @@ export const leads: { ref: string; title: string; shape?: string }[] = [
   { ref: "L6", title: "DSA researcher data access vs. platform security posture" },
 ];
 
-export const audits = [
-  {
-    shape: "deliberate-blindness",
-    model: "pending",
-    promptVersion: "ADVERSARIAL_PRIOR_ART_PROMPT.md@v1",
-    verdict: "inconclusive" as const,
-    priorArt: null,
-    reasoning: "Not yet run.",
-  },
-];
+/** Filled by `pnpm --filter @bind/db prior-art`. Nothing has been run yet. */
+export const audits: { shape: string; model: string; promptVersion: string; verdict: "novel" | "partial" | "rebrand" | "inconclusive"; priorArt: string | null; reasoning: string }[] = [];
