@@ -1,0 +1,398 @@
+// Bind — legal–architectural incompatibility registry
+// The data model is the intellectual contribution. Changes here ripple to every phase.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ──────────────────────────────────────────────────────────────────
+
+/// Three values, not a boolean. A case that is merely expensive is a different
+/// animal from one that is an open research problem.
+enum Resolvability {
+  unresolvable
+  resolvable_costly
+  tech_gap
+}
+
+/// How a case actually stopped being live, if it ever did. The running count of
+/// `engineering` is the corpus's central empirical claim.
+enum ResolutionMechanism {
+  none
+  engineering
+  legislative
+  judicial
+  abandonment
+}
+
+enum CaseStatus {
+  draft
+  in_review
+  published
+  withdrawn
+}
+
+enum VerificationStatus {
+  unverified
+  verified
+  corrected
+  disputed
+}
+
+enum InclusionVerdict {
+  passes
+  fails
+  undecided
+}
+
+/// Which side of the contradiction an instrument sits on. Sovereign-contradiction
+/// cases have two `mandating` instruments by definition.
+enum InstrumentRole {
+  mandating
+  conflicting
+  context
+}
+
+enum ShapeFamily {
+  architectural
+  conflict_of_law
+  drafting_error
+  research_gap
+}
+
+enum CitationTarget {
+  case
+  shape
+  instrument
+  property
+  papering_over
+  rejection
+}
+
+enum AdversarialVerdict {
+  novel
+  partial
+  rebrand
+  inconclusive
+}
+
+enum LegalStanding {
+  untested
+  endorsed_by_regulator
+  rejected_by_regulator
+  litigated_unresolved
+  academic_only
+}
+
+enum RejectionReason {
+  merely_expensive
+  implementation_defect
+  no_primary_source
+  not_a_binding_mandate
+  duplicate_of_existing
+  out_of_scope
+  resolved_by_known_technique
+}
+
+enum SubmissionStatus {
+  pending
+  in_review
+  accepted
+  rejected
+}
+
+// ─── Taxonomy ───────────────────────────────────────────────────────────────
+
+model Shape {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  ordinal          Int      @unique
+  name             String
+  family           ShapeFamily
+  /// One sentence. If it needs two, the shape is two shapes.
+  definition       String
+  /// What is deliberately outside the shape. The boundary is the contribution.
+  boundaryCriteria String
+  /// Why this shape is or is not the registry's own contribution.
+  provenanceNote   String?
+  taxonomyVersion  String   @default("v1")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  assignments ShapeAssignment[]
+  audits      AdversarialAudit[]
+}
+
+/// Shape assignment is versioned. The taxonomy will change; case history survives it.
+model ShapeAssignment {
+  id              String    @id @default(cuid())
+  caseId          String
+  shapeId         String
+  taxonomyVersion String    @default("v1")
+  rationale       String?
+  isPrimary       Boolean   @default(true)
+  assignedAt      DateTime  @default(now())
+  supersededAt    DateTime?
+
+  case  Case  @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  shape Shape @relation(fields: [shapeId], references: [id], onDelete: Restrict)
+
+  @@index([caseId, supersededAt])
+  @@index([shapeId, supersededAt])
+}
+
+/// Prior-art challenge against a shape claim, run by a non-Claude model.
+/// A shape that survived a REBRAND challenge is stronger evidence than an unattacked one.
+model AdversarialAudit {
+  id            String             @id @default(cuid())
+  shapeId       String
+  model         String
+  promptVersion String
+  verdict       AdversarialVerdict
+  priorArt      String?
+  reasoning     String
+  runAt         DateTime           @default(now())
+
+  shape Shape @relation(fields: [shapeId], references: [id], onDelete: Cascade)
+
+  @@index([shapeId])
+}
+
+// ─── Cases ──────────────────────────────────────────────────────────────────
+
+model Case {
+  id        String @id @default(cuid())
+  /// Stable citable ID: bind-0001. Never reused, never renumbered.
+  slug      String @unique
+  /// Working group letter from the source corpus (A1, D4, G5).
+  corpusRef String @unique
+  title     String
+
+  /// The incompatibility in one sentence. Both mandates, and why they cannot both hold.
+  statement          String
+  /// Longer prose: the mechanism, not the summary.
+  analysis           String?
+  inclusionVerdict   InclusionVerdict @default(undecided)
+  /// Answer to: could a competent engineer with unlimited budget satisfy both?
+  inclusionReasoning String?
+
+  resolvability Resolvability
+  resolution    ResolutionMechanism @default(none)
+  /// Set when `resolution` is not `none`.
+  resolvedAt    DateTime?
+  resolvedBy    String?
+
+  status      CaseStatus @default(draft)
+  publishedAt DateTime?
+  firstSeenAt DateTime?
+
+  contributor String?
+  sortKey     Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  shapes        ShapeAssignment[]
+  instruments   CaseInstrument[]
+  properties    CaseProperty[]
+  paperingOvers PaperingOver[]
+  transitions   CaseTransition[]
+
+  @@index([status])
+  @@index([resolvability])
+}
+
+model LegalInstrument {
+  id String @id @default(cuid())
+
+  /// The broad regime: "EU data protection", "US lawful access".
+  regime       String
+  /// The instrument itself: "Regulation (EU) 2016/679".
+  instrument   String
+  shortName    String
+  /// The provision that does the work: "Art. 17(1)".
+  provision    String
+  /// What the provision actually commands, paraphrased tightly.
+  mandate      String
+  inForceSince DateTime?
+  amendedAt    DateTime?
+
+  jurisdictionId String
+  jurisdiction   Jurisdiction @relation(fields: [jurisdictionId], references: [id])
+
+  /// Primary source only: EUR-Lex, eCFR, CourtListener, official gazettes.
+  sourceUrl  String
+  sourceKind String @default("primary")
+
+  cases     CaseInstrument[]
+  createdAt DateTime         @default(now())
+
+  @@unique([instrument, provision])
+  @@index([jurisdictionId])
+}
+
+model Jurisdiction {
+  id          String  @id @default(cuid())
+  code        String  @unique
+  name        String
+  /// supranational, national, subnational
+  level       String  @default("national")
+  instruments LegalInstrument[]
+}
+
+model CaseInstrument {
+  caseId       String
+  instrumentId String
+  role         InstrumentRole @default(mandating)
+  note         String?
+
+  case       Case            @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  instrument LegalInstrument @relation(fields: [instrumentId], references: [id], onDelete: Restrict)
+
+  @@id([caseId, instrumentId])
+}
+
+model ArchitecturalProperty {
+  id   String @id @default(cuid())
+  slug String @unique
+  /// The property: "append-only integrity", "sender anonymity".
+  name String
+
+  /// What the property is for. Without this the case is just a complaint.
+  threatModel String
+  /// Why abandoning the property defeats the purpose of the system.
+  defeatNote  String
+  /// Systems that actually rely on it.
+  exemplars   String[]
+
+  cases     CaseProperty[]
+  createdAt DateTime       @default(now())
+}
+
+model CaseProperty {
+  caseId     String
+  propertyId String
+  note       String?
+
+  case     Case                  @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  property ArchitecturalProperty @relation(fields: [propertyId], references: [id], onDelete: Restrict)
+
+  @@id([caseId, propertyId])
+}
+
+/// A documented workaround and whether any authority has blessed it.
+/// Papering over is not resolution; recording it stops the corpus being naive.
+model PaperingOver {
+  id          String        @id @default(cuid())
+  caseId      String
+  technique   String
+  description String
+  standing    LegalStanding @default(untested)
+  /// What the workaround gives up.
+  residual    String
+  createdAt   DateTime      @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+}
+
+/// Rejections are data. The reasons are how outsiders learn the inclusion test.
+model Rejection {
+  id          String          @id @default(cuid())
+  slug        String          @unique
+  title       String
+  claim       String
+  reason      RejectionReason
+  reasoning   String
+  submittedBy String?
+  decidedAt   DateTime        @default(now())
+}
+
+// ─── Verification ───────────────────────────────────────────────────────────
+
+/// Polymorphic by target type + id. Verification means someone opened the source
+/// and confirmed the provision says what the case claims.
+model Citation {
+  id         String         @id @default(cuid())
+  targetType CitationTarget
+  targetId   String
+
+  label     String
+  url       String
+  /// EUR-Lex, eCFR, CourtListener, official gazette, standards body.
+  publisher String?
+  /// The exact passage relied on. Empty means nobody has read it yet.
+  quote     String?
+  retrieved DateTime?
+
+  verificationStatus VerificationStatus @default(unverified)
+  verifiedAt         DateTime?
+  verifiedBy         String?
+  verificationNote   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([targetType, targetId])
+  @@index([verificationStatus])
+}
+
+// ─── Longitudinal ───────────────────────────────────────────────────────────
+
+model CaseTransition {
+  id       String   @id @default(cuid())
+  caseId   String
+  fromState String
+  toState   String
+  /// The instrument or ruling that caused the move.
+  trigger   String
+  triggerUrl String?
+  occurredAt DateTime
+  recordedAt DateTime @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, occurredAt])
+}
+
+// ─── Intake ─────────────────────────────────────────────────────────────────
+
+model Submission {
+  id    String @id @default(cuid())
+  title String
+  statement String
+  /// Required field. The submission is rejected without an answer.
+  inclusionArgument String
+  legalCitation     String
+  legalUrl          String
+  architecturalProperty String
+  proposedShape     String?
+  submitterName     String
+  submitterEmail    String
+  submitterAffiliation String?
+
+  status      SubmissionStatus @default(pending)
+  submittedAt DateTime         @default(now())
+  reviews     SubmissionReview[]
+
+  @@index([status])
+}
+
+model SubmissionReview {
+  id           String   @id @default(cuid())
+  submissionId String
+  reviewer     String
+  /// accept | reject | needs_work
+  recommendation String
+  notes        String
+  reviewedAt   DateTime @default(now())
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@unique([submissionId, reviewer])
+}

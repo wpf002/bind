@@ -1,0 +1,21 @@
+{
+  "name": "@bind/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "fastify": "^5.1.0",
+    "@fastify/cors": "^10.0.1",
+    "@bind/db": "workspace:*",
+    "@bind/core": "workspace:*",
+    "@bind/shared": "workspace:*",
+    "zod": "^3.23.8",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": { "tsx": "^4.19.2" }
+}
