@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { listCases } from "../src/queries";
 import { prisma } from "../src/client";
+import { cases as seedCases } from "./corpus";
 
 /**
  * Phase 1 gate: the DB, rendered back to markdown, must carry every sentence of
@@ -80,20 +81,26 @@ async function main() {
   if (srcRefs !== dbRefs) errors.push(`ID set differs\n  source: ${srcRefs}\n  db:     ${dbRefs}`);
 
   let total = 0;
+  let amended = 0;
   for (const s of src) {
     const c = db.find((x) => x.corpusRef === s.ref);
     if (!c) continue;
-    if (norm(c.title) !== norm(s.title)) errors.push(`${s.ref} title\n  source: ${s.title}\n  db:     ${c.title}`);
+    const am = seedCases.find((x) => x.ref === s.ref)?.amendments ?? [];
+    const titleAmended = am.some((a) => a.field === "title" && norm(a.from) === norm(s.title));
+    if (titleAmended) amended++;
+    else if (norm(c.title) !== norm(s.title)) errors.push(`${s.ref} title\n  source: ${s.title}\n  db:     ${c.title}`);
     if (s.legal.length && !c.instruments.length) errors.push(`${s.ref} has a Legal line but no instruments`);
     const hay = norm(render(c) + " " + c.citations.map((x) => `${x.label} ${x.verificationNote ?? ""}`).join(" "));
+    const live = norm(render({ ...c, analysis: c.analysis?.split("Amended from v0.1")[0] ?? null }) + " " + c.citations.map((x) => `${x.label} ${x.verificationNote ?? ""}`).join(" "));
     for (const sent of s.sentences) {
       total++;
+      if (!live.includes(norm(sent)) && am.some((a) => norm(a.from).includes(norm(sent)))) amended++;
       if (!hay.includes(norm(sent))) errors.push(`${s.ref} missing: ${sent}`);
     }
   }
 
   await writeFile(join(root, "corpus/roundtrip.md"), db.map(render).join("\n\n") + "\n");
-  console.log(`${src.length} source cases, ${db.length} in db, ${total} sentences checked, ${errors.length} mismatches`);
+  console.log(`${src.length} source cases, ${db.length} in db, ${total} sentences checked, ${amended} under declared amendments, ${errors.length} mismatches`);
   for (const e of errors) console.log("✗ " + e);
   process.exitCode = errors.length ? 1 : 0;
 }

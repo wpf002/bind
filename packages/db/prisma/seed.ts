@@ -65,7 +65,7 @@ async function main() {
         corpusRef: c.ref,
         title: c.title,
         statement: c.statement,
-        analysis: [c.analysis, c.review && `Review: ${c.review}`].filter(Boolean).join("\n\n") || undefined,
+        analysis: [c.analysis, c.review && `Review: ${c.review}`, amended(c)].filter(Boolean).join("\n\n") || undefined,
         inclusionVerdict: c.inclusionVerdict,
         inclusionReasoning: c.inclusionReasoning,
         resolvability: c.resolvability,
@@ -83,6 +83,7 @@ async function main() {
         instruments: { create: c.instruments.map((x) => ({ instrumentId: inst.get(x.key)!, role: x.role, note: x.note })) },
         properties: propertyId ? { create: [{ propertyId }] } : undefined,
         paperingOvers: { create: c.paperingOvers ?? [] },
+        transitions: { create: (c.transitions ?? []).map((t) => ({ fromState: t.from, toState: t.to, trigger: t.trigger, triggerUrl: t.url, occurredAt: new Date(t.at) })) },
       },
     });
 
@@ -127,3 +128,12 @@ main()
     process.exit(1);
   })
   .finally(() => prisma.$disconnect());
+
+/** Declared departures from v0.1, kept in the case text so the old wording stays on record. */
+function amended(c: (typeof cases)[number]) {
+  if (!c.amendments?.length) return undefined;
+  return [
+    "Amended from v0.1 by claude-opus-5-5, 2026-10-31, pending human review.",
+    ...c.amendments.map((a) => `${a.field}: "${a.from}" ${a.reason}`),
+  ].join("\n");
+}

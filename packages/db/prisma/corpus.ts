@@ -40,6 +40,10 @@ export type SeedCase = {
   }[];
   /** Extra sources named in the prose that are not instruments. */
   sources?: { label: string; note?: string }[];
+  /** Declared departures from the v0.1 source text. The round-trip accepts a source sentence found in `from`. */
+  amendments?: { field: "title" | "statement" | "analysis" | "inclusionReasoning" | "paperingOver"; from: string; reason: string }[];
+  /** Resolution-state changes, oldest first. */
+  transitions?: { from: string; to: string; trigger: string; url?: string; at: string }[];
   /** ⚠ in the source. Instrument key, or "case" when the mark is on a prose claim. */
   flags?: Record<string, string>;
 };
@@ -134,6 +138,7 @@ export const instruments: Record<string, Inst> = {
   gdpr22: { regime: "EU data protection", instrument: "General Data Protection Regulation", shortName: "GDPR", provision: "Art. 22", mandate: "The law asks for the logic.", jurisdiction: "EU" },
   gdpr33: { regime: "EU data protection", instrument: "General Data Protection Regulation", shortName: "GDPR", provision: "Art. 33/34", mandate: "Notify the supervisory authority within 72 hours, describing the categories and approximate number of records affected.", jurisdiction: "EU" },
   gdpr5c: { regime: "EU data protection", instrument: "General Data Protection Regulation", shortName: "GDPR", provision: "Art. 5(1)(c)", mandate: "Minimization forbids collecting more than necessary for the purpose.", jurisdiction: "EU" },
+  gdpr48: { regime: "EU data protection", instrument: "General Data Protection Regulation", shortName: "GDPR", provision: "Art. 48", mandate: "A third-country order to disclose personal data is enforceable only if based on an international agreement.", jurisdiction: "EU" },
   gdpr9: { regime: "EU data protection", instrument: "General Data Protection Regulation", shortName: "GDPR", provision: "Art. 9", mandate: "Prohibits processing special-category data.", jurisdiction: "EU" },
   gdprAnon: { regime: "EU data protection", instrument: "General Data Protection Regulation", shortName: "GDPR", provision: "Anonymous data", mandate: "GDPR treats anonymized data as out of scope.", jurisdiction: "EU" },
   ccpa: { regime: "US state privacy", instrument: "California Consumer Privacy Act", shortName: "CCPA", provision: "Deletion", mandate: "Deletion right.", jurisdiction: "US" },
@@ -142,7 +147,7 @@ export const instruments: Record<string, Inst> = {
   ftc: { regime: "US consumer protection", instrument: "FTC deletion orders", shortName: "FTC", provision: "Deletion orders", mandate: "Algorithmic disgorgement (Everalbum, Kurbo/WW) orders destruction of the model, not the data.", jurisdiction: "US" },
   schrems2: { regime: "EU data protection", instrument: "Schrems II", shortName: "Schrems II", provision: "Transfer restrictions", mandate: "EU law forbids the transfer.", jurisdiction: "EU" },
   cloudact: { regime: "US lawful access", instrument: "CLOUD Act", shortName: "CLOUD Act", provision: "Production orders", mandate: "US law compels production.", jurisdiction: "US" },
-  eidas: { regime: "EU digital identity", instrument: "eIDAS 2.0", shortName: "eIDAS 2.0", provision: "QWAC trust-root mandate", mandate: "Browsers required to trust member-state-designated CAs.", jurisdiction: "EU" },
+  eidas: { regime: "EU digital identity", instrument: "eIDAS 2.0", shortName: "eIDAS 2.0", provision: "QWAC recognition", mandate: "Browsers must recognise QWACs and display their identity data.", jurisdiction: "EU" },
   ru242: { regime: "Data localization", instrument: "Federal Law 242-FZ", shortName: "242-FZ", provision: "Localization", mandate: "Presupposes data has a determinate location.", jurisdiction: "RU" },
   cnPipl: { regime: "Data localization", instrument: "PIPL / CSL", shortName: "PIPL/CSL", provision: "Localization", mandate: "Presupposes data has a determinate location.", jurisdiction: "CN" },
   inRbi: { regime: "Data localization", instrument: "RBI payments data mandate", shortName: "RBI", provision: "Payments localization", mandate: "Presupposes data has a determinate location.", jurisdiction: "IN" },
@@ -163,6 +168,7 @@ export const instruments: Record<string, Inst> = {
   alabama: { regime: "US case law", instrument: "Alabama v. Commerce", shortName: "Alabama v. Commerce", provision: "Litigation", mandate: "Litigated.", jurisdiction: "US" },
   aiAct105: { regime: "EU AI regulation", instrument: "AI Act", shortName: "AI Act", provision: "Art. 10(5)", mandate: "Testing for bias against protected classes.", jurisdiction: "EU" },
   euRetention: { regime: "EU telecom retention", instrument: "Member-state data retention regimes", shortName: "EU Retention", provision: "Retention mandates", mandate: "Member states keep re-legislating retention regimes.", jurisdiction: "EU" },
+  eprivacy15: { regime: "EU telecom privacy", instrument: "Directive 2002/58/EC (ePrivacy)", shortName: "ePrivacy", provision: "Art. 15(1)", mandate: "Retention must be a necessary, appropriate and proportionate measure, in accordance with general principles of EU law.", jurisdiction: "EU" },
   cjeuRetention: { regime: "EU case law", instrument: "Digital Rights Ireland, Tele2, La Quadrature", shortName: "CJEU", provision: "Retention rulings", mandate: "The CJEU keeps striking retention regimes.", jurisdiction: "EU" },
   pci10: { regime: "Payment security", instrument: "PCI DSS", shortName: "PCI DSS", provision: "10.x", mandate: "Logging of IPs and access records.", jurisdiction: "INT" },
   soc2: { regime: "Audit", instrument: "SOC 2", shortName: "SOC 2", provision: "Logging", mandate: "Logging of IPs and access records.", jurisdiction: "US" },
@@ -190,23 +196,26 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "A2",
-    review: "GDPR Art. 17(3)(b) and CCPA 1798.105(d)(8) both exempt data kept to meet a legal obligation, so the conflict holds only against retention law outside the deleting regime's own exemption. SEC 17a-4 has allowed an audit-trail alternative to WORM since 2022. Statement needs narrowing. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Erasure/deletion rights vs. mandatory retention",
-    statement: "Two legal regimes command opposite state changes on the same bytes. The architecture didn't cause this and can't fix it.",
+    statement: "GDPR Art. 17(3)(b) exempts retention only where Union or Member State law requires it. A broker-dealer under both the GDPR and SEC Rule 17a-4 must keep records that a US rule requires, so an erasure request and the retention duty command opposite state changes on the same records. The architecture didn't cause this and can't fix it.",
     shapes: ["mandate-mutation", "sovereign-contradiction"],
     resolvability: "unresolvable",
     inclusionVerdict: "passes",
-    inclusionReasoning: "No. Not an engineering problem.",
+    inclusionReasoning: "No. Neither regime's exemption reaches the other's rule, and storage design can't satisfy both. Not an engineering problem.",
     instruments: [
-      { key: "gdpr17", role: "mandating" },
-      { key: "ccpa", role: "mandating" },
-      { key: "sec17a4", role: "conflicting" },
-      { key: "frcp37e", role: "conflicting", note: "Litigation hold." },
+      { key: "gdpr17", role: "mandating", note: "Art. 17(3)(b) exempts only Union or Member State legal obligations." },
+      { key: "sec17a4", role: "conflicting", note: "Retention on WORM or an audit-trail system that can re-create deleted records. Either forbids erasure within the period." },
+      { key: "ccpa", role: "context", note: "§ 1798.105(d)(8) exempts records kept for a legal obligation, so the CCPA yields to 17a-4." },
+      { key: "frcp37e", role: "context", note: "Litigation hold. GDPR Art. 17(3)(e) exempts data needed for legal claims." },
     ],
     property: prop("WORM Media", "WORM media and immutable backup snapshots are physically/cryptographically non-erasable by design."),
     paperingOvers: [
       { technique: "Deletion debt", description: "Scope backups out of deletion; delete on restore (\"deletion debt\").", standing: "untested", residual: "" },
       { technique: "Put beyond use", description: "ICO's \"put beyond use\" position.", standing: "endorsed_by_regulator", residual: "" },
+    ],
+    amendments: [
+      { field: "statement", from: "Two legal regimes command opposite state changes on the same bytes.", reason: "GDPR Art. 17(3)(b) and CCPA § 1798.105(d)(8) exempt data kept for a legal obligation, so the conflict holds only where the retention rule is foreign to the deleting regime. Narrowed to GDPR vs. 17a-4." },
+      { field: "inclusionReasoning", from: "No. Not an engineering problem.", reason: "States why the exemptions don't close the gap." },
     ],
   },
   {
@@ -223,7 +232,6 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "A4",
-    review: "Everalbum and WW/Kurbo ordered deletion of the data and of the models built from it. 'The model, not the data' is wrong. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Erasure vs. trained model weights",
     statement: "The law wants a proof of absence. The architecture can only offer a probabilistic reduction.",
     shapes: ["mandate-mutation"],
@@ -236,36 +244,51 @@ export const cases: SeedCase[] = [
     ],
     property: prop("Trained Weights", "Memorization means the weights may constitute a copy. Machine unlearning is approximate and, critically, not verifiable by the data subject or regulator."),
     paperingOvers: [
-      { technique: "Algorithmic disgorgement", description: "The FTC's algorithmic disgorgement remedy (Everalbum, Kurbo/WW) orders destruction of the model, not the data.", standing: "endorsed_by_regulator", residual: "That's a regulator conceding the point rather than solving it. The most interesting datum in this section." },
+      { technique: "Algorithmic disgorgement", description: "The FTC's algorithmic disgorgement remedy (Everalbum, Kurbo/WW) orders destruction of the data and of any model trained on it.", standing: "endorsed_by_regulator", residual: "That's a regulator conceding the point rather than solving it. The most interesting datum in this section." },
+    ],
+    amendments: [
+      { field: "paperingOver", from: "The FTC's algorithmic disgorgement remedy (Everalbum, Kurbo/WW) orders destruction of the model, not the data.", reason: "Everalbum § III.A-C and WW/Kurbo § D order deletion of the data and of models built from it." },
     ],
   },
   {
     ref: "B1",
-    review: "Schrems II doesn't forbid transfers, and the 2023 Data Privacy Framework covers certified US recipients. The blocking rule is GDPR Art. 48. Cite Art. 48 with C-311/18 as context. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Schrems II transfer restrictions vs. CLOUD Act production orders",
-    statement: "EU law forbids the transfer; US law compels production; same data, same provider.",
-    analysis: "Architectural: irrelevant. Encryption doesn't help when the compelled party holds the keys.\n\nThis is a legal conflict that merely surfaces in architecture. Engineers get handed it anyway.",
+    statement: "A US warrant reaches data in a provider's control wherever it's stored (18 U.S.C. § 2713). GDPR Art. 48 bars that warrant from serving as the transfer ground unless an international agreement backs it, so the provider must find another Chapter V ground or refuse. Same data, same provider.",
+    analysis: "Architectural: irrelevant. Encryption doesn't help when the compelled party holds the keys.\n\nThis is a legal conflict that merely surfaces in architecture. Engineers get handed it anyway.\n\n§ 2703(h) allows a comity motion to quash only for a qualifying foreign government with an executive agreement. Whether an EU-US agreement is in force wasn't checked.",
     shapes: ["sovereign-contradiction"],
     resolvability: "unresolvable",
     inclusionVerdict: "passes",
     inclusionReasoning: "No. This is a legal conflict that merely surfaces in architecture.",
     instruments: [
-      { key: "schrems2", role: "mandating" },
+      { key: "gdpr48", role: "mandating" },
       { key: "cloudact", role: "mandating" },
+      { key: "schrems2", role: "context", note: "Requires essentially equivalent protection for transfers. Doesn't forbid them outright." },
+    ],
+    amendments: [
+      { field: "statement", from: "EU law forbids the transfer; US law compels production; same data, same provider.", reason: "Schrems II doesn't forbid transfers, and the 2023 Data Privacy Framework covers certified US recipients. The blocking rule is GDPR Art. 48." },
     ],
   },
   {
     ref: "B2",
-    review: "Adopted eIDAS 2.0 (Reg. 2024/1183) differs from the draft this case describes. Recital 65 keeps browser control over TLS trust and Art. 45a(2) allows precautionary measures. Rewrite against the adopted text or record a resolved-legislatively transition. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "eIDAS 2.0 QWAC trust-root mandate vs. root program distrust authority",
-    statement: "A trust root you cannot remove is not a trust decision.",
+    statement: "Regulation (EU) 2024/1183 requires browsers to recognise QWACs (Art. 45(1a)) but leaves them free to secure TLS as they choose (Recital 65) and to take precautionary measures against a certificate (Art. 45a(2)). The draft's non-removable trust root wasn't enacted.",
+    analysis: "Resolved legislatively between draft and adoption. Art. 45a(2) measures require notification and remain subject to supervisory review, so a contested distrust hasn't been tested.",
     shapes: ["sovereign-contradiction", "trust-root-plurality"],
     resolvability: "unresolvable",
+    resolution: "legislative",
+    resolvedBy: "Reg. (EU) 2024/1183, Recital 65 and Art. 45a(2)",
     inclusionVerdict: "passes",
-    inclusionReasoning: "No. Mozilla/Google's public objections were the tell.",
+    inclusionReasoning: "Not by engineering. Mozilla/Google's public objections were the tell, and the legislature changed the text.",
     instruments: [{ key: "eidas", role: "mandating" }],
     property: prop("Root Program Distrust", "The Web PKI's only real security mechanism is the ability to distrust a misbehaving CA quickly."),
     flags: { eidas: "⚠ in source: least confident on the specific provision." },
+    transitions: [
+      { from: "unresolvable", to: "resolved_legislative", trigger: "Regulation (EU) 2024/1183 adopted", url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1183", at: "2024-04-11" },
+    ],
+    amendments: [
+      { field: "statement", from: "A trust root you cannot remove is not a trust decision.", reason: "Describes the draft. The adopted text keeps browser control over TLS trust." },
+      { field: "inclusionReasoning", from: "No. Mozilla/Google's public objections were the tell.", reason: "Records the legislative resolution." },
+    ],
   },
   {
     ref: "C1",
@@ -288,15 +311,18 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "D1",
-    review: "Art. 33(3)(a) requires record counts only 'where possible', and Art. 34(3)(a) waives data-subject notice for encrypted data. The conflict is narrower than stated. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "E2EE vs. Art. 33/34 breach notification",
-    statement: "The law requires the operator to know something the architecture was specifically built to prevent it from knowing.",
+    statement: "The operator must assess and report a breach of data it was built not to read. Art. 33(3)(a) asks for categories and record counts only where possible, and Art. 34(3)(a) waives data-subject notice where encryption left the data unintelligible, so the law may accept an operator that can't know.",
     shapes: ["deliberate-blindness"],
     resolvability: "unresolvable",
-    inclusionVerdict: "passes",
-    inclusionReasoning: "No. Either the operator can inspect user data or it can't.",
+    inclusionVerdict: "undecided",
+    inclusionReasoning: "Either the operator can inspect user data or it can't. The conflict survives only if a regulator reads 'where possible' to demand detail the operator could have had under a different architecture. Not tested.",
     instruments: [{ key: "gdpr33", role: "mandating" }],
     property: prop("Zero-Knowledge Operator", "A zero-knowledge operator holds ciphertext and cannot inspect what leaked."),
+    amendments: [
+      { field: "statement", from: "The law requires the operator to know something the architecture was specifically built to prevent it from knowing.", reason: "Art. 33(3)(a) qualifies the content duty with 'where possible' and Art. 34(3)(a) waives notice for encrypted data." },
+      { field: "inclusionReasoning", from: "No.", reason: "Verdict moved to undecided pending a regulator's reading of 'where possible'." },
+    ],
   },
   {
     ref: "D2",
@@ -420,31 +446,38 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "G3",
-    review: "C-203/22 Dun & Bradstreet (2025) holds Art. 15(1)(h) doesn't require the algorithm and sends trade-secret claims to the regulator or court for balancing. Restate around whether post-hoc attributions describe 'the procedure and principles actually applied'. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Art. 15 / Art. 22 explainability vs. model opacity + trade secret",
-    statement: "Post-hoc attributions (SHAP, LIME) are approximations of the decision, not the logic. The law asks for the logic; the architecture has weights.",
+    statement: "Art. 15(1)(h), as read in C-203/22, owes the data subject the procedure and principles actually applied to their data, and a complex formula doesn't satisfy it. Post-hoc attributions (SHAP, LIME) approximate the model's output. They aren't the procedure applied, and the procedure applied is weights.",
+    analysis: "C-203/22 sends trade-secret claims to the supervisory authority or court for balancing, so trade secret is a limit, not a bar. Art. 22(3) asks for human intervention and contest. The explanation language is in Recital 71, which isn't binding.",
     shapes: ["binary-continuum"],
     resolvability: "unresolvable",
     inclusionVerdict: "passes",
     instruments: [
       { key: "gdpr15", role: "mandating" },
-      { key: "gdpr22", role: "mandating" },
-      { key: "tradeSecret", role: "conflicting" },
+      { key: "gdpr22", role: "context" },
+      { key: "tradeSecret", role: "context" },
+    ],
+    amendments: [
+      { field: "statement", from: "Post-hoc attributions (SHAP, LIME) are approximations of the decision, not the logic. The law asks for the logic; the architecture has weights.", reason: "Restated around C-203/22's test. The mandate comes from Art. 15(1)(h), not Art. 22." },
     ],
   },
   {
     ref: "G4",
-    review: "Neither 13 USC 9 nor PL 94-171 sets an accuracy standard or privacy budget, and Alabama v. Commerce never reached the merits. The conflict is between agency choices, not statutes. Narrow or move to rejections. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
-    title: "Differential privacy budget vs. statutory accuracy",
-    statement: "The privacy budget is a dial with no setting that satisfies both statutes.",
-    analysis: "2020 US Census: Title 13 confidentiality vs. PL 94-171 redistricting accuracy. Litigated (Alabama v. Commerce).",
+    title: "Differential privacy budget vs. redistricting accuracy",
+    statement: "Census Bureau reconstruction tests show block-level tables accurate enough for equal-population districting let an attacker rebuild individual records, which 13 U.S.C. § 9(a)(2) forbids publishing. The privacy budget sets where that trade lands, and no setting satisfies both. Neither statute sets an accuracy floor or a privacy-loss limit.",
+    analysis: "2020 US Census: Title 13 confidentiality vs. PL 94-171 redistricting accuracy. Litigated (Alabama v. Commerce). The court denied relief on standing and ripeness without reaching the merits.\n\nThe accuracy demand comes from equal-population case law, not PL 94-171. That source isn't cited yet. Whether swapping or other methods would meet § 9 is the Bureau's judgment and is disputed.",
     shapes: ["binary-continuum"],
     resolvability: "unresolvable",
-    inclusionVerdict: "passes",
+    inclusionVerdict: "undecided",
+    inclusionReasoning: "Turns on the Bureau's reconstruction-risk reading of § 9, which no court has tested.",
     instruments: [
       { key: "title13", role: "mandating" },
-      { key: "pl94171", role: "mandating" },
+      { key: "pl94171", role: "mandating", note: "Block-level tabulations and a deadline. No accuracy standard." },
       { key: "alabama", role: "context" },
+    ],
+    amendments: [
+      { field: "title", from: "Differential privacy budget vs. statutory accuracy", reason: "Neither statute sets an accuracy standard." },
+      { field: "statement", from: "The privacy budget is a dial with no setting that satisfies both statutes.", reason: "The conflict is between § 9 as the Bureau reads it and equal-population accuracy, not between two statutes." },
     ],
   },
   {
@@ -465,17 +498,21 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "H1",
-    review: "The conflicting rule is ePrivacy Art. 15(1) with the Charter. The CJEU line permits targeted retention and general retention of source IPs, so the conflict is the boundary of general and indiscriminate retention. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
-    title: "EU data retention mandates vs. minimization",
-    statement: "Member states keep re-legislating retention regimes the CJEU keeps striking (Digital Rights Ireland, Tele2, La Quadrature). Structural, cyclical.",
+    title: "EU data retention mandates vs. ePrivacy Art. 15(1)",
+    statement: "Member states keep enacting general and indiscriminate retention of traffic and location data, and the CJEU keeps holding that ePrivacy Art. 15(1), read with the Charter, precludes it (Tele2, La Quadrature, SpaceNet). Targeted retention and general retention of source IP addresses survive, so the conflict sits at that boundary. Structural, cyclical.",
+    analysis: "Digital Rights Ireland invalidated the EU Retention Directive itself. The later rulings struck national regimes.",
     shapes: ["sovereign-contradiction"],
     shapeRationale: "Taxonomy v2, assigned by claude-opus-5-5 pending review. National legislatures mandate retention; the CJEU, applying the Charter, strikes it. Two authorities, opposite commands, one dataset.",
     resolvability: "unresolvable",
     inclusionVerdict: "passes",
     instruments: [
-      { key: "euRetention", role: "mandating" },
-      { key: "gdpr5c", role: "conflicting" },
+      { key: "euRetention", role: "mandating", note: "National statutes, e.g. the German TKG provisions struck in SpaceNet (C-793/19)." },
+      { key: "eprivacy15", role: "conflicting" },
       { key: "cjeuRetention", role: "context" },
+    ],
+    amendments: [
+      { field: "title", from: "EU data retention mandates vs. minimization", reason: "The conflicting rule is ePrivacy Art. 15(1) with the Charter, not GDPR minimization." },
+      { field: "statement", from: "Member states keep re-legislating retention regimes the CJEU keeps striking (Digital Rights Ireland, Tele2, La Quadrature).", reason: "Narrowed to general and indiscriminate retention, which is what the rulings strike." },
     ],
   },
   {
