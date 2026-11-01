@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { audits, cases as corpusCases, instruments as corpusInstruments, jurisdictions, rejections as corpusRejections, shapes } from "./corpus";
-import { draftCases, draftInstruments, draftRejections, draftVerifications } from "./drafts";
-import { instrumentVerifications, sourceVerifications as sv, type Verification } from "./verifications";
+import { draftCases, draftInstruments, draftRejections, draftSourceVerifications, draftVerifications } from "./drafts";
+import { instrumentVerifications, sourceVerifications, type Verification } from "./verifications";
+const sv: Record<string, Verification> = { ...sourceVerifications, ...draftSourceVerifications };
 
 const cases = [...corpusCases, ...draftCases];
 const instruments: Record<string, (typeof corpusInstruments)[string]> = { ...corpusInstruments, ...draftInstruments };
