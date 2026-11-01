@@ -1,0 +1,186 @@
+{
+  "instruments": {
+    "gdpr17": {
+      "status": "verified",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
+      "publisher": "EUR-Lex",
+      "quote": "The data subject shall have the right to obtain from the controller the erasure of personal data concerning him or her without undue delay and the controller shall have the obligation to erase personal data without undue delay where one of the following grounds applies:",
+      "provision": "Art. 17(1); exception at Art. 17(3)(b)",
+      "note": "Provision is correct (Regulation (EU) 2016/679, Art. 17(1)). Art. 17(3)(b) disapplies the right where processing is needed 'for compliance with a legal obligation which requires processing by Union or Member State law'. That resolves A2 for EU and member-state retention laws, so A2's conflict only holds against non-EU retention (SEC 17a-4, FRCP 37(e)) and A2 should say so.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "gdpr16": {
+      "status": "verified",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
+      "publisher": "EUR-Lex",
+      "quote": "The data subject shall have the right to obtain from the controller without undue delay the rectification of inaccurate personal data concerning him or her.",
+      "provision": "Art. 16",
+      "note": "Provision is correct. The article only reaches 'inaccurate' data, and Nowak (C-434/16, para. 53) measures accuracy against the purpose of collection. A controller can still rectify a score's wrong inputs and recompute. G2 should narrow its claim to the output value itself.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "gdpr15": {
+      "status": "verified",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
+      "publisher": "EUR-Lex",
+      "quote": "the existence of automated decision-making, including profiling, referred to in Article 22(1) and (4) and, at least in those cases, meaningful information about the logic involved, as well as the significance and the envisaged consequences of such processing for the data subject.",
+      "provision": "Art. 15(1)(h)",
+      "note": "Provision is Art. 15(1)(h). Dun & Bradstreet Austria (C-203/22, 27 February 2025) reads it as a right to 'the procedure and principles actually applied', and para. 59 says a complex formula or algorithm does not satisfy it. The same ruling sends trade-secret claims to the supervisory authority or court for balancing. G3 should cite C-203/22, drop trade secret as an absolute bar, and rest on whether post-hoc attributions describe the principles actually applied.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "gdpr22": {
+      "status": "corrected",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
+      "publisher": "EUR-Lex",
+      "quote": "The data subject shall have the right not to be subject to a decision based solely on automated processing, including profiling, which produces legal effects concerning him or her or similarly significantly affects him or her. [Recital 71:] ... the right to obtain human intervention, to express his or her point of view, to obtain an explanation of the decision reached after such assessment and to challenge the decision.",
+      "provision": "Art. 22(1), 22(3); Recital 71",
+      "note": "Art. 22 does not itself ask for the logic. Art. 22(3) lists human intervention, the right to express a view, and the right to contest. The explanation language appears only in Recital 71, which is not binding. The logic requirement in G3 comes from Art. 15(1)(h).",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "gdpr33": {
+      "status": "corrected",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
+      "publisher": "EUR-Lex",
+      "quote": "the controller shall without undue delay and, where feasible, not later than 72 hours after having become aware of it, notify the personal data breach to the supervisory authority ... [Art. 33(3)(a):] describe the nature of the personal data breach including where possible, the categories and approximate number of data subjects concerned and the categories and approximate number of personal data records concerned;",
+      "provision": "Art. 33(1), 33(3)(a); Art. 34(1), 34(3)(a)",
+      "note": "The 72-hour rule and the categories/records content are correct, but the content duty is qualified by 'where possible', and Art. 33(4) allows phased notification. Art. 34(3)(a) waives notice to data subjects where encryption made the data unintelligible. D1 has to show a breach where the operator still owes a description it cannot produce; as written, the 'where possible' qualifier lets an E2EE operator notify without the detail.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "gdpr5c": {
+      "status": "verified",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
+      "publisher": "EUR-Lex",
+      "quote": "adequate, relevant and limited to what is necessary in relation to the purposes for which they are processed ('data minimisation');",
+      "provision": "Art. 5(1)(c)",
+      "note": "Provision is correct. For H1 the CJEU retention rulings rest on Directive 2002/58/EC Art. 15(1) and Charter Arts. 7, 8, 11 and 52(1), not on GDPR Art. 5(1)(c). H1 should cite those as the conflicting rule.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "gdpr9": {
+      "status": "verified",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
+      "publisher": "EUR-Lex",
+      "quote": "Processing of personal data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, or trade union membership, and the processing of genetic data, biometric data for the purpose of uniquely identifying a natural person, data concerning health or data concerning a natural person's sex life or sexual orientation shall be prohibited.",
+      "provision": "Art. 9(1)",
+      "note": "Provision is Art. 9(1). The prohibition is subject to the Art. 9(2) exceptions, and AI Act Art. 10(5) supplies one for bias detection. G5 should state the conflict as the residual gap after 10(5)'s conditions, consistent with the aiAct105 entry.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "gdprAnon": {
+      "status": "corrected",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
+      "publisher": "EUR-Lex",
+      "quote": "The principles of data protection should therefore not apply to anonymous information, namely information which does not relate to an identified or identifiable natural person or to personal data rendered anonymous in such a manner that the data subject is not or no longer identifiable.",
+      "provision": "Recital 26",
+      "note": "The out-of-scope rule is Recital 26. The same recital makes identifiability depend on 'all the means reasonably likely to be used', taking into account 'technological developments', so the legal test already moves over time. G1's claim holds as a binary applied to a moving input. C-413/23 P EDPS v SRB (4 September 2025) also assesses identifiability from the recipient's position and should be cited.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "schrems2": {
+      "status": "corrected",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62018CJ0311",
+      "publisher": "EUR-Lex",
+      "quote": "[C-311/18, operative part 3:] unless there is a valid European Commission adequacy decision, the competent supervisory authority is required to suspend or prohibit a transfer of data to a third country pursuant to standard data protection clauses ... [GDPR Art. 48:] Any judgment of a court or tribunal and any decision of an administrative authority of a third country requiring a controller or processor to transfer or disclose personal data may only be recognised or enforceable in any manner if based on an international agreement",
+      "provision": "C-311/18 (Schrems II); GDPR Arts. 46, 48",
+      "note": "Schrems II (C-311/18, 16 July 2020) invalidated Privacy Shield and requires essentially equivalent protection for transfers. It does not forbid transfers outright, and the EU-US Data Privacy Framework adequacy decision (2023/1795) now covers certified US recipients. The rule that blocks a CLOUD Act disclosure is GDPR Art. 48, so B1 should cite Art. 48 with C-311/18 as context.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "dma64": {
+      "status": "verified",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925",
+      "publisher": "EUR-Lex",
+      "quote": "The gatekeeper shall allow and technically enable the installation and effective use of third-party software applications or software application stores using, or interoperating with, its operating system ... The gatekeeper shall not be prevented from taking, to the extent that they are strictly necessary and proportionate, measures to ensure that third-party software applications or software application stores do not endanger the integrity of the hardware or operating system provided by the gatekeeper, provided that such measures are duly justified by the gatekeeper.",
+      "provision": "Art. 6(4)",
+      "note": "Provision is correct (Regulation (EU) 2022/1925, Art. 6(4)). The second subparagraph keeps integrity measures that are strictly necessary and proportionate. E2 has to argue that the single-root model's security property is lost even under that carve-out, or it reads as a proportionality dispute.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "dma7": {
+      "status": "verified",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925",
+      "publisher": "EUR-Lex",
+      "quote": "it shall make the basic functionalities of its number-independent interpersonal communications services interoperable with the number-independent interpersonal communications services of another provider ... [Art. 7(3):] The level of security, including the end-to-end encryption, where applicable, that the gatekeeper provides to its own end users shall be preserved across the interoperable services.",
+      "provision": "Art. 7(1), 7(3)",
+      "note": "Provision is correct (Art. 7(1)). Art. 7(3) requires the E2EE level to be preserved across interoperable services. The statute itself commands both sides, which supports E3's inclusion; E3 should cite 7(3).",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "schufa": {
+      "status": "verified",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62021CJ0634",
+      "publisher": "EUR-Lex",
+      "quote": "the automated establishment, by a credit information agency, of a probability value based on personal data relating to a person and concerning his or her ability to meet payment commitments in the future constitutes 'automated individual decision-making' within the meaning of that provision, where a third party, to which that probability value is transmitted, draws strongly on that probability value",
+      "provision": "C-634/21 (7 December 2023), on GDPR Art. 22(1)",
+      "note": "C-634/21, judgment of 7 December 2023, interprets Art. 22(1). It does not address Art. 16 rectification, so for G2 it only establishes that the score is a regulated decision. It fits G3 more directly.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "nowak": {
+      "status": "corrected",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62016CJ0434",
+      "publisher": "EUR-Lex",
+      "quote": "Of course, the right of rectification provided for in Article 12(b) of Directive 95/46 cannot enable a candidate to 'correct', a posteriori, answers that are 'incorrect'. ... the assessment of whether personal data is accurate and complete must be made in the light of the purpose for which that data was collected.",
+      "provision": "C-434/16 (20 December 2017), paras. 52-53",
+      "note": "Case is C-434/16, Nowak v Data Protection Commissioner (20 December 2017), under Directive 95/46. Paras. 52 to 53 make accuracy purpose-relative, which supports G2's point that an evaluative output is not true or false like a stored field.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "cjeuRetention": {
+      "status": "corrected",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62018CJ0511",
+      "publisher": "EUR-Lex",
+      "quote": "[C-511/18, operative part 1:] must be interpreted as precluding legislative measures which, for the purposes laid down in Article 15(1), provide, as a preventive measure, for the general and indiscriminate retention of traffic and location data.",
+      "provision": "C-293/12 & C-594/12; C-203/15 & C-698/15; C-511/18, C-512/18 & C-520/18; C-140/20; C-793/19 & C-794/19",
+      "note": "Rulings: Digital Rights Ireland (C-293/12, C-594/12, 8 April 2014) invalidated Directive 2006/24/EC; Tele2 Sverige/Watson (C-203/15, C-698/15, 21 December 2016), La Quadrature du Net (C-511/18, C-512/18, C-520/18, 6 October 2020), Commissioner of An Garda Siochana (C-140/20, 5 April 2022) and SpaceNet (C-793/19, C-794/19, 20 September 2022) struck national regimes. The same rulings permit targeted retention, general retention of source IP addresses, and time-limited national-security instructions. H1's cycle is real for general and indiscriminate retention, but a regime inside those limits survives, so H1 should state the conflict as that boundary.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "euRetention": {
+      "status": "corrected",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32002L0058",
+      "publisher": "EUR-Lex",
+      "quote": "To this end, Member States may, inter alia, adopt legislative measures providing for the retention of data for a limited period justified on the grounds laid down in this paragraph.",
+      "provision": "Directive 2002/58/EC Art. 15(1) (enabling clause); national retention statutes",
+      "note": "Member-state retention laws rest on Directive 2002/58/EC Art. 15(1), which permits but does not require retention. The mandates are national statutes, and H1 should name at least one, such as the German TKG provisions struck in SpaceNet (C-793/19).",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "ru242": {
+      "status": "corrected",
+      "url": "http://www.kremlin.ru/acts/bank/38728",
+      "publisher": "Kremlin.ru (official text of Federal Law No. 242-FZ of 21.07.2014; own translation)",
+      "quote": "При сборе персональных данных, в том числе посредством информационно-телекоммуникационной сети \"Интернет\", оператор обязан обеспечить запись, систематизацию, накопление, хранение, уточнение (обновление, изменение), извлечение персональных данных граждан Российской Федерации с использованием баз данных, находящихся на территории Российской Федерации [When collecting personal data, including via the Internet, the operator must ensure the recording, systematization, accumulation, storage, clarification and retrieval of personal data of Russian citizens using databases located in the Russian Federation]",
+      "provision": "152-FZ Art. 18(5), inserted by 242-FZ Art. 2(1)",
+      "note": "242-FZ Art. 2(1) inserted Art. 18(5) into Federal Law 152-FZ, in force 1 September 2015. The duty attaches to the database used at collection and says nothing about routing or caches, so an in-country primary database satisfies the text. That confirms C1's 'fails' verdict. A 2025 amendment (23-FZ) reportedly tightened 18(5); current text not checked.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "cnPipl": {
+      "status": "corrected",
+      "url": "https://digichina.stanford.edu/work/translation-personal-information-protection-law-of-the-peoples-republic-of-china-effective-nov-1-2021/",
+      "publisher": "DigiChina, Stanford (translation of PIPL and CSL)",
+      "quote": "[PIPL Art. 40:] Critical information infrastructure operators and personal information handlers handling personal information reaching quantities provided by the State cybersecurity and informatization department shall store personal information collected and produced within the borders of the People's Republic of China domestically. [CSL Art. 37:] Critical information infrastructure operators that gather or produce personal information or important data during operations within the mainland territory of the People's Republic of China, shall store it within mainland China.",
+      "provision": "PIPL Art. 40; CSL Art. 37",
+      "note": "Localization is PIPL Art. 40 and CSL Art. 37. Both bind only CIIOs and, for PIPL, handlers above CAC volume thresholds, and both permit export after a security assessment. The CSL was amended in October 2025; confirm Art. 37's numbering against the current NPC text.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    }
+  },
+  "sources": {
+    "CNIL 2018 guidance on key destruction": {
+      "status": "verified",
+      "url": "https://www.cnil.fr/sites/default/files/atoms/files/blockchain_en.pdf",
+      "publisher": "CNIL",
+      "quote": "when the data recorded on the blockchain is a commitment, a hash generated by a keyed- hash function or a ciphertext obtained through \"state of the art\" algorithms and keys, the data controller can make the data practically inaccessible, and therefore move closer to the effects of data erasure.",
+      "provision": "Solutions for a responsible use of the blockchain, Part 2 (exercise of rights)",
+      "note": "CNIL, 'Blockchain: Solutions for a responsible use of the blockchain in the context of personal data' (September 2018), section 2. It names deletion of a keyed-hash secret key as an example, says these methods do not strictly erase the data, and says their GDPR equivalence 'should be evaluated'. A1's 'possible route' wording is accurate.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    }
+  }
+}

@@ -17,6 +17,8 @@ export type SeedCase = {
   title: string;
   statement: string;
   analysis?: string;
+  /** Findings from citation review. Not in the source text, so the round-trip ignores it. */
+  review?: string;
   /** Primary first. Taken from the source taxonomy table. */
   shapes: string[];
   /** Why the current shapes were chosen, when someone other than the source author chose them. */
@@ -171,6 +173,7 @@ const prop = (name: string, text: string, defeat?: string) => ({ name, text, def
 export const cases: SeedCase[] = [
   {
     ref: "A1",
+    review: "EDPB Guidelines 02/2025 (draft) say encrypted data stays personal data, so key destruction isn't erasure. Strengthens the case. Final text not yet checked. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "GDPR Art. 17 erasure vs. append-only ledgers",
     statement: "Erasure requires the operation the threat model forbids.",
     shapes: ["mandate-mutation"],
@@ -187,6 +190,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "A2",
+    review: "GDPR Art. 17(3)(b) and CCPA 1798.105(d)(8) both exempt data kept to meet a legal obligation, so the conflict holds only against retention law outside the deleting regime's own exemption. SEC 17a-4 has allowed an audit-trail alternative to WORM since 2022. Statement needs narrowing. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Erasure/deletion rights vs. mandatory retention",
     statement: "Two legal regimes command opposite state changes on the same bytes. The architecture didn't cause this and can't fix it.",
     shapes: ["mandate-mutation", "sovereign-contradiction"],
@@ -219,6 +223,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "A4",
+    review: "Everalbum and WW/Kurbo ordered deletion of the data and of the models built from it. 'The model, not the data' is wrong. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Erasure vs. trained model weights",
     statement: "The law wants a proof of absence. The architecture can only offer a probabilistic reduction.",
     shapes: ["mandate-mutation"],
@@ -236,6 +241,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "B1",
+    review: "Schrems II doesn't forbid transfers, and the 2023 Data Privacy Framework covers certified US recipients. The blocking rule is GDPR Art. 48. Cite Art. 48 with C-311/18 as context. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Schrems II transfer restrictions vs. CLOUD Act production orders",
     statement: "EU law forbids the transfer; US law compels production; same data, same provider.",
     analysis: "Architectural: irrelevant. Encryption doesn't help when the compelled party holds the keys.\n\nThis is a legal conflict that merely surfaces in architecture. Engineers get handed it anyway.",
@@ -250,6 +256,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "B2",
+    review: "Adopted eIDAS 2.0 (Reg. 2024/1183) differs from the draft this case describes. Recital 65 keeps browser control over TLS trust and Art. 45a(2) allows precautionary measures. Rewrite against the adopted text or record a resolved-legislatively transition. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "eIDAS 2.0 QWAC trust-root mandate vs. root program distrust authority",
     statement: "A trust root you cannot remove is not a trust decision.",
     shapes: ["sovereign-contradiction", "trust-root-plurality"],
@@ -281,6 +288,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "D1",
+    review: "Art. 33(3)(a) requires record counts only 'where possible', and Art. 34(3)(a) waives data-subject notice for encrypted data. The conflict is narrower than stated. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "E2EE vs. Art. 33/34 breach notification",
     statement: "The law requires the operator to know something the architecture was specifically built to prevent it from knowing.",
     shapes: ["deliberate-blindness"],
@@ -292,6 +300,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "D2",
+    review: "'When technically feasible' isn't in OSA s.121. It's a ministerial statement in Hansard (Lords, 6 Sept 2023). Citation not yet added. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "UK Online Safety Act s.121 scanning notices vs. E2EE",
     statement: "Same shape, different direction: the law requires detection capability that the architecture exists to preclude.",
     analysis: "Deferred in practice (\"when technically feasible\"), which is a legislature admitting the incompatibility without repealing the clause.",
@@ -304,22 +313,24 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "D3",
+    review: "No binding mandate found. Commission Recommendation (EU) 2020/518 is non-binding and asks for aggregated data. Fails criterion 'binding mandate'. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Exposure notification: DP-3T/GAEN vs. epidemiological need",
     statement: "The decentralized design deliberately withheld the linkage data public health authorities needed.",
     analysis: "The clearest case where the architecture won and the requirement went unmet. Useful control case.",
     shapes: ["deliberate-blindness"],
     resolvability: "unresolvable",
-    inclusionVerdict: "passes",
+    inclusionVerdict: "fails",
     instruments: [{ key: "publicHealth", role: "mandating", note: "Legal/institutional." }],
     property: prop("Decentralized Exposure Notification", "The decentralized design deliberately withheld it."),
   },
   {
     ref: "E1",
+    review: "Directive 2024/1799 Art. 5(6) exempts techniques 'justified by legitimate and objective factors'. If security attestation qualifies, the directive resolves the conflict. Verdict held pending that reading. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Right to repair vs. parts pairing / attested firmware",
     statement: "Secure boot and component attestation work by rejecting unattested parts. Repair requires installing exactly those.",
     shapes: ["trust-root-plurality"],
     resolvability: "unresolvable",
-    inclusionVerdict: "passes",
+    inclusionVerdict: "undecided",
     inclusionReasoning: "No, not without a plural attestation model that doesn't currently exist.",
     instruments: [
       { key: "euR2r", role: "mandating" },
@@ -373,11 +384,12 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "F2",
+    review: "The Travel Rule binds VASPs and financial institutions only, and the data needn't travel on-chain. Self-hosted to self-hosted transfers carry no obligation. Fails inclusion. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "FATF Travel Rule vs. self-hosted wallets",
     statement: "The rule requires originator/beneficiary information to accompany the transfer. A self-hosted wallet has no institution to attach it to and no counterparty to receive it.",
     shapes: ["verification-minimization"],
     resolvability: "unresolvable",
-    inclusionVerdict: "passes",
+    inclusionVerdict: "fails",
     inclusionReasoning: "No, for self-hosted endpoints specifically.",
     instruments: [{ key: "fatf", role: "mandating" }],
     property: prop("Self-Hosted Wallets", "A self-hosted wallet has no institution to attach it to and no counterparty to receive it."),
@@ -408,6 +420,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "G3",
+    review: "C-203/22 Dun & Bradstreet (2025) holds Art. 15(1)(h) doesn't require the algorithm and sends trade-secret claims to the regulator or court for balancing. Restate around whether post-hoc attributions describe 'the procedure and principles actually applied'. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Art. 15 / Art. 22 explainability vs. model opacity + trade secret",
     statement: "Post-hoc attributions (SHAP, LIME) are approximations of the decision, not the logic. The law asks for the logic; the architecture has weights.",
     shapes: ["binary-continuum"],
@@ -421,6 +434,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "G4",
+    review: "Neither 13 USC 9 nor PL 94-171 sets an accuracy standard or privacy budget, and Alabama v. Commerce never reached the merits. The conflict is between agency choices, not statutes. Narrow or move to rejections. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "Differential privacy budget vs. statutory accuracy",
     statement: "The privacy budget is a dial with no setting that satisfies both statutes.",
     analysis: "2020 US Census: Title 13 confidentiality vs. PL 94-171 redistricting accuracy. Litigated (Alabama v. Commerce).",
@@ -451,6 +465,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "H1",
+    review: "The conflicting rule is ePrivacy Art. 15(1) with the Charter. The CJEU line permits targeted retention and general retention of source IPs, so the conflict is the boundary of general and indiscriminate retention. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "EU data retention mandates vs. minimization",
     statement: "Member states keep re-legislating retention regimes the CJEU keeps striking (Digital Rights Ireland, Tele2, La Quadrature). Structural, cyclical.",
     shapes: ["sovereign-contradiction"],
@@ -465,6 +480,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "H2",
+    review: "SOC 2 doesn't require logging IPs, and PCI DSS is contractual. Supports the 'fails' verdict. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
     title: "PCI DSS 10.x / SOC2 logging vs. deletion rights over IPs and access records",
     statement: "Legitimate interest usually carries this, but the tension is permanent.",
     shapes: ["mandate-mutation"],
@@ -500,14 +516,8 @@ export const rejections = [
 ];
 
 /** "Next 17 cases: where to look." Shape is set only where the source names one. */
-export const leads: { ref: string; title: string; shape?: string }[] = [
-  { ref: "L1", title: "MiFID II best execution vs. dark pool opacity" },
-  { ref: "L2", title: "MDR recertification vs. security patch cadence", shape: "trust-root-plurality" },
-  { ref: "L3", title: "UNECE R155/R156 vs. right to repair" },
-  { ref: "L4", title: "CALEA lawful intercept vs. 5G SUPI concealment", shape: "deliberate-blindness" },
-  { ref: "L5", title: "TCF consent vs. real-time bidding broadcast" },
-  { ref: "L6", title: "DSA researcher data access vs. platform security posture" },
-];
+/** Every v0.1 lead has been drafted: passing ones are N-series cases, failing ones are rejections. */
+export const leads: { ref: string; title: string; shape?: string }[] = [];
 
 /** Filled by `pnpm --filter @bind/db prior-art`. Nothing has been run yet. */
 export const audits: { shape: string; model: string; promptVersion: string; verdict: "novel" | "partial" | "rebrand" | "inconclusive"; priorArt: string | null; reasoning: string }[] = [];

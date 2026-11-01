@@ -20,9 +20,18 @@ export type Verification = {
   verifiedAt: string;
 };
 
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 const by = "claude-opus-5-5";
 
+/** Batch checks written by research agents (2026-10-31). Each note says what wasn't opened. */
+type Batch = { instruments: Record<string, Verification>; sources: Record<string, Verification> };
+const batch = (f: string): Batch => JSON.parse(readFileSync(join(import.meta.dirname, "ledger", f), "utf8"));
+const batches = ["verify-a.json", "verify-b.json"].map(batch);
+
 export const instrumentVerifications: Record<string, Verification> = {
+  ...Object.assign({}, ...batches.map((b) => b.instruments)),
   euR2r: {
     status: "verified",
     url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024L1799",
@@ -68,6 +77,7 @@ export const instrumentVerifications: Record<string, Verification> = {
 };
 
 export const sourceVerifications: Record<string, Verification> = {
+  ...Object.assign({}, ...batches.map((b) => b.sources)),
   "EDPB position on crypto-shredding": {
     status: "corrected",
     url: "https://www.edpb.europa.eu/documents/guideline/guidelines-022025-on-processing-of-personal-data-through-blockchain_en",

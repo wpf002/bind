@@ -1,0 +1,175 @@
+{
+  "instruments": {
+    "ccpa": {
+      "status": "corrected",
+      "url": "https://cppa.ca.gov/regulations/pdf/ccpa_statute.pdf",
+      "publisher": "California Privacy Protection Agency",
+      "quote": "A business that receives a verifiable consumer request from a consumer to delete the consumer's personal information pursuant to subdivision (a) of this section shall delete the consumer's personal information from its records ... [(d)] A business ... shall not be required to comply with a consumer's request to delete ... if it is reasonably necessary ... to maintain the consumer's personal information in order to: ... (8) Comply with a legal obligation.",
+      "provision": "Cal. Civ. Code § 1798.105(a), (c)(1); exception (d)(8)",
+      "note": "The deletion right is Civ. Code § 1798.105(a) and (c)(1). § 1798.105(d)(8) exempts records kept to comply with a legal obligation, so the CCPA yields to 17a-4 for broker-dealer records and the two don't command opposite state changes on those bytes. A2 survives only for personal data that no retention rule covers but that sits on the same WORM media or immutable snapshot. Read from the CPPA's consolidated text (effective 1/1/2025) because leginfo.legislature.ca.gov returned a bot challenge.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "sec17a4": {
+      "status": "corrected",
+      "url": "https://www.ecfr.gov/current/title-17/section-240.17a-4",
+      "publisher": "eCFR",
+      "quote": "An electronic recordkeeping system must: (i)(A) Preserve a record for the duration of its applicable retention period in a manner that maintains a complete time-stamped audit trail that includes: (1) All modifications to and deletions of the record ... or (B) Preserve the records exclusively in a non-rewriteable, non-erasable format;",
+      "provision": "17 CFR 240.17a-4(b), (f)(2)(i)",
+      "note": "Since the 2022 amendments, 17a-4(f)(2)(i) lets a broker-dealer choose an audit-trail system (A) instead of WORM (B), so 'WORM retention' is one option. The retention duty itself stands: § 240.17a-4(b) requires preservation 'for a period of not less than three years'. A2 should say 'retention for 3 to 6 years, on WORM or an audit-trail system that can re-create deleted records'; either option still forbids true erasure within the period.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "frcp37e": {
+      "status": "corrected",
+      "url": "https://www.law.cornell.edu/rules/frcp/rule_37",
+      "publisher": "LII / Cornell Law School",
+      "quote": "If electronically stored information that should have been preserved in the anticipation or conduct of litigation is lost because a party failed to take reasonable steps to preserve it, and it cannot be restored or replaced through additional discovery, the court: (1) upon finding prejudice to another party ... may order measures no greater than necessary to cure the prejudice; or (2) only upon finding that the party acted with the intent to deprive ...",
+      "provision": "Fed. R. Civ. P. 37(e) (sanctions for lost ESI); preservation duty is common law",
+      "note": "Rule 37(e) is the sanctions rule for lost ESI. It doesn't create the litigation hold; the preservation duty is common law and 37(e) applies when a party 'failed to take reasonable steps'. The mandate string should read 'sanctions for failure to take reasonable steps to preserve ESI'. For H3 the test is reasonable steps, and disabling auto-delete for custodians under hold is a configuration change, so H3 passes only for ephemeral messages on devices or apps the organization can't configure.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "ftc": {
+      "status": "corrected",
+      "url": "https://www.ftc.gov/system/files/documents/cases/1923172_-_everalbum_decision_final.pdf",
+      "publisher": "Federal Trade Commission",
+      "quote": "Within ninety (90) days after the issuance of this Order, delete or destroy any Affected Work Product ... “Affected Work Product” means any models or algorithms developed in whole or in part using Biometric Information Respondent collected from Users of the “Ever” mobile application.",
+      "provision": "In re Everalbum, Inc., FTC No. 192-3172, Decision and Order (May 2021) § III.C; U.S. v. Kurbo, Inc. & WW Int'l (N.D. Cal. 2022), Stipulated Order § D",
+      "note": "Both orders exist and both reach models. They also order deletion of the data: Everalbum § III.A-B (photos, videos, face embeddings) and WW/Kurbo § D with a separate destruction of children's personal information (U.S. v. Kurbo, Inc. and WW International, N.D. Cal. 2022, stipulated order at https://www.ftc.gov/system/files/ftc_gov/pdf/wwkurbostipulatedorder.pdf). A4's 'the model, not the data' is wrong; it should read 'the data and any model trained on it'. A4's point holds: the remedy is destroying the model, which concedes that unlearning can't be verified.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "cloudact": {
+      "status": "corrected",
+      "url": "https://www.law.cornell.edu/uscode/text/18/2713",
+      "publisher": "LII / Cornell Law School",
+      "quote": "A provider of electronic communication service or remote computing service shall comply with the obligations of this chapter to preserve, backup, or disclose the contents of a wire or electronic communication and any record or other information pertaining to a customer or subscriber within such provider's possession, custody, or control, regardless of whether such communication, record, or other information is located within or outside of the United States.",
+      "provision": "18 U.S.C. § 2713 (CLOUD Act § 103(a)(1), Pub. L. 115-141), applied through § 2703 warrants",
+      "note": "The CLOUD Act doesn't create production orders. § 2713 extends existing SCA warrants and orders (18 U.S.C. § 2703) to data held abroad. § 2703(h) allows a comity motion to quash, but only where the conflicting law is that of a 'qualifying foreign government' with an executive agreement, so B1's conflict holds for EU data unless an EU-US agreement is in force; that status wasn't checked here.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "inRbi": {
+      "status": "corrected",
+      "url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=11244&Mode=0",
+      "publisher": "Reserve Bank of India",
+      "quote": "All system providers shall ensure that the entire data relating to payment systems operated by them are stored in a system only in India. This data should include the full end-to-end transaction details / information collected / carried / processed as part of the message / payment instruction. For the foreign leg of the transaction, if any, the data can also be stored in the foreign country, if required.",
+      "provision": "RBI/2017-18/153 (Storage of Payment System Data), para 2(i)",
+      "note": "Circular RBI/2017-18/153, DPSS.CO.OD No.2785/06.08.005/2017-2018, 6 April 2018, para 2(i). The text names a location ('a system only in India'), which supports C1's claim that the rule presupposes data has a determinate location. Scope is payment system operators' data only. RBI's later FAQs on processing abroad weren't checked and could narrow the conflict further.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "publicHealth": {
+      "status": "disputed",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32020H0518",
+      "publisher": "EUR-Lex (read via Internet Archive snapshot of 4 Mar 2026)",
+      "quote": "(5) sharing data with relevant epidemiological public bodies and public health research institutions, including aggregated data to ECDC.",
+      "provision": "Commission Recommendation (EU) 2020/518, point 13(5) (non-binding)",
+      "note": "No binding instrument required exposure-notification apps to give authorities linkage data. The closest EU text, Commission Recommendation (EU) 2020/518 point 13(5), is non-binding and asks for aggregated data. D3 has no legal mandate on the mandating side, so it fails the inclusion test as written; keep it as a control case outside the registry or name a binding instrument. EUR-Lex returned a bot challenge, so the text was read from an archived EUR-Lex snapshot.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "usR2r": {
+      "status": "corrected",
+      "url": "https://olis.oregonlegislature.gov/liz/2024R1/Downloads/MeasureDocument/SB1596/Enrolled",
+      "publisher": "Oregon State Legislature",
+      "quote": "For consumer electronic equipment that is manufactured for the first time, and first sold or used in this state, after January 1, 2025, an original equipment manufacturer may not use parts pairing to: (A) Prevent or inhibit an independent repair provider or an owner from installing or enabling the function of an otherwise functional replacement part or a component of consumer electronic equipment, including a replacement part or a component that the original equipment manufacturer has not approved;",
+      "provision": "Or. SB 1596 (2024), Or. Laws 2024 ch. 69, § 1(2)(b)",
+      "note": "Picked Oregon SB 1596 (2024) because it is the first US state statute that bans parts pairing outright, which is the exact conflict E1 claims. NY GBL § 399-nn and Minnesota § 325E.72 require parts and tools but don't ban pairing. Oregon defines parts pairing as using software to identify parts by unique identifier, so attestation can still run as long as it doesn't block function or reduce performance; E1's conflict is with the rejection behavior, not attestation itself.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "a11yInterop": {
+      "status": "corrected",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32019L0882",
+      "publisher": "EUR-Lex (read via Internet Archive snapshot of 21 Jul 2023)",
+      "quote": "The provision of services in order to maximise their foreseeable use by persons with disabilities, shall be achieved by including functions, practices, policies and procedures and alterations in the operation of the service targeted to address the needs of persons with disabilities and ensure interoperability with assistive technologies:",
+      "provision": "Directive (EU) 2019/882 (European Accessibility Act), Annex I, Section IV",
+      "note": "Picked the European Accessibility Act because it applies from June 2025 to the app-delivered services (banking, e-commerce, e-communications) that use Play Integrity-style attestation, and its text requires interoperability with assistive technologies. It doesn't require support for modified clients. Platform assistive tech (screen readers via OS accessibility APIs) works with attested apps, so E4 holds only for assistive tooling that modifies the client or runs on a non-attesting OS; E4 should narrow its claim to that.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "ageVerif": {
+      "status": "corrected",
+      "url": "https://www.legislation.gov.uk/ukpga/2023/50/section/81",
+      "publisher": "legislation.gov.uk",
+      "quote": "A duty to ensure, by the use of age verification or age estimation (or both), that children are not normally able to encounter content that is regulated provider pornographic content in relation to the service. (3) The age verification or age estimation must be of such a kind, and used in such a way, that it is highly effective at correctly determining whether or not a particular user is a child.",
+      "provision": "Online Safety Act 2023 (UK), s.81(2)-(3) (Part 5)",
+      "note": "Picked UK OSA s.81 (Part 5) because it is in force, mandates 'highly effective' age assurance, and sits beside UK GDPR Art. 5(1)(c), which is the conflicting side F1 cites. The Act permits age estimation, which doesn't always need identity evidence, so 'requires collecting identity evidence' overstates it. This supports F1's tech-gap verdict.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "fatf": {
+      "status": "disputed",
+      "url": "https://www.fatf-gafi.org/content/dam/fatf-gafi/recommendations/FATF%20Recommendations%202012.pdf",
+      "publisher": "FATF (read via Internet Archive copy, 'Updated June 2025')",
+      "quote": "Countries should ensure that originating VASPs obtain and hold required and accurate originator information and required beneficiary information on virtual asset transfers, submit the above information to the beneficiary VASP or financial institution (if any) immediately and securely ... [fn 47:] It is not necessary for this information to be attached directly to the virtual asset transfers.",
+      "provision": "FATF Recommendation 16 (renamed 'Payment transparency', June 2025) and INR.15 para 7(b), fn 47",
+      "note": "The Travel Rule binds VASPs and financial institutions only (INR.15 para 7(b)), and footnote 47 says the information need not accompany the transfer. A transfer between two self-hosted wallets has no obliged party, so the rule imposes nothing on it. A VASP sending to a self-hosted wallet collects from its own customer and the '(if any)' covers the missing counterparty. F2 fails the inclusion test as stated; it needs a rewrite around a national rule that does reach unhosted wallets, or a move to rejections.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "tradeSecret": {
+      "status": "corrected",
+      "url": "https://gdpr-info.eu/recitals/no-63/",
+      "publisher": "gdpr-info.eu (unofficial reproduction of GDPR recitals)",
+      "quote": "That right should not adversely affect the rights or freedoms of others, including trade secrets or intellectual property and in particular the copyright protecting the software. However, the result of those considerations should not be a refusal to provide all information to the data subject.",
+      "provision": "Directive (EU) 2016/943, Art. 2(1); GDPR Recital 63",
+      "note": "Picked Directive (EU) 2016/943 (Art. 2(1) defines trade secret; read from an archived EUR-Lex snapshot) because G3's mandating side is GDPR, and GDPR Recital 63 is where the trade-secret limit on access attaches. Recital 63 bars a full refusal. Commentary on CJEU C-203/22 Dun & Bradstreet Austria (27 Feb 2025) reports the Court held the same and said the algorithm itself isn't owed; if confirmed against the judgment text, the law doesn't ask for the weights and G3's 'the law asks for the logic' needs restating. The judgment text wasn't reached (EUR-Lex and InfoCuria blocked automated fetches).",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "title13": {
+      "status": "corrected",
+      "url": "https://www.law.cornell.edu/uscode/text/13/9",
+      "publisher": "LII / Cornell Law School",
+      "quote": "(a) Neither the Secretary, nor any other officer or employee of the Department of Commerce or bureau or agency thereof ... may ... (2) make any publication whereby the data furnished by any particular establishment or individual under this title can be identified;",
+      "provision": "13 U.S.C. § 9(a)(2)",
+      "note": "The confidentiality rule is 13 U.S.C. § 9(a)(2). It sets no privacy budget and names no method; the Bureau chose differential privacy to meet it. G4's 'no setting satisfies both' is the Bureau's reading of § 9 plus reconstruction-attack risk, not a quantity in the statute, and the case should say so.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "pl94171": {
+      "status": "disputed",
+      "url": "https://www.law.cornell.edu/uscode/text/13/141",
+      "publisher": "LII / Cornell Law School",
+      "quote": "Tabulations of population for the areas identified in any plan approved by the Secretary shall be completed by him as expeditiously as possible after the decennial census date and reported to the Governor of the State involved and to the officers or public bodies having responsibility for legislative apportionment or districting of such State,",
+      "provision": "13 U.S.C. § 141(c) (Pub. L. 94-171)",
+      "note": "PL 94-171 is codified at 13 U.S.C. § 141(c). It requires block-level tabulations and a deadline; it states no accuracy standard. The accuracy demand in G4 comes from one-person-one-vote case law and Alabama's Census Act arguments, which the court didn't reach. G4 should cite the equal-population requirement for the accuracy side or reword 'statutory accuracy'.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "alabama": {
+      "status": "corrected",
+      "url": "https://redistricting.lls.edu/wp-content/uploads/AL-commerce2-20210629-motion-deny-pi.pdf",
+      "publisher": "Doc. 139, M.D. Ala. (copy hosted by Loyola Law School redistricting site)",
+      "quote": "After the benefit of oral argument, the court concludes that Plaintiffs' motion for a preliminary injunction and petition for writ of mandamus are due to be DENIED.",
+      "provision": "Alabama v. U.S. Dep't of Commerce, No. 3:21-cv-211 (M.D. Ala. June 29, 2021) (three-judge court), Doc. 139",
+      "note": "Three-judge court, No. 3:21-cv-211-RAH-ECM-KCN, opinion of 29 June 2021 (reported at 546 F. Supp. 3d 1057 per search results, not checked). The court denied relief on cause-of-action, standing and ripeness grounds and didn't rule on whether differential privacy violates the Census Act; Alabama later dismissed the case. 'Litigated' is accurate, but G4 must not imply a court found the two mandates incompatible.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "pci10": {
+      "status": "corrected",
+      "url": "https://www.pcisecuritystandards.org/document_library/",
+      "publisher": "PCI Security Standards Council (text read from secondary reproductions)",
+      "quote": "10.2.2 Audit logs record the following details for each auditable event: User identification. Type of event. Date and time. Success and failure indication. Origination of event. Identity or name of affected data, system component, resource, or service ... 10.5.1 Retain audit log history for at least 12 months, with at least the most recent three months immediately available for analysis.",
+      "provision": "PCI DSS v4.0.1, Req. 10.2.2, 10.5.1",
+      "note": "Provision is PCI DSS v4.0.1 Req. 10.2.2 and 10.5.1 (v4.0 retired end of 2024). The PCI SSC document library requires accepting a license, so the quote is from secondary reproductions (withpci.pages.dev, ce.prod.cloudaware.com) and needs a check against the official PDF. PCI DSS is a contractual card-brand standard, not law, which supports H2's 'fails' verdict.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    },
+    "soc2": {
+      "status": "disputed",
+      "url": "https://www.aicpa.org/content/dam/aicpa/interestareas/frc/assuranceadvisoryservices/downloadabledocuments/trust-services-criteria.pdf",
+      "publisher": "AICPA (read via Internet Archive copy, 2017 TSC with March 2020 updates)",
+      "quote": "CC7.2 The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events.",
+      "provision": "AICPA 2017 Trust Services Criteria, CC7.2 (points of focus)",
+      "note": "SOC 2 is an attestation against the Trust Services Criteria, not a mandate. CC7.2 asks for monitoring and its points of focus mention 'logging of unusual system activities', but no criterion requires logging IPs or sets a retention period, and P4.3 requires secure disposal of personal information. SOC 2 should come off H2's mandating side; the AICPA's 2022 revised points of focus weren't checked.",
+      "verifiedBy": "claude-opus-5-5",
+      "verifiedAt": "2026-10-31"
+    }
+  },
+  "sources": {}
+}

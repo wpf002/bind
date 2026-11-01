@@ -8,8 +8,13 @@ import { fmtDate, resNote, titleCase } from "@/lib/format";
 export const metadata = { title: "Method" };
 
 export default async function Method() {
-  const [s, transitions, shapes] = await Promise.all([stats(), listTransitions(), listShapes()]);
-  const shapeName = (slug: string) => shapes.find((x) => x.slug === slug)?.name ?? slug;
+  const [s, transitions, shapes] = await Promise.all([
+    stats(),
+    listTransitions(),
+    listShapes(),
+  ]);
+  const shapeName = (slug: string) =>
+    shapes.find((x) => x.slug === slug)?.name ?? slug;
 
   return (
     <div className="wrap page">
@@ -28,9 +33,10 @@ export default async function Method() {
           <section id="inclusion">
             <h2>Inclusion Test</h2>
             <p className="prose" style={{ marginBottom: 24 }}>
-              A case enters the registry only if a competent engineer with unlimited budget still cannot satisfy both the
-              legal mandate and the architectural property. All five criteria must hold. Failing one is a rejection, logged
-              publicly under that criterion.
+              A case enters the registry only if a competent engineer with
+              unlimited budget still cannot satisfy both the legal mandate and
+              the architectural property. All five criteria must hold. Failing
+              one is a rejection, logged publicly under that criterion.
             </p>
             <div className="test">
               {INCLUSION_CRITERIA.map((c, i) => (
@@ -39,7 +45,11 @@ export default async function Method() {
                   <span className="test-label">{c.label}</span>
                   <span className="test-q">
                     {c.question}{" "}
-                    <Link className="code" href="/rejections" style={{ color: "var(--accent)" }}>
+                    <Link
+                      className="code"
+                      href="/rejections"
+                      style={{ color: "var(--accent)" }}
+                    >
                       {c.failsAs}
                     </Link>
                   </span>
@@ -66,8 +76,9 @@ export default async function Method() {
           <section id="gate">
             <h2>Citation Gate</h2>
             <p className="prose">
-              Every provision a case relies on is opened at its primary source and checked against the quoted text. A case
-              with any unverified or disputed citation stays unpublished. There is no provisional tier.
+              Every provision a case relies on is opened at its primary source
+              and checked against the quoted text. A case with any unverified or
+              disputed citation stays unpublished. There is no provisional tier.
             </p>
             <div className="reason-bar" style={{ marginTop: 24 }}>
               <div className="reason-stat">
@@ -113,7 +124,13 @@ export default async function Method() {
                       <td className="mono">
                         {titleCase(t.fromState)} → {titleCase(t.toState)}
                       </td>
-                      <td>{t.triggerUrl ? <a href={t.triggerUrl}>{t.trigger}</a> : t.trigger}</td>
+                      <td>
+                        {t.triggerUrl ? (
+                          <a href={t.triggerUrl}>{t.trigger}</a>
+                        ) : (
+                          t.trigger
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -125,26 +142,36 @@ export default async function Method() {
 
           <section id="leads">
             <h2>Leads</h2>
-            <table className="tbl">
-              <thead>
-                <tr>
-                  <th>Ref</th>
-                  <th>Candidate</th>
-                  <th>Likely Shape</th>
-                </tr>
-              </thead>
-              <tbody>
-                {leads.map((l) => (
-                  <tr key={l.ref}>
-                    <td className="mono">{l.ref}</td>
-                    <td>{l.title}</td>
-                    <td>
-                      {l.shape ? <Link href={`/shapes/${l.shape}`}>{shapeName(l.shape)}</Link> : <span className="muted">Unassigned</span>}
-                    </td>
+            {leads.length ? (
+              <table className="tbl">
+                <thead>
+                  <tr>
+                    <th>Ref</th>
+                    <th>Candidate</th>
+                    <th>Likely Shape</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {leads.map((l) => (
+                    <tr key={l.ref}>
+                      <td className="mono">{l.ref}</td>
+                      <td>{l.title}</td>
+                      <td>
+                        {l.shape ? (
+                          <Link href={`/shapes/${l.shape}`}>
+                            {shapeName(l.shape)}
+                          </Link>
+                        ) : (
+                          <span className="muted">Unassigned</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="muted">None Open</p>
+            )}
           </section>
         </div>
       </div>

@@ -1,6 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import { audits, cases, instruments, jurisdictions, rejections, shapes } from "./corpus";
-import { instrumentVerifications as iv, sourceVerifications as sv, type Verification } from "./verifications";
+import { audits, cases as corpusCases, instruments as corpusInstruments, jurisdictions, rejections as corpusRejections, shapes } from "./corpus";
+import { draftCases, draftInstruments, draftRejections, draftVerifications } from "./drafts";
+import { instrumentVerifications, sourceVerifications as sv, type Verification } from "./verifications";
+
+const cases = [...corpusCases, ...draftCases];
+const instruments: Record<string, (typeof corpusInstruments)[string]> = { ...corpusInstruments, ...draftInstruments };
+const iv: Record<string, Verification> = { ...instrumentVerifications, ...draftVerifications };
+const rejections = [...corpusRejections, ...draftRejections];
 
 const prisma = new PrismaClient();
 const slugOf = (i: number) => `bind-${String(i + 1).padStart(4, "0")}`;
@@ -59,7 +65,7 @@ async function main() {
         corpusRef: c.ref,
         title: c.title,
         statement: c.statement,
-        analysis: c.analysis,
+        analysis: [c.analysis, c.review && `Review: ${c.review}`].filter(Boolean).join("\n\n") || undefined,
         inclusionVerdict: c.inclusionVerdict,
         inclusionReasoning: c.inclusionReasoning,
         resolvability: c.resolvability,

@@ -1,152 +1,181 @@
 ### A1. GDPR Art. 17 erasure vs. append-only ledgers
-- **Legal:** GDPR Art. 17
+- **Legal:** GDPR Art. 17(1); exception at Art. 17(3)(b)
 - **Architectural:** Immutability is the security property of a distributed ledger. Mutation is the attack it's designed to prevent.
 - **Incompatibility:** Erasure requires the operation the threat model forbids.
 - **Current papering-over:** Off-chain storage: Off-chain storage with on-chain hash pointers. Crypto-shredding: Destroy the key, leave the ciphertext. CNIL's 2018 guidance treated key destruction as a possible route. I don't believe the EDPB has ever endorsed it, which leaves it legally untested.
+- **Note:** Review: EDPB Guidelines 02/2025 (draft) say encrypted data stays personal data, so key destruction isn't erasure. Strengthens the case. Final text not yet checked. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** resolvable_costly. Partially, but only by moving personal data out of the architecture, i.e. by not using the property you adopted the ledger for.
-- **Sources:** EDPB position on crypto-shredding: The EDPB has now addressed it: Guidelines 02/2025 on blockchain (consultation version April 2025, section 5.2). It does not endorse key destruction as erasure and says technical impossibility can't justify non-compliance. This strengthens A1. Read from the April 2025 version; the final version adopted in 2026 needs a check for changes to section 5.2.
+- **Sources:** General Data Protection Regulation, Art. 17(1); exception at Art. 17(3)(b): Provision is correct (Regulation (EU) 2016/679, Art. 17(1)). Art. 17(3)(b) disapplies the right where processing is needed 'for compliance with a legal obligation which requires processing by Union or Member State law'. That resolves A2 for EU and member-state retention laws, so A2's conflict only holds against non-EU retention (SEC 17a-4, FRCP 37(e)) and A2 should say so. CNIL 2018 guidance on key destruction: CNIL, 'Blockchain: Solutions for a responsible use of the blockchain in the context of personal data' (September 2018), section 2. It names deletion of a keyed-hash secret key as an example, says these methods do not strictly erase the data, and says their GDPR equivalence 'should be evaluated'. A1's 'possible route' wording is accurate. EDPB position on crypto-shredding: The EDPB has now addressed it: Guidelines 02/2025 on blockchain (consultation version April 2025, section 5.2). It does not endorse key destruction as erasure and says technical impossibility can't justify non-compliance. This strengthens A1. Read from the April 2025 version; the final version adopted in 2026 needs a check for changes to section 5.2.
 
 ### A2. Erasure/deletion rights vs. mandatory retention
-- **Legal:** GDPR Art. 17; CCPA Deletion; SEC 17a-4; FRCP 37(e) (Litigation hold.)
+- **Legal:** GDPR Art. 17(1); exception at Art. 17(3)(b); CCPA Cal. Civ. Code § 1798.105(a), (c)(1); exception (d)(8); SEC 17 CFR 240.17a-4(b), (f)(2)(i); FRCP Fed. R. Civ. P. 37(e) (sanctions for lost ESI); preservation duty is common law (Litigation hold.)
 - **Architectural:** WORM media and immutable backup snapshots are physically/cryptographically non-erasable by design.
 - **Incompatibility:** Two legal regimes command opposite state changes on the same bytes. The architecture didn't cause this and can't fix it.
 - **Current papering-over:** Deletion debt: Scope backups out of deletion; delete on restore ("deletion debt"). Put beyond use: ICO's "put beyond use" position.
+- **Note:** Review: GDPR Art. 17(3)(b) and CCPA 1798.105(d)(8) both exempt data kept to meet a legal obligation, so the conflict holds only against retention law outside the deleting regime's own exemption. SEC 17a-4 has allowed an audit-trail alternative to WORM since 2022. Statement needs narrowing. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable. No. Not an engineering problem.
+- **Sources:** California Consumer Privacy Act, Cal. Civ. Code § 1798.105(a), (c)(1); exception (d)(8): The deletion right is Civ. Code § 1798.105(a) and (c)(1). § 1798.105(d)(8) exempts records kept to comply with a legal obligation, so the CCPA yields to 17a-4 for broker-dealer records and the two don't command opposite state changes on those bytes. A2 survives only for personal data that no retention rule covers but that sits on the same WORM media or immutable snapshot. Read from the CPPA's consolidated text (effective 1/1/2025) because leginfo.legislature.ca.gov returned a bot challenge. General Data Protection Regulation, Art. 17(1); exception at Art. 17(3)(b): Provision is correct (Regulation (EU) 2016/679, Art. 17(1)). Art. 17(3)(b) disapplies the right where processing is needed 'for compliance with a legal obligation which requires processing by Union or Member State law'. That resolves A2 for EU and member-state retention laws, so A2's conflict only holds against non-EU retention (SEC 17a-4, FRCP 37(e)) and A2 should say so. SEC Rule 17a-4, 17 CFR 240.17a-4(b), (f)(2)(i): Since the 2022 amendments, 17a-4(f)(2)(i) lets a broker-dealer choose an audit-trail system (A) instead of WORM (B), so 'WORM retention' is one option. The retention duty itself stands: § 240.17a-4(b) requires preservation 'for a period of not less than three years'. A2 should say 'retention for 3 to 6 years, on WORM or an audit-trail system that can re-create deleted records'; either option still forbids true erasure within the period. Federal Rules of Civil Procedure, Fed. R. Civ. P. 37(e) (sanctions for lost ESI); preservation duty is common law: Rule 37(e) is the sanctions rule for lost ESI. It doesn't create the litigation hold; the preservation duty is common law and 37(e) applies when a party 'failed to take reasonable steps'. The mandate string should read 'sanctions for failure to take reasonable steps to preserve ESI'. For H3 the test is reasonable steps, and disabling auto-delete for custodians under hold is a configuration change, so H3 passes only for ephemeral messages on devices or apps the organization can't configure.
 
 ### A3. Erasure vs. transparency logs
-- **Legal:** GDPR Art. 17
+- **Legal:** GDPR Art. 17(1); exception at Art. 17(3)(b)
 - **Architectural:** Certificate Transparency logs are append-only Merkle trees; their entire security value is that entries cannot be removed retroactively.
 - **Incompatibility:** A mis-issued certificate with personal data in the SAN field is permanently public, by design, and the design is the point.
 - **Note:** Current papering-over: none. The tension is acknowledged and tolerated.
 - **Resolvable?** unresolvable. No.
+- **Sources:** General Data Protection Regulation, Art. 17(1); exception at Art. 17(3)(b): Provision is correct (Regulation (EU) 2016/679, Art. 17(1)). Art. 17(3)(b) disapplies the right where processing is needed 'for compliance with a legal obligation which requires processing by Union or Member State law'. That resolves A2 for EU and member-state retention laws, so A2's conflict only holds against non-EU retention (SEC 17a-4, FRCP 37(e)) and A2 should say so.
 
 ### A4. Erasure vs. trained model weights
-- **Legal:** GDPR Art. 17; FTC Deletion orders
+- **Legal:** GDPR Art. 17(1); exception at Art. 17(3)(b); FTC In re Everalbum, Inc., FTC No. 192-3172, Decision and Order (May 2021) § III.C; U.S. v. Kurbo, Inc. & WW Int'l (N.D. Cal. 2022), Stipulated Order § D
 - **Architectural:** Memorization means the weights may constitute a copy. Machine unlearning is approximate and, critically, not verifiable by the data subject or regulator.
 - **Incompatibility:** The law wants a proof of absence. The architecture can only offer a probabilistic reduction.
 - **Current papering-over:** Algorithmic disgorgement: The FTC's algorithmic disgorgement remedy (Everalbum, Kurbo/WW) orders destruction of the model, not the data. That's a regulator conceding the point rather than solving it. The most interesting datum in this section.
+- **Note:** Review: Everalbum and WW/Kurbo ordered deletion of the data and of the models built from it. 'The model, not the data' is wrong. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable. No, absent verifiable unlearning.
+- **Sources:** General Data Protection Regulation, Art. 17(1); exception at Art. 17(3)(b): Provision is correct (Regulation (EU) 2016/679, Art. 17(1)). Art. 17(3)(b) disapplies the right where processing is needed 'for compliance with a legal obligation which requires processing by Union or Member State law'. That resolves A2 for EU and member-state retention laws, so A2's conflict only holds against non-EU retention (SEC 17a-4, FRCP 37(e)) and A2 should say so. FTC deletion orders, In re Everalbum, Inc., FTC No. 192-3172, Decision and Order (May 2021) § III.C; U.S. v. Kurbo, Inc. & WW Int'l (N.D. Cal. 2022), Stipulated Order § D: Both orders exist and both reach models. They also order deletion of the data: Everalbum § III.A-B (photos, videos, face embeddings) and WW/Kurbo § D with a separate destruction of children's personal information (U.S. v. Kurbo, Inc. and WW International, N.D. Cal. 2022, stipulated order at https://www.ftc.gov/system/files/ftc_gov/pdf/wwkurbostipulatedorder.pdf). A4's 'the model, not the data' is wrong; it should read 'the data and any model trained on it'. A4's point holds: the remedy is destroying the model, which concedes that unlearning can't be verified.
 
 ### B1. Schrems II transfer restrictions vs. CLOUD Act production orders
-- **Legal:** Schrems II Transfer restrictions; CLOUD Act Production orders
+- **Legal:** Schrems II C-311/18 (Schrems II); GDPR Arts. 46, 48; CLOUD Act 18 U.S.C. § 2713 (CLOUD Act § 103(a)(1), Pub. L. 115-141), applied through § 2703 warrants
 - **Incompatibility:** EU law forbids the transfer; US law compels production; same data, same provider.
-- **Note:** Architectural: irrelevant. Encryption doesn't help when the compelled party holds the keys. This is a legal conflict that merely surfaces in architecture. Engineers get handed it anyway.
+- **Note:** Architectural: irrelevant. Encryption doesn't help when the compelled party holds the keys. This is a legal conflict that merely surfaces in architecture. Engineers get handed it anyway. Review: Schrems II doesn't forbid transfers, and the 2023 Data Privacy Framework covers certified US recipients. The blocking rule is GDPR Art. 48. Cite Art. 48 with C-311/18 as context. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable. No. This is a legal conflict that merely surfaces in architecture.
+- **Sources:** Schrems II, C-311/18 (Schrems II); GDPR Arts. 46, 48: Schrems II (C-311/18, 16 July 2020) invalidated Privacy Shield and requires essentially equivalent protection for transfers. It does not forbid transfers outright, and the EU-US Data Privacy Framework adequacy decision (2023/1795) now covers certified US recipients. The rule that blocks a CLOUD Act disclosure is GDPR Art. 48, so B1 should cite Art. 48 with C-311/18 as context. CLOUD Act, 18 U.S.C. § 2713 (CLOUD Act § 103(a)(1), Pub. L. 115-141), applied through § 2703 warrants: The CLOUD Act doesn't create production orders. § 2713 extends existing SCA warrants and orders (18 U.S.C. § 2703) to data held abroad. § 2703(h) allows a comity motion to quash, but only where the conflicting law is that of a 'qualifying foreign government' with an executive agreement, so B1's conflict holds for EU data unless an EU-US agreement is in force; that status wasn't checked here.
 
 ### B2. eIDAS 2.0 QWAC trust-root mandate vs. root program distrust authority
 - **Legal:** eIDAS 2.0 Art. 45(1a), Art. 45a
 - **Architectural:** The Web PKI's only real security mechanism is the ability to distrust a misbehaving CA quickly.
 - **Incompatibility:** A trust root you cannot remove is not a trust decision.
+- **Note:** Review: Adopted eIDAS 2.0 (Reg. 2024/1183) differs from the draft this case describes. Recital 65 keeps browser control over TLS trust and Art. 45a(2) allows precautionary measures. Rewrite against the adopted text or record a resolved-legislatively transition. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable. No. Mozilla/Google's public objections were the tell.
 - **Sources:** eIDAS 2.0, Art. 45(1a), Art. 45a: Regulation (EU) 2024/1183 amends Art. 45 and inserts Art. 45a. The adopted text requires recognition and display of QWAC identity data. Recital 65 keeps browser control over TLS trust, and Art. 45a(2) lets browsers take precautionary measures against a certificate, subject to notification and supervisory review. The case's claim that browsers must trust member-state CAs describes the draft, not the adopted text. B2 needs a rewrite or a move to a resolved-legislatively transition.
 
 ### C1. Data localization vs. anycast + global load balancing
-- **Legal:** 242-FZ Localization; PIPL/CSL Localization; RBI Payments localization
+- **Legal:** 242-FZ 152-FZ Art. 18(5), inserted by 242-FZ Art. 2(1); PIPL/CSL PIPL Art. 40; CSL Art. 37; RBI RBI/2017-18/153 (Storage of Payment System Data), para 2(i)
 - **Architectural:** Placement under anycast routing and opportunistic cache fill is an emergent runtime property of BGP and traffic, not a configured fact. Global failover, latency.
 - **Incompatibility:** The law asks a question the system cannot answer without giving up the property (global failover, latency) it was built for.
 - **Current papering-over:** Pinned regions: In-country pinned regions with degraded performance and separate operational stacks. Degraded performance and separate operational stacks.
 - **Resolvable?** resolvable_costly. Yes, expensively, by abandoning the architecture. So it fails the strict inclusion test and sits here as a boundary case.
+- **Sources:** Federal Law 242-FZ, 152-FZ Art. 18(5), inserted by 242-FZ Art. 2(1): 242-FZ Art. 2(1) inserted Art. 18(5) into Federal Law 152-FZ, in force 1 September 2015. The duty attaches to the database used at collection and says nothing about routing or caches, so an in-country primary database satisfies the text. That confirms C1's 'fails' verdict. A 2025 amendment (23-FZ) reportedly tightened 18(5); current text not checked. PIPL / CSL, PIPL Art. 40; CSL Art. 37: Localization is PIPL Art. 40 and CSL Art. 37. Both bind only CIIOs and, for PIPL, handlers above CAC volume thresholds, and both permit export after a security assessment. The CSL was amended in October 2025; confirm Art. 37's numbering against the current NPC text. RBI payments data mandate, RBI/2017-18/153 (Storage of Payment System Data), para 2(i): Circular RBI/2017-18/153, DPSS.CO.OD No.2785/06.08.005/2017-2018, 6 April 2018, para 2(i). The text names a location ('a system only in India'), which supports C1's claim that the rule presupposes data has a determinate location. Scope is payment system operators' data only. RBI's later FAQs on processing abroad weren't checked and could narrow the conflict further.
 
 ### D1. E2EE vs. Art. 33/34 breach notification
-- **Legal:** GDPR Art. 33/34
+- **Legal:** GDPR Art. 33(1), 33(3)(a); Art. 34(1), 34(3)(a)
 - **Architectural:** A zero-knowledge operator holds ciphertext and cannot inspect what leaked.
 - **Incompatibility:** The law requires the operator to know something the architecture was specifically built to prevent it from knowing.
+- **Note:** Review: Art. 33(3)(a) requires record counts only 'where possible', and Art. 34(3)(a) waives data-subject notice for encrypted data. The conflict is narrower than stated. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable. No. Either the operator can inspect user data or it can't.
+- **Sources:** General Data Protection Regulation, Art. 33(1), 33(3)(a); Art. 34(1), 34(3)(a): The 72-hour rule and the categories/records content are correct, but the content duty is qualified by 'where possible', and Art. 33(4) allows phased notification. Art. 34(3)(a) waives notice to data subjects where encryption made the data unintelligible. D1 has to show a breach where the operator still owes a description it cannot produce; as written, the 'where possible' qualifier lets an E2EE operator notify without the detail.
 
 ### D2. UK Online Safety Act s.121 scanning notices vs. E2EE
 - **Legal:** UK OSA s.121(2)(a)(iii)
 - **Architectural:** The architecture exists to preclude detection capability.
 - **Incompatibility:** Same shape, different direction: the law requires detection capability that the architecture exists to preclude.
-- **Note:** Deferred in practice ("when technically feasible"), which is a legislature admitting the incompatibility without repealing the clause.
+- **Note:** Deferred in practice ("when technically feasible"), which is a legislature admitting the incompatibility without repealing the clause. Review: 'When technically feasible' isn't in OSA s.121. It's a ministerial statement in Hansard (Lords, 6 Sept 2023). Citation not yet added. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable
 - **Sources:** Online Safety Act, s.121(2)(a)(iii): Section number is correct. 'When technically feasible' is not in the statute. It comes from a ministerial statement, which needs its own Hansard citation before D2's 'deferred in practice' claim can stand. s.122 requires a skilled person's report before a notice.
 
 ### D3. Exposure notification: DP-3T/GAEN vs. epidemiological need
-- **Legal:** Public Health Linkage data (Legal/institutional.)
+- **Legal:** Public Health Commission Recommendation (EU) 2020/518, point 13(5) (non-binding) (Legal/institutional.)
 - **Architectural:** The decentralized design deliberately withheld it.
 - **Incompatibility:** The decentralized design deliberately withheld the linkage data public health authorities needed.
-- **Note:** The clearest case where the architecture won and the requirement went unmet. Useful control case.
+- **Note:** The clearest case where the architecture won and the requirement went unmet. Useful control case. Review: No binding mandate found. Commission Recommendation (EU) 2020/518 is non-binding and asks for aggregated data. Fails criterion 'binding mandate'. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable
+- **Sources:** Public health authorities, Commission Recommendation (EU) 2020/518, point 13(5) (non-binding): No binding instrument required exposure-notification apps to give authorities linkage data. The closest EU text, Commission Recommendation (EU) 2020/518 point 13(5), is non-binding and asks for aggregated data. D3 has no legal mandate on the mandating side, so it fails the inclusion test as written; keep it as a control case outside the registry or name a binding instrument. EUR-Lex returned a bot challenge, so the text was read from an archived EUR-Lex snapshot.
 
 ### E1. Right to repair vs. parts pairing / attested firmware
-- **Legal:** EU R2R Art. 5(6); US States Right to repair
+- **Legal:** EU R2R Art. 5(6); US States Or. SB 1596 (2024), Or. Laws 2024 ch. 69, § 1(2)(b)
 - **Architectural:** Secure boot and component attestation work by rejecting unattested parts.
 - **Incompatibility:** Secure boot and component attestation work by rejecting unattested parts. Repair requires installing exactly those.
+- **Note:** Review: Directive 2024/1799 Art. 5(6) exempts techniques 'justified by legitimate and objective factors'. If security attestation qualifies, the directive resolves the conflict. Verdict held pending that reading. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable. No, not without a plural attestation model that doesn't currently exist.
-- **Sources:** Directive (EU) 2024/1799, Art. 5(6): Directive number is correct. The anti-pairing rule is Art. 5(6). It carries an exception for 'legitimate and objective factors'. Whether security attestation qualifies is the open question, and it decides E1's inclusion verdict. Scope is limited to goods in Annex II.
+- **Sources:** Directive (EU) 2024/1799, Art. 5(6): Directive number is correct. The anti-pairing rule is Art. 5(6). It carries an exception for 'legitimate and objective factors'. Whether security attestation qualifies is the open question, and it decides E1's inclusion verdict. Scope is limited to goods in Annex II. US state right-to-repair statutes, Or. SB 1596 (2024), Or. Laws 2024 ch. 69, § 1(2)(b): Picked Oregon SB 1596 (2024) because it is the first US state statute that bans parts pairing outright, which is the exact conflict E1 claims. NY GBL § 399-nn and Minnesota § 325E.72 require parts and tools but don't ban pairing. Oregon defines parts pairing as using software to identify parts by unique identifier, so attestation can still run as long as it doesn't block function or reduce performance; E1's conflict is with the rejection behavior, not attestation itself.
 
 ### E2. DMA Art. 6(4) sideloading vs. single-root iOS distribution model
 - **Legal:** DMA Art. 6(4)
 - **Architectural:** Single-root iOS distribution model.
 - **Incompatibility:** DMA Art. 6(4) sideloading vs. single-root iOS distribution model.
 - **Resolvable?** unresolvable
+- **Sources:** Digital Markets Act, Art. 6(4): Provision is correct (Regulation (EU) 2022/1925, Art. 6(4)). The second subparagraph keeps integrity measures that are strictly necessary and proportionate. E2 has to argue that the single-root model's security property is lost even under that carve-out, or it reads as a proportionality dispute.
 
 ### E3. DMA Art. 7 messaging interoperability vs. E2EE guarantees
-- **Legal:** DMA Art. 7
+- **Legal:** DMA Art. 7(1), 7(3)
 - **Architectural:** E2EE guarantees.
 - **Incompatibility:** You cannot verify the security properties of a bridged counterparty's implementation. Interop degrades the guarantee to "as strong as the weakest bridge."
 - **Resolvable?** unresolvable
+- **Sources:** Digital Markets Act, Art. 7(1), 7(3): Provision is correct (Art. 7(1)). Art. 7(3) requires the E2EE level to be preserved across interoperable services. The statute itself commands both sides, which supports E3's inclusion; E3 should cite 7(3).
 
 ### E4. Client attestation (Play Integrity, WEI) vs. accessibility and interoperability obligations
-- **Legal:** A11y/Interop Unspecified
+- **Legal:** A11y/Interop Directive (EU) 2019/882 (European Accessibility Act), Annex I, Section IV
 - **Architectural:** Attestation excludes modified clients.
 - **Incompatibility:** Attestation excludes modified clients. Assistive tooling and interoperable clients are modified clients.
 - **Resolvable?** unresolvable
+- **Sources:** Accessibility and interoperability obligations, Directive (EU) 2019/882 (European Accessibility Act), Annex I, Section IV: Picked the European Accessibility Act because it applies from June 2025 to the app-delivered services (banking, e-commerce, e-communications) that use Play Integrity-style attestation, and its text requires interoperability with assistive technologies. It doesn't require support for modified clients. Platform assistive tech (screen readers via OS accessibility APIs) works with attested apps, so E4 holds only for assistive tooling that modifies the client or runs on a non-attesting OS; E4 should narrow its claim to that.
 
 ### F1. Age verification mandates vs. GDPR Art. 5(1)(c)
-- **Legal:** Age Verification Unspecified; GDPR Art. 5(1)(c)
+- **Legal:** Age Verification Online Safety Act 2023 (UK), s.81(2)-(3) (Part 5); GDPR Art. 5(1)(c)
 - **Incompatibility:** Verifying age requires collecting identity evidence; minimization forbids collecting more than necessary for the purpose.
 - **Resolvable?** tech_gap. Yes, in principle: ZK age attestation. Not deployed at scale. This is a technology gap, not a true incompatibility, and belongs in a different bucket than D.
+- **Sources:** Age verification mandates, Online Safety Act 2023 (UK), s.81(2)-(3) (Part 5): Picked UK OSA s.81 (Part 5) because it is in force, mandates 'highly effective' age assurance, and sits beside UK GDPR Art. 5(1)(c), which is the conflicting side F1 cites. The Act permits age estimation, which doesn't always need identity evidence, so 'requires collecting identity evidence' overstates it. This supports F1's tech-gap verdict. General Data Protection Regulation, Art. 5(1)(c): Provision is correct. For H1 the CJEU retention rulings rest on Directive 2002/58/EC Art. 15(1) and Charter Arts. 7, 8, 11 and 52(1), not on GDPR Art. 5(1)(c). H1 should cite those as the conflicting rule.
 
 ### F2. FATF Travel Rule vs. self-hosted wallets
-- **Legal:** FATF Travel Rule
+- **Legal:** FATF FATF Recommendation 16 (renamed 'Payment transparency', June 2025) and INR.15 para 7(b), fn 47
 - **Architectural:** A self-hosted wallet has no institution to attach it to and no counterparty to receive it.
 - **Incompatibility:** The rule requires originator/beneficiary information to accompany the transfer. A self-hosted wallet has no institution to attach it to and no counterparty to receive it.
+- **Note:** Review: The Travel Rule binds VASPs and financial institutions only, and the data needn't travel on-chain. Self-hosted to self-hosted transfers carry no obligation. Fails inclusion. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable. No, for self-hosted endpoints specifically.
+- **Sources:** FATF Travel Rule, FATF Recommendation 16 (renamed 'Payment transparency', June 2025) and INR.15 para 7(b), fn 47: The Travel Rule binds VASPs and financial institutions only (INR.15 para 7(b)), and footnote 47 says the information need not accompany the transfer. A transfer between two self-hosted wallets has no obliged party, so the rule imposes nothing on it. A VASP sending to a self-hosted wallet collects from its own customer and the '(if any)' covers the missing counterparty. F2 fails the inclusion test as stated; it needs a rewrite around a national rule that does reach unhosted wallets, or a move to rejections.
 
 ### G1. "Anonymous" as a binary vs. re-identifiability as a continuum
-- **Legal:** GDPR Anonymous data
+- **Legal:** GDPR Recital 26
 - **Incompatibility:** GDPR treats anonymized data as out of scope. Re-identifiability is a function of dataset sparsity plus available auxiliary data, and auxiliary data grows monotonically over time.
 - **Note:** Consequence: a dataset can become personal data years later without anyone touching it. No engineering action at time T fixes this.
 - **Resolvable?** unresolvable
+- **Sources:** General Data Protection Regulation, Recital 26: The out-of-scope rule is Recital 26. The same recital makes identifiability depend on 'all the means reasonably likely to be used', taking into account 'technological developments', so the legal test already moves over time. G1's claim holds as a binary applied to a moving input. C-413/23 P EDPS v SRB (4 September 2025) also assesses identifiability from the recipient's position and should be cited.
 
 ### G2. Art. 16 rectification vs. probabilistic inference
-- **Legal:** GDPR Art. 16; CJEU C-634/21; CJEU Nowak
+- **Legal:** GDPR Art. 16; CJEU C-634/21 (7 December 2023), on GDPR Art. 22(1); CJEU C-434/16 (20 December 2017), paras. 52-53
 - **Incompatibility:** You cannot "correct" a credit score or a propensity estimate. It isn't true or false the way a stored field is.
 - **Note:** Live in SCHUFA (C-634/21) and Nowak.
 - **Resolvable?** unresolvable
+- **Sources:** General Data Protection Regulation, Art. 16: Provision is correct. The article only reaches 'inaccurate' data, and Nowak (C-434/16, para. 53) measures accuracy against the purpose of collection. A controller can still rectify a score's wrong inputs and recompute. G2 should narrow its claim to the output value itself. SCHUFA (C-634/21), C-634/21 (7 December 2023), on GDPR Art. 22(1): C-634/21, judgment of 7 December 2023, interprets Art. 22(1). It does not address Art. 16 rectification, so for G2 it only establishes that the score is a regulated decision. It fits G3 more directly. Nowak, C-434/16 (20 December 2017), paras. 52-53: Case is C-434/16, Nowak v Data Protection Commissioner (20 December 2017), under Directive 95/46. Paras. 52 to 53 make accuracy purpose-relative, which supports G2's point that an evaluative output is not true or false like a stored field.
 
 ### G3. Art. 15 / Art. 22 explainability vs. model opacity + trade secret
-- **Legal:** GDPR Art. 15; GDPR Art. 22; Trade Secret Unspecified
+- **Legal:** GDPR Art. 15(1)(h); GDPR Art. 22(1), 22(3); Recital 71; Trade Secret Directive (EU) 2016/943, Art. 2(1); GDPR Recital 63
 - **Incompatibility:** Post-hoc attributions (SHAP, LIME) are approximations of the decision, not the logic. The law asks for the logic; the architecture has weights.
+- **Note:** Review: C-203/22 Dun & Bradstreet (2025) holds Art. 15(1)(h) doesn't require the algorithm and sends trade-secret claims to the regulator or court for balancing. Restate around whether post-hoc attributions describe 'the procedure and principles actually applied'. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable
+- **Sources:** General Data Protection Regulation, Art. 22(1), 22(3); Recital 71: Art. 22 does not itself ask for the logic. Art. 22(3) lists human intervention, the right to express a view, and the right to contest. The explanation language appears only in Recital 71, which is not binding. The logic requirement in G3 comes from Art. 15(1)(h). Trade secret protection, Directive (EU) 2016/943, Art. 2(1); GDPR Recital 63: Picked Directive (EU) 2016/943 (Art. 2(1) defines trade secret; read from an archived EUR-Lex snapshot) because G3's mandating side is GDPR, and GDPR Recital 63 is where the trade-secret limit on access attaches. Recital 63 bars a full refusal. Commentary on CJEU C-203/22 Dun & Bradstreet Austria (27 Feb 2025) reports the Court held the same and said the algorithm itself isn't owed; if confirmed against the judgment text, the law doesn't ask for the weights and G3's 'the law asks for the logic' needs restating. The judgment text wasn't reached (EUR-Lex and InfoCuria blocked automated fetches). General Data Protection Regulation, Art. 15(1)(h): Provision is Art. 15(1)(h). Dun & Bradstreet Austria (C-203/22, 27 February 2025) reads it as a right to 'the procedure and principles actually applied', and para. 59 says a complex formula or algorithm does not satisfy it. The same ruling sends trade-secret claims to the supervisory authority or court for balancing. G3 should cite C-203/22, drop trade secret as an absolute bar, and rest on whether post-hoc attributions describe the principles actually applied.
 
 ### G4. Differential privacy budget vs. statutory accuracy
-- **Legal:** Title 13 Confidentiality; PL 94-171 Redistricting data; Alabama v. Commerce Litigation
+- **Legal:** Title 13 13 U.S.C. § 9(a)(2); PL 94-171 13 U.S.C. § 141(c) (Pub. L. 94-171); Alabama v. Commerce Alabama v. U.S. Dep't of Commerce, No. 3:21-cv-211 (M.D. Ala. June 29, 2021) (three-judge court), Doc. 139
 - **Incompatibility:** The privacy budget is a dial with no setting that satisfies both statutes.
-- **Note:** 2020 US Census: Title 13 confidentiality vs. PL 94-171 redistricting accuracy. Litigated (Alabama v. Commerce).
+- **Note:** 2020 US Census: Title 13 confidentiality vs. PL 94-171 redistricting accuracy. Litigated (Alabama v. Commerce). Review: Neither 13 USC 9 nor PL 94-171 sets an accuracy standard or privacy budget, and Alabama v. Commerce never reached the merits. The conflict is between agency choices, not statutes. Narrow or move to rejections. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable
+- **Sources:** Title 13, 13 U.S.C. § 9(a)(2): The confidentiality rule is 13 U.S.C. § 9(a)(2). It sets no privacy budget and names no method; the Bureau chose differential privacy to meet it. G4's 'no setting satisfies both' is the Bureau's reading of § 9 plus reconstruction-attack risk, not a quantity in the statute, and the case should say so. Alabama v. Commerce, Alabama v. U.S. Dep't of Commerce, No. 3:21-cv-211 (M.D. Ala. June 29, 2021) (three-judge court), Doc. 139: Three-judge court, No. 3:21-cv-211-RAH-ECM-KCN, opinion of 29 June 2021 (reported at 546 F. Supp. 3d 1057 per search results, not checked). The court denied relief on cause-of-action, standing and ripeness grounds and didn't rule on whether differential privacy violates the Census Act; Alabama later dismissed the case. 'Litigated' is accurate, but G4 must not imply a court found the two mandates incompatible. PL 94-171, 13 U.S.C. § 141(c) (Pub. L. 94-171): PL 94-171 is codified at 13 U.S.C. § 141(c). It requires block-level tabulations and a deadline; it states no accuracy standard. The accuracy demand in G4 comes from one-person-one-vote case law and Alabama's Census Act arguments, which the court didn't reach. G4 should cite the equal-population requirement for the accuracy side or reword 'statutory accuracy'.
 
 ### G5. AI Act Art. 10(5) bias testing vs. GDPR Art. 9
-- **Legal:** AI Act Art. 10(5); GDPR Art. 9
+- **Legal:** AI Act Art. 10(5); GDPR Art. 9(1)
 - **Incompatibility:** Testing for bias against protected classes requires processing special-category data that Art. 9 prohibits.
 - **Note:** It was resolved by an explicit statutory carve-out. It's the corpus's only worked example of what resolution actually looks like: a legislature patching the conflict, not an engineer.
 - **Resolvable?** unresolvable
-- **Sources:** AI Act, Art. 10(5): Provision is correct (Regulation (EU) 2024/1689, Art. 10(5)). Conditions (a) to (f) apply 'in addition to' the GDPR, so the carve-out narrows the conflict with Art. 9 without removing it.
+- **Sources:** AI Act, Art. 10(5): Provision is correct (Regulation (EU) 2024/1689, Art. 10(5)). Conditions (a) to (f) apply 'in addition to' the GDPR, so the carve-out narrows the conflict with Art. 9 without removing it. General Data Protection Regulation, Art. 9(1): Provision is Art. 9(1). The prohibition is subject to the Art. 9(2) exceptions, and AI Act Art. 10(5) supplies one for bias detection. G5 should state the conflict as the residual gap after 10(5)'s conditions, consistent with the aiAct105 entry.
 
 ### H1. EU data retention mandates vs. minimization
-- **Legal:** EU Retention Retention mandates; GDPR Art. 5(1)(c); CJEU Retention rulings
+- **Legal:** EU Retention Directive 2002/58/EC Art. 15(1) (enabling clause); national retention statutes; GDPR Art. 5(1)(c); CJEU C-293/12 & C-594/12; C-203/15 & C-698/15; C-511/18, C-512/18 & C-520/18; C-140/20; C-793/19 & C-794/19
 - **Incompatibility:** Member states keep re-legislating retention regimes the CJEU keeps striking (Digital Rights Ireland, Tele2, La Quadrature). Structural, cyclical.
+- **Note:** Review: The conflicting rule is ePrivacy Art. 15(1) with the Charter. The CJEU line permits targeted retention and general retention of source IPs, so the conflict is the boundary of general and indiscriminate retention. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable
+- **Sources:** Member-state data retention regimes, Directive 2002/58/EC Art. 15(1) (enabling clause); national retention statutes: Member-state retention laws rest on Directive 2002/58/EC Art. 15(1), which permits but does not require retention. The mandates are national statutes, and H1 should name at least one, such as the German TKG provisions struck in SpaceNet (C-793/19). General Data Protection Regulation, Art. 5(1)(c): Provision is correct. For H1 the CJEU retention rulings rest on Directive 2002/58/EC Art. 15(1) and Charter Arts. 7, 8, 11 and 52(1), not on GDPR Art. 5(1)(c). H1 should cite those as the conflicting rule. Digital Rights Ireland, Tele2, La Quadrature, C-293/12 & C-594/12; C-203/15 & C-698/15; C-511/18, C-512/18 & C-520/18; C-140/20; C-793/19 & C-794/19: Rulings: Digital Rights Ireland (C-293/12, C-594/12, 8 April 2014) invalidated Directive 2006/24/EC; Tele2 Sverige/Watson (C-203/15, C-698/15, 21 December 2016), La Quadrature du Net (C-511/18, C-512/18, C-520/18, 6 October 2020), Commissioner of An Garda Siochana (C-140/20, 5 April 2022) and SpaceNet (C-793/19, C-794/19, 20 September 2022) struck national regimes. The same rulings permit targeted retention, general retention of source IP addresses, and time-limited national-security instructions. H1's cycle is real for general and indiscriminate retention, but a regime inside those limits survives, so H1 should state the conflict as that boundary.
 
 ### H2. PCI DSS 10.x / SOC2 logging vs. deletion rights over IPs and access records
-- **Legal:** PCI DSS 10.x; SOC 2 Logging; GDPR Art. 17
+- **Legal:** PCI DSS PCI DSS v4.0.1, Req. 10.2.2, 10.5.1; SOC 2 AICPA 2017 Trust Services Criteria, CC7.2 (points of focus); GDPR Art. 17(1); exception at Art. 17(3)(b)
 - **Incompatibility:** Legitimate interest usually carries this, but the tension is permanent.
+- **Note:** Review: SOC 2 doesn't require logging IPs, and PCI DSS is contractual. Supports the 'fails' verdict. Review by claude-opus-5-5, 2026-10-31, pending human countersign.
 - **Resolvable?** unresolvable
+- **Sources:** PCI DSS, PCI DSS v4.0.1, Req. 10.2.2, 10.5.1: Provision is PCI DSS v4.0.1 Req. 10.2.2 and 10.5.1 (v4.0 retired end of 2024). The PCI SSC document library requires accepting a license, so the quote is from secondary reproductions (withpci.pages.dev, ce.prod.cloudaware.com) and needs a check against the official PDF. PCI DSS is a contractual card-brand standard, not law, which supports H2's 'fails' verdict. SOC 2, AICPA 2017 Trust Services Criteria, CC7.2 (points of focus): SOC 2 is an attestation against the Trust Services Criteria, not a mandate. CC7.2 asks for monitoring and its points of focus mention 'logging of unusual system activities', but no criterion requires logging IPs or sets a retention period, and P4.3 requires secure disposal of personal information. SOC 2 should come off H2's mandating side; the AICPA's 2022 revised points of focus weren't checked. General Data Protection Regulation, Art. 17(1); exception at Art. 17(3)(b): Provision is correct (Regulation (EU) 2016/679, Art. 17(1)). Art. 17(3)(b) disapplies the right where processing is needed 'for compliance with a legal obligation which requires processing by Union or Member State law'. That resolves A2 for EU and member-state retention laws, so A2's conflict only holds against non-EU retention (SEC 17a-4, FRCP 37(e)) and A2 should say so.
 
 ### H3. FRCP 37(e) litigation hold vs. ephemeral messaging
-- **Legal:** FRCP 37(e)
+- **Legal:** FRCP Fed. R. Civ. P. 37(e) (sanctions for lost ESI); preservation duty is common law
 - **Architectural:** Auto-delete defaults are a security control.
 - **Incompatibility:** Auto-delete defaults are a security control and a spoliation risk simultaneously.
 - **Note:** Sanctions have landed (Google Chat retention; Uber's Wickr use).
 - **Resolvable?** unresolvable
+- **Sources:** Federal Rules of Civil Procedure, Fed. R. Civ. P. 37(e) (sanctions for lost ESI); preservation duty is common law: Rule 37(e) is the sanctions rule for lost ESI. It doesn't create the litigation hold; the preservation duty is common law and 37(e) applies when a party 'failed to take reasonable steps'. The mandate string should read 'sanctions for failure to take reasonable steps to preserve ESI'. For H3 the test is reasonable steps, and disabling auto-delete for custodians under hold is a configuration change, so H3 passes only for ephemeral messages on devices or apps the organization can't configure.
