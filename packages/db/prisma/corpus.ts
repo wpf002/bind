@@ -467,7 +467,7 @@ export const cases: SeedCase[] = [
     ref: "G4",
     title: "Differential privacy budget vs. redistricting accuracy",
     statement: "Census Bureau reconstruction tests show block-level tables accurate enough for equal-population districting let an attacker rebuild individual records, which 13 U.S.C. § 9(a)(2) forbids publishing. The privacy budget sets where that trade lands, and no setting satisfies both. Neither statute sets an accuracy floor or a privacy-loss limit.",
-    analysis: "2020 US Census: Title 13 confidentiality vs. PL 94-171 redistricting accuracy. Litigated (Alabama v. Commerce). The court denied relief on standing and ripeness without reaching the merits.\n\nThe accuracy demand comes from equal-population case law, not PL 94-171. That source isn't cited yet. Whether swapping or other methods would meet § 9 is the Bureau's judgment and is disputed.",
+    analysis: "2020 US Census: Title 13 confidentiality vs. PL 94-171 redistricting accuracy. Litigated (Alabama v. Commerce). The court denied relief on standing and ripeness without reaching the merits.\n\nThe accuracy demand comes from equal-population case law, not PL 94-171: Karcher v. Daggett allows no avoidable deviation in congressional districts. Karcher also measures equality against the census count as published, which a reviewer needs to weigh against this statement. Whether swapping or other methods would meet § 9 is the Bureau's judgment and is disputed.",
     shapes: ["binary-continuum"],
     resolvability: "unresolvable",
     inclusionVerdict: "undecided",
@@ -477,6 +477,7 @@ export const cases: SeedCase[] = [
       { key: "pl94171", role: "mandating", note: "Block-level tabulations and a deadline. No accuracy standard." },
       { key: "alabama", role: "context" },
     ],
+    sources: [{ label: "Karcher v. Daggett, 462 U.S. 725 (1983)" }],
     amendments: [
       { field: "title", from: "Differential privacy budget vs. statutory accuracy", reason: "Neither statute sets an accuracy standard." },
       { field: "statement", from: "The privacy budget is a dial with no setting that satisfies both statutes.", reason: "The conflict is between § 9 as the Bureau reads it and equal-population accuracy, not between two statutes." },

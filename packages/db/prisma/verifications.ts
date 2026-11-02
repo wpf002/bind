@@ -117,6 +117,16 @@ export const sourceVerifications: Record<string, Verification> = {
     verifiedBy: by,
     verifiedAt: "2026-11-01",
   },
+  "Karcher v. Daggett, 462 U.S. 725 (1983)": {
+    status: "verified",
+    url: "https://tile.loc.gov/storage-services/service/ll/usrep/usrep462/usrep462725/usrep462725.pdf",
+    publisher: "Library of Congress (United States Reports)",
+    quote: "We thus reaffirm that there are no de minimis population variations, which could practicably be avoided, but which nonetheless meet the standard of Art. I, §2, without justification.",
+    provision: "462 U.S. at 734; at 738 on census data",
+    note: "Congressional districts only; state legislative maps follow the looser Reynolds v. Sims standard. At 738 the Court treats the census count as the 'best population data available' and 'the only basis for good-faith attempts to achieve population equality', and rejects undercount error as an excuse. Tension for G4: equality is measured against the published count, error and all, so noise injected before publication may not breach Karcher. Alabama v. Commerce challenged the accuracy of DP data but wasn't decided on the merits. Needs a reviewer's read.",
+    verifiedBy: by,
+    verifiedAt: "2026-11-01",
+  },
   "CJEU C-203/22 Dun & Bradstreet Austria, 27 Feb 2025": {
     status: "verified",
     url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62022CJ0203",
