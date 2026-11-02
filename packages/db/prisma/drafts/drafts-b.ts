@@ -1,13 +1,14 @@
-// Batch B drafts. Model-drafted by claude-opus-5-5, pending human review. Not publishable until a human signs off.
+// Batch B drafts. Model-drafted by claude-opus-5-5; owner sign-off in ../signoff.ts.
 // Refs run N9-N18, then N21-N22. The brief allotted N9-N16; three leads failed, so two extra refs were needed to reach the pass count.
 // N21-N22 added 2026-11-01 (N19-N20 are in drafts-a) to bring the corpus to 40.
+import { SIGNOFF_NOTE } from "../signoff";
 import type { SeedCase } from "../corpus";
 import type { Verification } from "../verifications";
 
 const BY = "claude-opus-5-5";
 const AT = "2026-10-31";
 const AT2 = "2026-11-01";
-const DRAFTED = "Drafted by claude-opus-5-5 pending human review.";
+const DRAFTED = `Drafted by claude-opus-5-5. ${SIGNOFF_NOTE}`;
 
 export const draftInstruments: Record<string, { regime: string; instrument: string; shortName: string; provision: string; mandate: string; jurisdiction: string }> = {
   nb_calea1002: { regime: "US lawful intercept", instrument: "Communications Assistance for Law Enforcement Act, 47 U.S.C. 1002", shortName: "CALEA", provision: "§ 1002(a)(1), (b)(3)", mandate: "Carriers must be able to isolate and deliver a subscriber's communications to the government on lawful authorization.", jurisdiction: "US" },

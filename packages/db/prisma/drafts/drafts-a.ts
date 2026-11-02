@@ -1,8 +1,9 @@
 import type { SeedCase } from "../corpus";
+import { SIGNOFF_NOTE } from "../signoff";
 import type { Verification } from "../verifications";
 
 // Drafts batch A: finance, health and medical devices, automotive, ICS, energy.
-// Drafted by claude-opus-5-5 pending human review. Refs run N1-N8, N19-N20: three required
+// Drafted by claude-opus-5-5; owner sign-off in ../signoff.ts. Refs run N1-N8, N19-N20: three required
 // leads (all fail the inclusion test) plus seven passing replacements.
 
 const BY = "claude-opus-5-5";
@@ -512,7 +513,7 @@ export const draftVerifications: Record<string, Verification> = {
   },
 };
 
-const R = "Drafted by claude-opus-5-5 pending human review.";
+const R = `Drafted by claude-opus-5-5. ${SIGNOFF_NOTE}`;
 
 export const draftCases: SeedCase[] = [
   {

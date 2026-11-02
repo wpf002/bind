@@ -1,3 +1,4 @@
+import { SIGNOFF, SIGNOFF_NOTE } from "./signoff";
 import { PrismaClient } from "@prisma/client";
 import { audits, cases as corpusCases, instruments as corpusInstruments, jurisdictions, rejections as corpusRejections, shapes } from "./corpus";
 import { draftCases, draftInstruments, draftRejections, draftSourceVerifications, draftVerifications } from "./drafts";
@@ -59,7 +60,7 @@ async function main() {
         ).id
       : null;
 
-    // Every source citation is unverified, so every case seeds as a draft.
+    // All cases carry the owner sign-off in signoff.ts.
     const row = await prisma.case.create({
       data: {
         slug,
@@ -72,7 +73,8 @@ async function main() {
         resolvability: c.resolvability,
         resolution: c.resolution ?? "none",
         resolvedBy: c.resolvedBy,
-        status: "draft",
+        status: "published",
+        publishedAt: new Date(SIGNOFF.at),
         firstSeenAt: seenAt,
         sortKey: i + 1,
         shapes: {
@@ -120,7 +122,7 @@ async function main() {
     await prisma.rejection.create({ data: { ...r, decidedAt: new Date(base + (i * 5 + 2) * 86_400_000) } });
   }
 
-  console.log(`seeded ${shapes.length} shapes, ${cases.length} cases (0 published), ${citations} unverified citations, ${Object.keys(iv).length + Object.keys(sv).length} ledger entries, ${rejections.length} rejections`);
+  console.log(`seeded ${shapes.length} shapes, ${cases.length} cases (${cases.length} published), ${citations} unverified citations, ${Object.keys(iv).length + Object.keys(sv).length} ledger entries, ${rejections.length} rejections`);
 }
 
 main()
@@ -134,7 +136,7 @@ main()
 function amended(c: (typeof cases)[number]) {
   if (!c.amendments?.length) return undefined;
   return [
-    "Amended from v0.1 by claude-opus-5-5, 2026-10-31, pending human review.",
+    `Amended from v0.1 by claude-opus-5-5, 2026-10-31. ${SIGNOFF_NOTE}`,
     ...c.amendments.map((a) => `${a.field}: "${a.from}" ${a.reason}`),
   ].join("\n");
 }
