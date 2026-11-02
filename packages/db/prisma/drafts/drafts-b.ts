@@ -1,10 +1,12 @@
 // Batch B drafts. Model-drafted by claude-opus-5-5, pending human review. Not publishable until a human signs off.
-// Refs run N9-N18. The brief allotted N9-N16; three leads failed, so two extra refs were needed to reach the pass count.
+// Refs run N9-N18, then N21-N22. The brief allotted N9-N16; three leads failed, so two extra refs were needed to reach the pass count.
+// N21-N22 added 2026-11-01 (N19-N20 are in drafts-a) to bring the corpus to 40.
 import type { SeedCase } from "../corpus";
 import type { Verification } from "../verifications";
 
 const BY = "claude-opus-5-5";
 const AT = "2026-10-31";
+const AT2 = "2026-11-01";
 const DRAFTED = "Drafted by claude-opus-5-5 pending human review.";
 
 export const draftInstruments: Record<string, { regime: string; instrument: string; shortName: string; provision: string; mandate: string; jurisdiction: string }> = {
@@ -27,6 +29,10 @@ export const draftInstruments: Record<string, { regime: string; instrument: stri
   nb_cjeuOT: { regime: "EU data protection", instrument: "CJEU, Case C-184/20 OT v Vyriausioji tarnybinės etikos komisija", shortName: "C-184/20", provision: "Operative part, point 2", mandate: "Data liable to disclose special categories indirectly is special-category data.", jurisdiction: "EU" },
   nb_ru1014_1: { regime: "Russian information law", instrument: "Federal Law No. 149-FZ of 27.07.2006 On Information, Information Technologies and Protection of Information", shortName: "149-FZ", provision: "Art. 10.1(4.1)", mandate: "An organizer of information dissemination that encodes messages, or lets users encode them, must give the FSB the information needed to decode them.", jurisdiction: "RU" },
   nb_ru1014_2: { regime: "Russian information law", instrument: "Federal Law No. 149-FZ of 27.07.2006 On Information, Information Technologies and Protection of Information", shortName: "149-FZ", provision: "Art. 10.1(4.2)(4)", mandate: "An instant messaging service organizer must ensure the confidentiality of transmitted messages.", jurisdiction: "RU" },
+  nb_certin2022v: { regime: "Indian cybersecurity regulation", instrument: "CERT-In Directions No. 20(3)/2022-CERT-In of 28.04.2022 under IT Act 2000 s. 70B(6)", shortName: "CERT-In Directions", provision: "Paras (iv), (v)", mandate: "VPN service providers must register validated subscriber names, addresses, hire periods and the IPs allotted to or used by members, and keep them 5 years; all ICT system logs kept a rolling 180 days.", jurisdiction: "IN" },
+  nb_certinFaq: { regime: "Indian cybersecurity regulation", instrument: "CERT-In FAQs on Cyber Security Directions of 28.04.2022 (May 2022)", shortName: "CERT-In FAQ", provision: "Q34, Q35", mandate: "Para (v) covers VPN providers offering Internet proxy-like services to general subscribers, not enterprise VPNs; logs may sit outside India if produced in reasonable time.", jurisdiction: "IN" },
+  nb_dsa28: { regime: "EU platform regulation", instrument: "Digital Services Act, Regulation (EU) 2022/2065", shortName: "DSA", provision: "Art. 28(1), (3)", mandate: "Platforms accessible to minors must ensure a high level of privacy, safety and security for minors, without being obliged to process additional personal data to assess whether a user is a minor.", jurisdiction: "EU" },
+  nb_dsa28Guidelines: { regime: "EU platform regulation", instrument: "Commission Guidelines on the protection of minors under Art. 28(4) DSA, C(2025) 6826 final", shortName: "Art. 28 Guidelines", provision: "Paras 41, 46; § 6.1.4(c)-(d)", mandate: "Age verification for high-risk and 18+ services; methods must be robust against circumvention by minors and non-intrusive, with double-blind tokens encouraged.", jurisdiction: "EU" },
 };
 
 const eurlex = (celex: string) => `https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:${celex}`;
@@ -203,6 +209,42 @@ export const draftVerifications: Record<string, Verification> = {
     provision: "Art. 10.1(4.2)(4), inserted by Federal Law No. 241-FZ of 29.07.2017",
     note: "Working translation: the instant messaging service organizer must ensure the confidentiality of transmitted messages. Same article as 4.1. Not the official publication.",
     verifiedBy: BY, verifiedAt: AT,
+  },
+  nb_certin2022v: {
+    status: "verified",
+    url: "https://www.cert-in.org.in/PDF/CERT-In_Directions_70B_28.04.2022.pdf",
+    publisher: "Indian Computer Emergency Response Team (CERT-In), MeitY",
+    quote: "Virtual Private Network Service (VPN Service) providers, shall be required to register the following accurate information which must be maintained by them for a period of 5 years or longer duration as mandated by the law after any cancellation or withdrawal of the registration",
+    provision: "Para (v), items a-g; para (iv)",
+    note: "Items: validated names; period of hire; \"IPs allotted to / being used by the members\"; email, IP and timestamp at onboarding; purpose; validated address and contact numbers; ownership pattern. Para (iv): logs of all ICT systems for \"a rolling period of 180 days\". Read from the CERT-In PDF with pdftotext.",
+    verifiedBy: BY, verifiedAt: AT2,
+  },
+  nb_certinFaq: {
+    status: "verified",
+    url: "https://www.cert-in.org.in/PDF/FAQs_on_CyberSecurityDirections_May2022.pdf",
+    publisher: "Indian Computer Emergency Response Team (CERT-In), MeitY",
+    quote: "VPN Service provider refer to an entity that provide “Internet proxy like services” through the use of VPN technologies, standard or proprietary, to general Internet subscribers/users.",
+    provision: "Q34; Q35",
+    note: "Q34 answers No for enterprise/corporate VPNs. Q35: \"The logs may be stored outside India also as long as the obligation to produce logs to CERT-In is adhered to by the entities in a reasonable time.\" FAQs are guidance, not the Directions.",
+    verifiedBy: BY, verifiedAt: AT2,
+  },
+  nb_dsa28: {
+    status: "verified",
+    url: eurlex("32022R2065"),
+    publisher: "EUR-Lex",
+    quote: "Compliance with the obligations set out in this Article shall not oblige providers of online platforms to process additional personal data in order to assess whether the recipient of the service is a minor.",
+    provision: "Art. 28(3)",
+    note: "Art. 28(1): \"Providers of online platforms accessible to minors shall put in place appropriate and proportionate measures to ensure a high level of privacy, safety, and security of minors, on their service.\" Recital 71 ties 28(3) to GDPR data minimisation. Read on EUR-Lex in the built-in browser.",
+    verifiedBy: BY, verifiedAt: AT2,
+  },
+  nb_dsa28Guidelines: {
+    status: "verified",
+    url: "https://ec.europa.eu/newsroom/dae/redirection/document/118226",
+    publisher: "European Commission",
+    quote: "A double-blind method ensures that (i) the online platform does not receive additional means to identify the user and, instead only receives information allowing it to confirm whether they meet the required age threshold and that (ii) the age verification provider does not obtain knowledge of the services for which the proof of age is used.",
+    provision: "Para 46",
+    note: "Para 41: ID-based methods \"may constitute an effective age verification method, in so far as they are based on anonymised age tokens\", issued by an independent third party. § 6.1.4(c): \"A method that is easy for minors to circumvent will not be considered robust enough and will therefore not be considered effective.\" § 6.1.4(d) cites Art. 28(3): process only \"the age-related attributes that are strictly necessary\". The PDF is dated 7.10.2025; the Commission web page gives 14 July 2025 as publication. Read with pdftotext.",
+    verifiedBy: BY, verifiedAt: AT2,
   },
 };
 
@@ -427,5 +469,51 @@ export const draftCases: SeedCase[] = [
       { technique: "Server-side default with optional E2EE", description: "Default chats use server-held keys; E2EE is opt-in.", standing: "untested", residual: "4.1 also covers offering users the ability to encode, so the opt-in mode is still in scope." },
     ],
     sources: [{ label: "149-FZ Art. 10.1, consolidated text via КонсультантПлюс" }],
+  },
+  {
+    ref: "N21",
+    title: "CERT-In VPN subscriber records vs. no-log VPN",
+    statement: "India's 2022 CERT-In Directions make consumer VPN providers register validated subscriber identities and the IPs each member used, and keep them five years. A no-log VPN keeps no record linking a user to an IP or session.",
+    analysis: "Para (v) requires validated names, addresses, hire periods and \"IPs allotted to / being used by the members\", held for 5 years after the account closes. Para (iv) adds 180 days of ICT system logs. FAQ Q34 limits (v) to providers of Internet proxy-like services to the general public, which is the consumer VPN market. A no-log, anonymous-signup VPN is built so the operator can't answer who used an exit IP at a given time. Records of validated identity plus allotted IPs are the answer to that question. A provider can't hold the records and also lack them. The FAQ's offshore-storage allowance in Q35 changes where the records sit. They still exist.",
+    shapes: ["deliberate-blindness"],
+    shapeRationale: `Deliberate-blindness: the product property is the operator's inability to link a user to traffic, and the direction requires the operator to keep that link. The conflict is with an architecture's security property. No second statute requires no-logs. ${DRAFTED}`,
+    resolvability: "unresolvable",
+    resolution: "abandonment",
+    inclusionVerdict: "undecided",
+    inclusionReasoning: "The technical conflict is total: shared-exit, no-log designs can't produce member-to-IP records. Undecided because the corpus hasn't settled whether a conflict between one mandate and a product's security property, with no opposing law, meets the inclusion test. Several providers reportedly removed Indian servers in 2022; press-reported, not verified.",
+    instruments: [
+      { key: "nb_certin2022v", role: "mandating" },
+      { key: "nb_certinFaq", role: "context", note: "Scopes para (v) to consumer proxy-like VPNs; allows offshore storage." },
+    ],
+    property: { name: "Operator unlinkability", text: "The VPN operator holds no record linking an identified subscriber to an exit IP or session.", defeat: "Para (v) requires validated identity plus the IPs allotted to or used by each member, kept 5 years." },
+    paperingOvers: [
+      { technique: "Withdraw in-country servers", description: "Stop operating VPN servers in India while still serving Indian users from abroad.", standing: "untested", residual: "Whether a provider with no Indian infrastructure is in scope wasn't tested. The Directions don't say. Press-reported provider exits only." },
+      { technique: "Per-user dedicated exit IPs", description: "Assign each subscriber a fixed IP and record it at signup.", standing: "untested", residual: "Complies by giving up the property: every session is attributable." },
+    ],
+    sources: [{ label: "CERT-In Directions No. 20(3)/2022-CERT-In, 28 April 2022" }, { label: "CERT-In FAQs on Cyber Security Directions, May 2022" }],
+  },
+  {
+    ref: "N22",
+    title: "DSA Art. 28 age assurance robustness vs. no additional data",
+    statement: "The Art. 28 guidelines reject age checks minors can easily get around. Art. 28(3) says platforms aren't obliged to process additional personal data to tell whether a user is a minor.",
+    analysis: "Distinct from the age-verification vs. Art. 5(1)(c) case: this one is internal to Art. 28 and its guidelines. Para 41 and para 46 resolve the platform side with double-blind tokens. The platform learns only that the threshold is met, and the issuer doesn't learn which service. The remaining question is § 6.1.4(c) robustness. A bearer token says a valid credential was presented. It doesn't say who presented it, so an adult's token or wallet can be used by a minor. Binding the proof to the person at presentation takes a liveness or biometric check, which is the extra processing 28(3) and § 6.1.4(d) push against. Device-local binding keeps that data off the platform. Whether it counts as robust enough is the Commission's call, and the guidelines leave it case by case.",
+    shapes: ["verification-minimization"],
+    shapeRationale: `Verification-minimization: proving the check can't be borrowed requires binding it to the person, which is more data than the threshold bit. ${DRAFTED}`,
+    resolvability: "resolvable_costly",
+    resolution: "engineering",
+    resolvedBy: "Double-blind age tokens with device-local holder binding (EU age verification solution)",
+    inclusionVerdict: "undecided",
+    inclusionReasoning: "Likely fails as resolved_by_known_technique if a reviewer accepts device-local holder binding as robust. Kept undecided because the guidelines set robustness case by case and no regulator has ruled on token sharing.",
+    instruments: [
+      { key: "nb_dsa28", role: "mandating" },
+      { key: "nb_dsa28Guidelines", role: "context", note: "Para 41, 46 token route; § 6.1.4(c) robustness vs. (d) non-intrusiveness." },
+      { key: "gdpr5c", role: "conflicting" },
+    ],
+    property: { name: "Threshold-only disclosure", text: "The platform learns only that the user meets the age threshold, and the issuer learns nothing about where the proof is used.", defeat: "Robustness against token sharing requires holder binding at presentation." },
+    paperingOvers: [
+      { technique: "Double-blind age tokens", description: "Independent issuer verifies ID once and issues an anonymised token; the platform checks the token.", standing: "endorsed_by_regulator", residual: "Bearer tokens can be lent. Robustness under § 6.1.4(c) isn't settled." },
+      { technique: "Device-local holder binding", description: "Wallet requires an on-device biometric or PIN before presenting the token.", standing: "untested", residual: "PIN binding is shareable. Biometric binding is still biometric processing, done by the wallet instead of the platform." },
+    ],
+    sources: [{ label: "DSA Art. 28(1), (3)" }, { label: "Commission Guidelines C(2025) 6826 final, paras 41, 46" }],
   },
 ];

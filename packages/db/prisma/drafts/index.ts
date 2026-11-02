@@ -90,4 +90,8 @@ export const draftSourceVerifications: Record<string, Verification> = {
     v("nb_ru1014_1"),
     "Part 4.2(4) (241-FZ of 2017, amended by 41-FZ of 01.04.2025) also requires the organizer to \"обеспечивать конфиденциальность передаваемых электронных сообщений\" (ensure confidentiality of transmitted messages).",
   ),
+  "CERT-In Directions No. 20(3)/2022-CERT-In, 28 April 2022": v("nb_certin2022v"),
+  "CERT-In FAQs on Cyber Security Directions, May 2022": v("nb_certinFaq"),
+  "DSA Art. 28(1), (3)": v("nb_dsa28"),
+  "Commission Guidelines C(2025) 6826 final, paras 41, 46": v("nb_dsa28Guidelines"),
 };
