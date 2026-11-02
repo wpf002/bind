@@ -326,7 +326,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "D2",
-    review: "'When technically feasible' isn't in OSA s.121. It's a ministerial statement in Hansard (Lords, 6 Sept 2023). Citation not yet added. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
+    review: "'When technically feasible' isn't in OSA s.121. It's a ministerial assurance (HL Deb 6 Sept 2023, col 458), now cited. The analysis calls it the legislature's admission; it's the Government's, and Lord Moylan said in the same debate that the clause text doesn't contain it. Review by claude-opus-5-5, 2026-11-01, pending human countersign.",
     title: "UK Online Safety Act s.121 scanning notices vs. E2EE",
     statement: "Same shape, different direction: the law requires detection capability that the architecture exists to preclude.",
     analysis: "Deferred in practice (\"when technically feasible\"), which is a legislature admitting the incompatibility without repealing the clause.",
@@ -336,6 +336,7 @@ export const cases: SeedCase[] = [
     instruments: [{ key: "osa121", role: "mandating" }],
     property: prop("End-To-End Encryption", "The architecture exists to preclude detection capability."),
     flags: { osa121: "⚠ in source: least confident on the specific provision." },
+    sources: [{ label: "HL Deb 6 Sept 2023, col 458 (Lord Parkinson of Whitley Bay)" }],
   },
   {
     ref: "D3",
@@ -457,6 +458,7 @@ export const cases: SeedCase[] = [
       { key: "gdpr22", role: "context" },
       { key: "tradeSecret", role: "context" },
     ],
+    sources: [{ label: "CJEU C-203/22 Dun & Bradstreet Austria, 27 Feb 2025" }],
     amendments: [
       { field: "statement", from: "Post-hoc attributions (SHAP, LIME) are approximations of the decision, not the logic. The law asks for the logic; the architecture has weights.", reason: "Restated around C-203/22's test. The mandate comes from Art. 15(1)(h), not Art. 22." },
     ],
