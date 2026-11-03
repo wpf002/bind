@@ -29,7 +29,7 @@ export const draftRejections = all
 /**
  * Verifications for draft `sources` labels, keyed by exact label. Most reuse the instrument
  * check for the same text; the rest were read from the primary source on 2026-11-01.
- * "WhatsApp v Union of India, Delhi HC, 2021" is left out on purpose: the petition has no
+ * "WhatsApp v Union of India, Delhi HC, 2021" is left out on purpose (rechecked 2026-11-03): the petition has no
  * judgment and the court record wasn't reachable, so it seeds as unverified.
  */
 const v = (k: string): Verification => {

@@ -6,24 +6,46 @@
 \toprule
 Ref & Case & Shape & Resolvability \\
 \midrule
-  A1 & Erasure of personal data recorded on a public distributed led… & Mandate--Mutation & unresolvable \\
-  A2 & Rectification of inaccurate data in a consensus-finalised sta… & Mandate--Mutation & unresolvable \\
-  A3 & Erasure of names embedded in Certificate Transparency log ent… & Mandate--Mutation & unresolvable \\
-  A4 & Erasure duty against non-rewriteable broker-dealer retention & Sovereign Contradiction & unresolvable \\
-  A5 & Erasure from signed commit history in public repositories & Mandate--Mutation & unresolvable \\
-  B1 & CLOUD Act production order against the Art. 48 disclosure bar & Sovereign Contradiction & unresolvable \\
-  B2 & PRC export approval against US discovery obligations & Sovereign Contradiction & unresolvable \\
-  B3 & Swiss Art. 271 against compelled US document production & Sovereign Contradiction & unresolvable \\
-  C2 & National interception root installed in subscriber trust stor… & Trust-Root Plurality & unresolvable \\
-  C3 & Lawful-access key escrow against forward secrecy & Trust-Root Plurality & unresolvable \\
-  D2 & Detection orders against encrypted interpersonal communicatio… & Deliberate Blindness & unresolvable \\
-  D4 & Access requests against pseudonymous-by-design accounts & Deliberate Blindness & unresolvable \\
-  D5 & Traffic-data retention against no-logs anonymity networks & Deliberate Blindness & unresolvable \\
-  E1 & Four-day incident disclosure during active containment & Disclosure Collision & resolvable costly \\
-  E3 & Twenty-four-hour early warning against investigative non-disc… & Disclosure Collision & resolvable costly \\
-  F1 & Continuous real-time data access without a named access const… & Drafting Error & tech gap \\
-  G2 & Highly effective age assurance without identification & Open Problem & tech gap \\
-  G5 & Supplementary measures for transfers exposed to Section 702 & Sovereign Contradiction & unresolvable \\
+  A1 & GDPR Art. 17 erasure vs. append-only ledgers & Mandate--Mutation & resolvable costly \\
+  A2 & Erasure/deletion rights vs. mandatory retention & Mandate--Mutation & unresolvable \\
+  A3 & Erasure vs. transparency logs & Mandate--Mutation & unresolvable \\
+  A4 & Erasure vs. trained model weights & Mandate--Mutation & unresolvable \\
+  B1 & Schrems II transfer restrictions vs. CLOUD Act production ord… & Sovereign Contradiction & unresolvable \\
+  B2 & eIDAS 2.0 QWAC trust-root mandate vs. root program distrust a… & Sovereign Contradiction & unresolvable \\
+  C1 & Data localization vs. anycast + global load balancing &  & resolvable costly \\
+  D1 & E2EE vs. Art. 33/34 breach notification & Deliberate Blindness & unresolvable \\
+  D2 & UK Online Safety Act s.121 scanning notices vs. E2EE & Deliberate Blindness & unresolvable \\
+  D3 & Exposure notification: DP-3T/GAEN vs. epidemiological need & Deliberate Blindness & unresolvable \\
+  E1 & Right to repair vs. parts pairing / attested firmware & Trust-Root Monopoly vs. Plurality & unresolvable \\
+  E2 & DMA Art. 6(4) sideloading vs. single-root iOS distribution mo… & Trust-Root Monopoly vs. Plurality & unresolvable \\
+  E3 & DMA Art. 7 messaging interoperability vs. E2EE guarantees & Trust-Root Monopoly vs. Plurality & unresolvable \\
+  E4 & Client attestation (Play Integrity, WEI) vs. accessibility an… & Trust-Root Monopoly vs. Plurality & unresolvable \\
+  F1 & Age verification mandates vs. GDPR Art. 5(1)(c) & Verification vs. Minimization & tech gap \\
+  F2 & FATF Travel Rule vs. self-hosted wallets & Verification vs. Minimization & unresolvable \\
+  G1 & "Anonymous" as a binary vs. re-identifiability as a continuum & Binary vs. Continuum & unresolvable \\
+  G2 & Art. 16 rectification vs. probabilistic inference & Binary vs. Continuum & unresolvable \\
+  G3 & Art. 15 / Art. 22 explainability vs. model opacity + trade se… & Binary vs. Continuum & unresolvable \\
+  G4 & Differential privacy budget vs. redistricting accuracy & Binary vs. Continuum & unresolvable \\
+  G5 & AI Act Art. 10(5) bias testing vs. GDPR Art. 9 & Binary vs. Continuum & unresolvable \\
+  H1 & EU data retention mandates vs. ePrivacy Art. 15(1) & Sovereign Contradiction & unresolvable \\
+  H2 & PCI DSS 10.x / SOC2 logging vs. deletion rights over IPs and… & Mandate--Mutation & unresolvable \\
+  H3 & FRCP 37(e) litigation hold vs. ephemeral messaging & Mandate--Mutation & unresolvable \\
+  N4 & Sanctions Blocking vs. Immutable Contracts & Mandate--Mutation & unresolvable \\
+  N5 & EU Blocking Statute vs. OFAC Iran Rules & Sovereign Contradiction & unresolvable \\
+  N6 & US Correspondent Subpoenas vs. China Data Export & Sovereign Contradiction & unresolvable \\
+  N7 & MiCA Scope vs. Partial Decentralisation & Binary vs. Continuum & unresolvable \\
+  N8 & Sensitive Care Segregation vs. Clinical Records & Binary vs. Continuum & unresolvable \\
+  N19 & EDR Anonymity vs. Crash Trace & Binary vs. Continuum & unresolvable \\
+  N20 & Stablecoin Burn Orders vs. MiCA Redemption & Sovereign Contradiction & unresolvable \\
+  N12 & UK IPA technical capability notices vs. provider-blind E2EE b… & Deliberate Blindness & unresolvable \\
+  N13 & India IT Rules 4(2) first-originator traceability vs. E2EE me… & Verification vs. Minimization & unresolvable \\
+  N14 & DMA 6(7) Wi-Fi interoperability vs. single-account trust doma… & Trust-Root Monopoly vs. Plurality & unresolvable \\
+  N15 & DSA monthly active recipients vs. no individual tracking & Verification vs. Minimization & unresolvable \\
+  N16 & DMA 6(8) independent ad verification vs. data minimization & Verification vs. Minimization & tech gap \\
+  N17 & DSA 26(3) special-category ad ban vs. behavioural profiling & Binary vs. Continuum & unresolvable \\
+  N18 & Russia 149-FZ decoding-key duty vs. E2EE messaging & Deliberate Blindness & unresolvable \\
+  N21 & CERT-In VPN subscriber records vs. no-log VPN & Deliberate Blindness & unresolvable \\
+  N22 & DSA Art. 28 age assurance robustness vs. no additional data & Verification vs. Minimization & resolvable costly \\
 \bottomrule
 \end{tabular}
 \end{table*}

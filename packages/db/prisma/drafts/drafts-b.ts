@@ -359,7 +359,7 @@ export const draftCases: SeedCase[] = [
     ],
     sources: [
       { label: "IT Rules 2021, rule 4(2), MeitY consolidated text to 06.04.2023" },
-      { label: "WhatsApp v Union of India, Delhi HC, 2021", note: "Secondary sources only. Not verified against the court record." },
+      { label: "WhatsApp v Union of India, Delhi HC, 2021", note: "Secondary sources only (LiveLaw, Bar & Bench). Filed May 2021; notice to the Centre 27 Aug 2021; listed for hearing 14 Aug 2024. No judgment found as of 2026-11-03. The Delhi HC case-status portal needs a CAPTCHA, so the court record wasn't checked." },
     ],
   },
   {
