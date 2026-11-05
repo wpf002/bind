@@ -1,18 +1,16 @@
 import { bibtexKey, caseTableTeX, caseToBibTeX, shapeTableTeX, sourceToBibTeX } from "@bind/core";
-import { listCases, listShapes } from "@bind/db";
+import { listCases, shapeTableInput } from "@bind/db";
 import { CopyButton, DownloadButton } from "@/components/CopyButton";
 import { pad } from "@/lib/format";
 
 export const metadata = { title: "Export" };
 
 export default async function Export() {
-  const [cases, shapes] = await Promise.all([listCases(), listShapes()]);
+  const [cases, shapeInput] = await Promise.all([listCases(), shapeTableInput()]);
   const bib = cases
     .flatMap((c) => [caseToBibTeX(c), ...c.citations.map((s, i) => sourceToBibTeX(s, `${bibtexKey(c.slug)}:src${i + 1}`))])
     .join("\n\n");
-  const shapeTex = shapeTableTeX(
-    shapes.map((s) => ({ ordinal: s.ordinal, name: s.name, family: s.family, cases: s.published, verdict: s.audit?.verdict }))
-  );
+  const shapeTex = shapeTableTeX(...shapeInput);
   const caseTex = caseTableTeX(
     cases.map((c) => ({
       slug: c.slug,

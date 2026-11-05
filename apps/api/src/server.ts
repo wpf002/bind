@@ -11,6 +11,7 @@ import {
   listJurisdictions,
   listRejections,
   listShapes,
+  shapeTableInput,
   listTransitions,
   stats,
 } from "@bind/db";
@@ -73,9 +74,7 @@ app.get<{ Querystring: { table?: string } }>("/export/latex", async (req, reply)
             resolvability: c.resolvability,
           }))
         )
-      : shapeTableTeX(
-          (await listShapes()).map((s) => ({ ordinal: s.ordinal, name: s.name, family: s.family, cases: s.published, verdict: s.audit?.verdict }))
-        );
+      : shapeTableTeX(...(await shapeTableInput()));
   return reply.type("application/x-tex; charset=utf-8").send(tex + "\n");
 });
 

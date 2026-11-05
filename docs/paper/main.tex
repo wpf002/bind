@@ -16,8 +16,8 @@ We publish 40 cases in which a legal requirement and a technical architecture
 issue contradictory mandates, drawn from 7 jurisdictions and 110 cited sources.
 A case enters the registry only if a competent engineer with unlimited budget
 still cannot satisfy both sides; 11 candidates failed that test and are
-published as rejections. We group the cases into six shapes. An adversarial
-prior-art audit by a non-Claude model found that four of the six shapes are
+published as rejections. We group the cases into six shapes. Adversarial
+prior-art audits by two non-Claude models agree that four of the six shapes are
 established ideas under other names, so we do not claim the shapes as new. The
 contribution is the case set, the inclusion test, and one empirical result:
 of the 35 cases rated unresolvable, five have stopped being live, and none of
@@ -57,11 +57,18 @@ artifact, and the engineer holding the data cannot satisfy both.
 
 \subsection{Prior-art audit}
 
-Each shape was submitted to gpt-5 with a prompt instructing it to find prior
+Each shape was submitted separately to gpt-5 and to Gemini 3.1 Pro with a prompt instructing it to find prior
 work describing the same mechanism and to return \emph{novel},
 \emph{partial}, \emph{rebrand}, or \emph{inconclusive}. The prompt is
 \path{docs/prompts/ADVERSARIAL_PRIOR_ART_PROMPT.md}, version 1. A Claude model
-drafted the shapes, so Claude models were excluded as auditors.
+drafted the shapes, so Claude models were excluded as auditors. The two
+auditors returned the same verdict on all seven shapes, including the retired
+one, while citing largely different prior art. Gemini added Woods on
+sovereign conflict~\cite{woods2016}, Finck and Bourtoule et al.\ on
+erasure~\cite{finck2018,bourtoule2021}, and Wachter and Mittelstadt on
+rectification of inferences~\cite{wachter2019}. The verdicts below are therefore stable across auditors; the
+individual citations are not, and only those we could match to a known
+publication are cited.
 
 \begin{itemize}
 \item \textbf{Sovereign Contradiction: rebrand.} This is the ``true
@@ -142,8 +149,9 @@ was wrong.
   \emph{WhatsApp v.\ Union of India} (Delhi HC, filed 2021). Secondary
   reporting confirms the filing. We found no judgment, and the court's case
   status page could not be queried automatically.
-\item \textbf{Single auditor.} One model ran the prior-art audit once. A
-  second non-Claude auditor would show whether the verdicts are stable.
+\item \textbf{Audit depth.} Each of two auditors ran once per shape with
+  one prompt version. Agreement between two models does not establish that
+  no closer prior art exists.
 \item \textbf{Open verdicts.} Seven cases have an undecided inclusion
   verdict.
 \end{itemize}

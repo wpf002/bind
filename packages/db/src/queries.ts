@@ -114,6 +114,26 @@ export async function listShapes(opts: { includeRetired?: boolean } = {}) {
 
 export type ShapeRow = Awaited<ReturnType<typeof listShapes>>[number];
 
+/** Auditor columns in the paper's shapes table, in display order. */
+const PAPER_AUDITORS = [
+  { model: "gpt-5", label: "gpt-5" },
+  { model: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro" },
+] as const;
+
+/** Rows and auditor labels for shapeTableTeX: each shape's latest verdict per auditor. */
+export async function shapeTableInput() {
+  const [shapes, audits] = await Promise.all([listShapes(), prisma.adversarialAudit.findMany({ orderBy: { runAt: "desc" } })]);
+  const latest = (shapeId: string, model: string) => audits.find((a) => a.shapeId === shapeId && a.model === model)?.verdict ?? null;
+  const rows = shapes.map((s) => ({
+    ordinal: s.ordinal,
+    name: s.name,
+    family: s.family,
+    cases: s.published,
+    verdicts: PAPER_AUDITORS.map((a) => latest(s.id, a.model)),
+  }));
+  return [rows, PAPER_AUDITORS.map((a) => a.label)] as const;
+}
+
 export async function getShape(slug: string) {
   const shape = await prisma.shape.findUnique({ where: { slug }, include: { audits: { orderBy: { runAt: "desc" } } } });
   if (!shape) return null;

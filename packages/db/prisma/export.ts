@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { caseTableTeX, caseToBibTeX, shapeTableTeX, sourceToBibTeX, bibtexKey } from "@bind/core";
-import { listCases, listShapes } from "../src/queries";
+import { listCases, listShapes, shapeTableInput } from "../src/queries";
 import { prisma } from "../src/client";
 
 /** Writes the corpus back to markdown and generates the paper's tables. Published cases only. */
@@ -47,7 +47,7 @@ async function main() {
   await mkdir(join(root, "docs/paper"), { recursive: true });
   await writeFile(
     join(root, "docs/paper/shapes.tex"),
-    shapeTableTeX(shapes.map((s) => ({ ordinal: s.ordinal, name: s.name, family: s.family, cases: s.published, verdict: s.audit?.verdict })))
+    shapeTableTeX(...(await shapeTableInput()))
   );
   await writeFile(
     join(root, "docs/paper/cases.tex"),

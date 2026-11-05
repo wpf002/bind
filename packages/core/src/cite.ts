@@ -55,24 +55,25 @@ export function sourceToBibTeX(s: SourceCitation, key: string): string {
     .join("\n");
 }
 
-/** Shape × case counts as a LaTeX tabular. If this cannot be generated, the schema is wrong. */
+/** Shape × case counts as a LaTeX tabular, with one verdict column per auditor in the order given. */
 export function shapeTableTeX(
-  rows: { ordinal: number; name: string; family: string; cases: number; verdict?: string | null }[]
+  rows: { ordinal: number; name: string; family: string; cases: number; verdicts: (string | null)[] }[],
+  auditors: string[]
 ): string {
   const body = rows
-    .map(
-      (r) =>
-        `  ${r.ordinal} & ${escapeTex(r.name)} & ${escapeTex(r.family.replace(/_/g, " "))} & ${r.cases} & ${escapeTex(r.verdict ?? "--")} \\\\`
-    )
+    .map((r) => {
+      const verdicts = auditors.map((_, i) => escapeTex(r.verdicts[i] ?? "--"));
+      return `  ${[r.ordinal, escapeTex(r.name), escapeTex(r.family.replace(/_/g, " ")), r.cases, ...verdicts].join(" & ")} \\\\`;
+    })
     .join("\n");
   return [
     `\\begin{table*}[t]`,
     `\\centering`,
-    `\\caption{Shapes of legal--architectural incompatibility, with case counts and prior-art verdicts.}`,
+    `\\caption{Shapes of legal--architectural incompatibility, with case counts and prior-art verdicts by auditor.}`,
     `\\label{tab:shapes}`,
-    `\\begin{tabular}{rllrl}`,
+    `\\begin{tabular}{rllr${"l".repeat(auditors.length)}}`,
     `\\toprule`,
-    `\\# & Shape & Family & Cases & Prior-art verdict \\\\`,
+    `${["\\#", "Shape", "Family", "Cases", ...auditors.map(escapeTex)].join(" & ")} \\\\`,
     `\\midrule`,
     body,
     `\\bottomrule`,

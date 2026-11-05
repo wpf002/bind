@@ -25,9 +25,11 @@ describe("citations", () => {
 
 describe("paper tables", () => {
   it("spans both columns for the shapes table and escapes TeX", () => {
-    const tex = shapeTableTeX([{ ordinal: 1, name: "Mandate–Mutation", family: "conflict_of_law", cases: 9, verdict: null }]);
+    const tex = shapeTableTeX([{ ordinal: 1, name: "Mandate–Mutation", family: "conflict_of_law", cases: 9, verdicts: ["partial", null] }], ["gpt-5", "Gemini"]);
     expect(tex).toContain("\\begin{table*}");
-    expect(tex).toContain("1 & Mandate--Mutation & conflict of law & 9 & -- \\\\");
+    expect(tex).toContain("{rllrll}");
+    expect(tex).toContain("\\# & Shape & Family & Cases & gpt-5 & Gemini \\\\");
+    expect(tex).toContain("1 & Mandate--Mutation & conflict of law & 9 & partial & -- \\\\");
   });
 
   // Regression: titles longer than 56 chars pushed the corpus table past the page margin.
