@@ -66,7 +66,7 @@ export function shapeTableTeX(
     )
     .join("\n");
   return [
-    `\\begin{table}[t]`,
+    `\\begin{table*}[t]`,
     `\\centering`,
     `\\caption{Shapes of legal--architectural incompatibility, with case counts and prior-art verdicts.}`,
     `\\label{tab:shapes}`,
@@ -77,7 +77,7 @@ export function shapeTableTeX(
     body,
     `\\bottomrule`,
     `\\end{tabular}`,
-    `\\end{table}`,
+    `\\end{table*}`,
   ].join("\n");
 }
 
@@ -87,7 +87,7 @@ export function caseTableTeX(
   const body = rows
     .map(
       (r) =>
-        `  ${r.corpusRef} & ${escapeTex(trunc(r.title, 62))} & ${escapeTex(r.shape)} & ${escapeTex(r.resolvability.replace(/_/g, " "))} \\\\`
+        `  ${r.corpusRef} & ${escapeTex(trunc(r.title, 56))} & ${escapeTex(r.shape)} & ${escapeTex(r.resolvability.replace(/_/g, " "))} \\\\`
     )
     .join("\n");
   return [
@@ -95,6 +95,7 @@ export function caseTableTeX(
     `\\centering`,
     `\\caption{Corpus of documented incompatibilities.}`,
     `\\label{tab:corpus}`,
+    `\\footnotesize`,
     `\\begin{tabular}{llll}`,
     `\\toprule`,
     `Ref & Case & Shape & Resolvability \\\\`,
