@@ -1,3 +1,4 @@
+import auditLedger from "./ledger/audits.json";
 /**
  * Seed corpus imported from PARADOX-CORPUS.md (v0.1). Field text is the source's
  * own wording. Where the source is silent, the field is empty rather than filled.
@@ -76,7 +77,7 @@ export const shapes = [
     definition: "Two authorities, opposite commands, one artifact.",
     boundaryCriteria: "Truly unresolvable. Owner: nobody. Unowned.",
     provenanceNote:
-      "Shape 2 has no architectural content at all. It's a pure conflict of laws that engineers get handed because they hold the data.",
+      "Not new. This is the 'true conflict' of conflict-of-laws doctrine (Hartford Fire v. California, 1993; Pauwelyn 2003). It has no architectural content; engineers get handed it because they hold the data. The registry's contribution is the case set.",
   },
   {
     slug: "locality-emergent-placement",
@@ -97,7 +98,7 @@ export const shapes = [
     definition: "Law requires knowledge the architecture exists to prevent.",
     boundaryCriteria: "Truly unresolvable. Owner: Architect.",
     provenanceNote:
-      "Has no literature under a single name, and it's the shape that recurs hardest as E2EE and confidential computing spread. That's where a paper goes.",
+      "Not new. Described in RFC 1984 (1996), RFC 2804 (2000) and Keys Under Doormats (2015) as exceptional access vs. end-to-end encryption. The registry extends it to no-log VPNs, confidential computing and breach notification.",
   },
   {
     slug: "trust-root-plurality",
@@ -115,7 +116,7 @@ export const shapes = [
     family: "research_gap" as const,
     definition: "Proving an attribute requires collecting more than the attribute.",
     boundaryCriteria: "Not unresolvable. Tech gap. Owner: Researcher.",
-    provenanceNote: "Shape 6 is a research gap that will close.",
+    provenanceNote: "Not new. Chaum (1985) and Brands (2000) name it; CNIL (2022) and the ICO (2023) apply it to age assurance. A research gap that selective-disclosure credentials are closing.",
   },
   {
     slug: "binary-continuum",
@@ -124,7 +125,7 @@ export const shapes = [
     family: "drafting_error" as const,
     definition: "Legal category is a threshold on a shifting continuous property.",
     boundaryCriteria: "Unresolvable, but by category error. Owner: Legislator.",
-    provenanceNote: "Shape 7 is a drafting error: the statute quantizes something continuous.",
+    provenanceNote: "Not new. Ohm (2010) and Schwartz & Solove (2011) make the argument for PII; Endicott (2000) for law generally. A drafting error: the statute quantizes something continuous.",
   },
 ];
 
@@ -559,5 +560,6 @@ export const rejections = [
 /** Every v0.1 lead has been drafted: passing ones are N-series cases, failing ones are rejections. */
 export const leads: { ref: string; title: string; shape?: string }[] = [];
 
-/** Filled by `pnpm --filter @bind/db prior-art`. Nothing has been run yet. */
-export const audits: { shape: string; model: string; promptVersion: string; verdict: "novel" | "partial" | "rebrand" | "inconclusive"; priorArt: string | null; reasoning: string }[] = [];
+type Audit = { shape: string; model: string; promptVersion: string; verdict: "novel" | "partial" | "rebrand" | "inconclusive"; priorArt: string | null; reasoning: string; runAt: string };
+/** Output of `pnpm --filter @bind/db prior-art --all`, copied out of the db so a reseed keeps it. */
+export const audits: Audit[] = auditLedger as Audit[];
