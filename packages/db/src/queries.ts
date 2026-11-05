@@ -15,7 +15,7 @@ async function citationsFor(ids: string[]) {
   if (!ids.length) return new Map<string, Awaited<ReturnType<typeof prisma.citation.findMany>>>();
   const rows = await prisma.citation.findMany({
     where: { targetType: "case", targetId: { in: ids } },
-    orderBy: { createdAt: "asc" },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
   });
   const by = new Map<string, typeof rows>();
   for (const r of rows) by.set(r.targetId, [...(by.get(r.targetId) ?? []), r]);
