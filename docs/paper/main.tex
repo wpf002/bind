@@ -1,0 +1,153 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+
+\title{Bind: A Registry of Legal--Architectural Incompatibilities}
+\author{Will Foti}
+\date{November 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We publish 40 cases in which a legal requirement and a technical architecture
+issue contradictory mandates, drawn from 7 jurisdictions and 110 cited sources.
+A case enters the registry only if a competent engineer with unlimited budget
+still cannot satisfy both sides; 11 candidates failed that test and are
+published as rejections. We group the cases into six shapes. An adversarial
+prior-art audit by a non-Claude model found that four of the six shapes are
+established ideas under other names, so we do not claim the shapes as new. The
+contribution is the case set, the inclusion test, and one empirical result:
+of the 35 cases rated unresolvable, five have stopped being live, and none of
+the five was ended by engineering. Three ended through legislation, one through
+a court, and one through abandonment of the product.
+\end{abstract}
+
+\section{Inclusion test}
+
+A case qualifies only if a competent engineer with unlimited budget still
+cannot satisfy both mandates. Cases that are merely expensive, or that a better
+implementation would fix, are out. Each case carries one of three
+resolvability ratings: \emph{unresolvable} (35 cases), \emph{resolvable at
+cost} (3), or \emph{technology gap}, an open research problem (2). Cases
+rated resolvable at cost or technology gap stay in the registry as boundary
+cases, because they mark where the test stops.
+
+Inclusion verdicts are recorded per case: 29 pass, 4 fail and are kept as
+boundary cases, and 7 are undecided. The 11 rejected candidates are published
+with a reason: resolved by a known technique (6), merely expensive (3), or out
+of scope (2). HIPAA versus cloud hosting is a typical rejection. Business
+associate agreements settled it a decade ago.
+
+\section{Shapes}
+
+Table~\ref{tab:shapes} lists the six active shapes. A seventh, Locality
+vs.\ Emergent Placement, was retired in taxonomy v2 because every one of its
+cases could be resolved by pinning data in-country. Shape assignments are
+versioned, so its one case (C1) keeps that history.
+
+Each shape names an owner, the party who could end the conflict:
+the architect, the legislator, a researcher, or nobody. Sovereign
+Contradiction has no owner. Two sovereigns issue opposite commands about one
+artifact, and the engineer holding the data cannot satisfy both.
+
+\input{shapes.tex}
+
+\subsection{Prior-art audit}
+
+Each shape was submitted to gpt-5 with a prompt instructing it to find prior
+work describing the same mechanism and to return \emph{novel},
+\emph{partial}, \emph{rebrand}, or \emph{inconclusive}. The prompt is
+\path{docs/prompts/ADVERSARIAL_PRIOR_ART_PROMPT.md}, version 1. A Claude model
+drafted the shapes, so Claude models were excluded as auditors.
+
+\begin{itemize}
+\item \textbf{Sovereign Contradiction: rebrand.} This is the ``true
+  conflict'' of conflict-of-laws doctrine~\cite{hartfordfire,pauwelyn2003}.
+\item \textbf{Deliberate Blindness: rebrand.} The conflict between lawful
+  access and end-to-end encryption is described in RFC~1984, RFC~2804, and
+  \emph{Keys Under Doormats}~\cite{rfc1984,rfc2804,abelson2015keys}. Our cases
+  extend it to no-log VPNs, confidential computing, and breach notification.
+\item \textbf{Verification vs.\ Minimization: rebrand.} Chaum and Brands name
+  it and propose selective disclosure as the
+  fix~\cite{chaum1985,brands2000}.
+\item \textbf{Binary vs.\ Continuum: rebrand.} Ohm and Schwartz and Solove
+  argue that the PII threshold sits on a continuum~\cite{ohm2010,schwartzsolove2011};
+  Endicott treats bright lines over continua in law
+  generally~\cite{endicott2000}.
+\item \textbf{Mandate--Mutation: partial.} Covered domain by domain (erasure
+  vs.\ ledgers, erasure vs.\ model weights~\cite{caoyang2015}), without a
+  single name across domains.
+\item \textbf{Trust-Root Monopoly vs.\ Plurality: partial.} The single-root
+  argument appears for DNS~\cite{rfc2826} and the Web PKI~\cite{clark2013sok}.
+  The audit found no account that applies it to repair and sideloading
+  mandates.
+\end{itemize}
+
+We kept all four rebranded shapes. A rebrand verdict says the mechanism has
+prior art. It says nothing about whether the cases are correctly classified,
+and retiring the four shapes would leave 24 of the 39 shaped cases with no shape. Each
+shape's provenance note now cites its prior art.
+
+\section{Corpus}
+
+Table~\ref{tab:corpus} lists all 40 cases. Each case records the mandating
+instruments with pinpoint provisions, the architectural property in conflict,
+a resolvability rating, and, where the conflict ended, the mechanism and the
+instrument that ended it.
+
+\input{cases.tex}
+
+\section{Resolution}
+
+Six cases have stopped being live.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Ref & Rating & Ended by \\
+\midrule
+B2 & unresolvable & Legislation (eIDAS 2.0 Art.~45a(2)) \\
+G5 & unresolvable & Legislation (AI Act Art.~10(5)) \\
+N15 & unresolvable & Legislation (DSA recital 77) \\
+N4 & unresolvable & Court (\emph{Van Loon}, 5th Cir.\ 2024) \\
+N21 & unresolvable & Product abandonment \\
+N22 & resolvable at cost & Engineering \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The only engineering resolution is N22, age assurance under DSA Art.~28,
+which the registry had already rated resolvable at cost. Its fix is
+double-blind age tokens with device-local holder binding. No case rated
+unresolvable has been ended by engineering. This is consistent with the
+inclusion test, and it is the claim the registry will test as cases
+accumulate. An unresolvable case resolved by engineering would show a rating
+was wrong.
+
+\section{Method and limitations}
+
+\begin{itemize}
+\item \textbf{Drafting.} The first 24 cases come from a working corpus
+  (v0.1) whose citations were recalled from memory. Claude Opus 5.5 drafted
+  the remaining 16 cases and checked every citation against a primary source.
+  Each check is recorded in a verification ledger with its URL.
+\item \textbf{Review.} The author approved the corpus for publication on the
+  strength of the model's source verification, without an independent
+  case-by-case human check. Every case records this sign-off.
+\item \textbf{Unverified source.} One citation is unverified:
+  \emph{WhatsApp v.\ Union of India} (Delhi HC, filed 2021). Secondary
+  reporting confirms the filing. We found no judgment, and the court's case
+  status page could not be queried automatically.
+\item \textbf{Single auditor.} One model ran the prior-art audit once. A
+  second non-Claude auditor would show whether the verdicts are stable.
+\item \textbf{Open verdicts.} Seven cases have an undecided inclusion
+  verdict.
+\end{itemize}
+
+\bibliographystyle{plain}
+\bibliography{priorart,bind}
+
+\end{document}
