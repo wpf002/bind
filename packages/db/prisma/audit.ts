@@ -56,12 +56,16 @@ function parse(content: string): { verdict: Verdict; priorArt: string | null; re
   return { verdict: o.verdict as Verdict, priorArt: art.length ? art.join("\n") : null, reasoning: o.reasoning ?? "" };
 }
 
+/** Reasoning models can take minutes per shape. */
+const AUDIT_TIMEOUT_MS = 10 * 60 * 1000;
+
 async function call(model: string, prompt: string) {
   const base = process.env.AUDIT_API_BASE!.replace(/\/$/, "");
   const res = await fetch(`${base}/chat/completions`, {
     method: "POST",
     headers: { "content-type": "application/json", authorization: `Bearer ${process.env.AUDIT_API_KEY ?? ""}` },
     body: JSON.stringify({ model, messages: [{ role: "user", content: prompt }], response_format: { type: "json_object" } }),
+    signal: AbortSignal.timeout(AUDIT_TIMEOUT_MS),
   });
   if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
   const body = (await res.json()) as { choices: { message: { content: string } }[] };
