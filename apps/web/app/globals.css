@@ -518,6 +518,8 @@ a.jur:hover { border-color: var(--accent); }
   .related a { grid-template-columns: 1fr; gap: var(--s1); }
   .kv dd { margin-bottom: var(--s2); }
   .ledger-end { display: none; }
+  .sources li { grid-template-columns: 28px 1fr; }
+  .sources li > .chip { grid-column: 2; justify-self: start; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .log tbody tr, .facet, .btn, .taxon { transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease; }

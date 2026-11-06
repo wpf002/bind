@@ -374,7 +374,6 @@ export default async function CasePage({ params }: Props) {
                       <SourceCheck status={s.sourceCheck} at={s.sourceCheckedAt} />
                     </div>
                   </div>
-                  <span />
                   <Verify s={s.verificationStatus} />
                 </li>
               ))}
