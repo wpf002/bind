@@ -638,6 +638,9 @@ export const draftCases: SeedCase[] = [
       { key: "na_tornadoDelist", role: "context" },
       { key: "na_genius4a5", role: "context", note: "Legislative response for stablecoins: freeze capability is mandatory." },
     ],
+    transitions: [
+      { from: "unresolvable", to: "resolved_judicial", trigger: "Van Loon v. Department of the Treasury decided", url: "https://www.ca5.uscourts.gov/opinions/pub/23/23-50669-CV0.pdf", at: "2024-11-26" },
+    ],
     property: {
       name: "Immutability",
       text: "Deployed contract code and its state transitions cannot be changed or halted by any party.",

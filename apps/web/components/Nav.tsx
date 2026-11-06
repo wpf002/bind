@@ -6,6 +6,7 @@ const ITEMS = [
   ["/", "Cases"],
   ["/shapes", "Shapes"],
   ["/matrix", "Matrix"],
+  ["/resolutions", "Resolutions"],
   ["/rejections", "Rejections"],
   ["/method", "Method"],
   ["/export", "Export"],

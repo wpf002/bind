@@ -383,6 +383,17 @@ a.jur:hover { border-color: var(--accent); }
 .rej-reason { font-size: var(--t14); color: var(--ink-2); margin-top: var(--s2); max-width: 70ch; }
 .code { font: 500 11px/1 var(--font-mono); letter-spacing: 0.02em; }
 
+/* ── Resolutions ────────────────────────────────── */
+.reason-stat-key b { color: var(--accent); }
+.scroll-x { overflow-x: auto; }
+.years th.num, .years td.num { text-align: right; padding-right: var(--s4); white-space: nowrap; }
+.years td:first-child { width: 40%; }
+.years-n { font: 400 var(--t20)/1 var(--font-display); color: var(--ink); }
+.years-add { display: inline-block; min-width: 3ch; margin-left: var(--s1); font: 400 var(--t12)/1 var(--font-mono); color: var(--ok); text-align: left; }
+.years-key td:first-child, .years-key .years-n { color: var(--accent); }
+.finding-sub a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.finding-sub a:hover { color: var(--accent); }
+
 /* ── Method ─────────────────────────────────────── */
 .method { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: var(--s8); }
 .toc { position: sticky; top: 104px; align-self: start; display: grid; gap: var(--s2); font-size: var(--t14); }

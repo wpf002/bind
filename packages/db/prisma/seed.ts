@@ -1,6 +1,6 @@
 import { SIGNOFF_NOTE, signoffFor } from "./signoff";
 import { PrismaClient } from "@prisma/client";
-import { AMENDMENT_NOTE_PREFIX, INTAKE_REJECTION_PREFIX, REVIEW_NOTE_PREFIX, isPublishable } from "@bind/core";
+import { AMENDMENT_NOTE_PREFIX, INTAKE_REJECTION_PREFIX, REVIEW_NOTE_PREFIX, isPublishable, resolvedAtFrom } from "@bind/core";
 import { CORPUS_AUTHOR, audits, cases as corpusCases, instruments as corpusInstruments, jurisdictions, rejections as corpusRejections, shapes } from "./corpus";
 import { draftCases, draftInstruments, draftRejections, draftSourceVerifications, draftVerifications } from "./drafts";
 import { instrumentVerifications, sourceVerifications, type Verification } from "./verifications";
@@ -77,6 +77,8 @@ async function main() {
       citations: cites.map((s) => ({ verificationStatus: s.v?.status ?? "unverified" })),
     });
     if (!gate.ok) held.push(`${c.ref}: ${gate.blockers.join("; ")}`);
+    const resolvedAt = c.resolution ? resolvedAtFrom(c.transitions ?? [], c.resolution) : null;
+    if (c.resolution && !resolvedAt) throw new Error(`${c.ref}: resolution "${c.resolution}" has no dated transition`);
     const row = await prisma.case.create({
       data: {
         slug,
@@ -90,6 +92,7 @@ async function main() {
         resolvability: c.resolvability,
         resolution: c.resolution ?? "none",
         resolvedBy: c.resolvedBy,
+        resolvedAt,
         status: gate.ok ? "published" : "draft",
         publishedAt: gate.ok ? new Date(signoffFor(c.ref).at) : null,
         firstSeenAt: seenAt,

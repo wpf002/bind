@@ -75,6 +75,28 @@ export default async function CasePage({ params }: Props) {
   ].filter((k) => k !== null);
   const mark = (key: string) => `§${sections.indexOf(key) + 1}`;
 
+  // Transitions are dated by the legal event, which can precede the case's entry into the corpus.
+  const enteredAt = c.firstSeenAt?.getTime() ?? 0;
+  const transitionItem = (t: (typeof c.transitions)[number]) => (
+    <li key={t.id}>
+      <time>{fmtDate(t.occurredAt)}</time>
+      <span className="node node-accent" />
+      <span>
+        <span className="from-to">
+          {t.fromState} → {t.toState}
+        </span>
+        <br />
+        {t.triggerUrl ? (
+          <a href={t.triggerUrl} target="_blank" rel="noreferrer">
+            {t.trigger}
+          </a>
+        ) : (
+          t.trigger
+        )}
+      </span>
+    </li>
+  );
+
   return (
     <article className="wrap case">
       <nav className="crumbs" aria-label="Breadcrumb">
@@ -311,6 +333,7 @@ export default async function CasePage({ params }: Props) {
               <h2>Record</h2>
             </div>
             <ol className="timeline">
+              {c.transitions.filter((t) => t.occurredAt.getTime() < enteredAt).map(transitionItem)}
               <li>
                 <time>{fmtDate(c.firstSeenAt)}</time>
                 <span className="node" />
@@ -321,25 +344,7 @@ export default async function CasePage({ params }: Props) {
                 <span className="node" />
                 <span>Published after citation verification</span>
               </li>
-              {c.transitions.map((t) => (
-                <li key={t.id}>
-                  <time>{fmtDate(t.occurredAt)}</time>
-                  <span className="node node-accent" />
-                  <span>
-                    <span className="from-to">
-                      {t.fromState} → {t.toState}
-                    </span>
-                    <br />
-                    {t.triggerUrl ? (
-                      <a href={t.triggerUrl} target="_blank" rel="noreferrer">
-                        {t.trigger}
-                      </a>
-                    ) : (
-                      t.trigger
-                    )}
-                  </span>
-                </li>
-              ))}
+              {c.transitions.filter((t) => t.occurredAt.getTime() >= enteredAt).map(transitionItem)}
             </ol>
           </section>
 

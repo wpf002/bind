@@ -166,6 +166,22 @@ export async function listJurisdictions() {
   });
 }
 
+/** Published cases that stopped being live, oldest resolution first. */
+export async function listResolutions() {
+  return prisma.case.findMany({
+    where: { status: "published", resolution: { not: "none" }, resolvedAt: { not: null } },
+    orderBy: [{ resolvedAt: "asc" }, { sortKey: "asc" }],
+    select: {
+      slug: true,
+      title: true,
+      resolution: true,
+      resolvedAt: true,
+      resolvedBy: true,
+      transitions: { orderBy: { occurredAt: "desc" }, take: 1, select: { trigger: true, triggerUrl: true } },
+    },
+  });
+}
+
 export async function listRejections() {
   return prisma.rejection.findMany({ orderBy: { decidedAt: "desc" } });
 }

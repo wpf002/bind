@@ -460,6 +460,9 @@ export const draftCases: SeedCase[] = [
       { technique: "Probabilistic distinct counting", description: "Sketches such as HyperLogLog over session IDs.", standing: "untested", residual: "Counts sessions or devices, not people. Error vs. the true unique count is unknown." },
     ],
     sources: [{ label: "DSA Art. 24(2), recital 77" }],
+    transitions: [
+      { from: "unresolvable", to: "resolved_legislative", trigger: "Regulation (EU) 2022/2065 adopted with recital 77", url: eurlex("32022R2065"), at: "2022-10-19" },
+    ],
   },
   {
     ref: "N16",
@@ -535,8 +538,9 @@ export const draftCases: SeedCase[] = [
     shapeRationale: `Deliberate-blindness: the product property is the operator's inability to link a user to traffic, and the direction requires the operator to keep that link. The conflict is with an architecture's security property. No second statute requires no-logs. ${DRAFTED}`,
     resolvability: "unresolvable",
     resolution: "abandonment",
+    resolvedBy: "ExpressVPN withdrew its India-based servers",
     inclusionVerdict: "passes",
-    inclusionReasoning: "No. Shared-exit, no-log designs can't produce member-to-IP records, and keeping them removes the property. Passes on the same footing as the other Deliberate Blindness cases, where one mandate conflicts with a security property and no opposing law is needed. Several providers reportedly removed Indian servers in 2022; press-reported, not verified.",
+    inclusionReasoning: "No. Shared-exit, no-log designs can't produce member-to-IP records, and keeping them removes the property. Passes on the same footing as the other Deliberate Blindness cases, where one mandate conflicts with a security property and no opposing law is needed. ExpressVPN removed its Indian servers on 2 June 2022, per its own notice. Other removals are press-reported.",
     instruments: [
       { key: "nb_certin2022v", role: "mandating" },
       { key: "nb_certinFaq", role: "context", note: "Scopes para (v) to consumer proxy-like VPNs; allows offshore storage." },
@@ -547,6 +551,9 @@ export const draftCases: SeedCase[] = [
       { technique: "Per-user dedicated exit IPs", description: "Assign each subscriber a fixed IP and record it at signup.", standing: "untested", residual: "Complies by giving up the property: every session is attributable." },
     ],
     sources: [{ label: "CERT-In Directions No. 20(3)/2022-CERT-In, 28 April 2022" }, { label: "CERT-In FAQs on Cyber Security Directions, May 2022" }],
+    transitions: [
+      { from: "unresolvable", to: "resolved_abandonment", trigger: "ExpressVPN removes its India-based servers", url: "https://www.expressvpn.com/blog/remove-india-vpn-servers/", at: "2022-06-02" },
+    ],
   },
   {
     ref: "N22",

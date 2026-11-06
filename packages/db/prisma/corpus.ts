@@ -511,6 +511,9 @@ export const cases: SeedCase[] = [
       { key: "gdpr9", role: "conflicting" },
     ],
     flags: { aiAct105: "⚠ in source: least confident on the specific provision." },
+    transitions: [
+      { from: "unresolvable", to: "resolved_legislative", trigger: "Regulation (EU) 2024/1689 adopted with the Art. 10(5) carve-out", url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689", at: "2024-06-13" },
+    ],
   },
   {
     ref: "H1",

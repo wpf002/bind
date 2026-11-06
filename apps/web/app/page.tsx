@@ -103,7 +103,7 @@ export default async function Index({ searchParams }: { searchParams: Promise<Pa
             <span className="finding-n">{s.resolvedBy.engineering}</span>
             <span className="finding-label">Resolved By Engineering</span>
             <span className="finding-sub">
-              {resolvedOther} by legislation · {s.published} published
+              <Link href="/resolutions">{resolvedOther} by other means</Link> · {s.published} published
             </span>
           </div>
           <div className="gauges">
