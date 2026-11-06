@@ -270,9 +270,21 @@ are arguably out of scope), so keep going.
 
 ## Next 17 cases — where to look
 
-Financial market structure (MiFID II best execution vs. dark pool opacity);
-medical device firmware (MDR recertification vs. security patch cadence —
-likely a strong shape-5 case); automotive (UNECE R155/R156 vs. right to
-repair); telecom (CALEA lawful intercept vs. 5G SUPI concealment — probable
-shape 4); ad tech (TCF consent vs. real-time bidding broadcast); DSA researcher
-data access vs. platform security posture.
+All six leads listed here in v0.1 were drafted and failed the inclusion test.
+Each is in the rejection log with the primary source that closes it:
+
+- MiFID II best execution vs. dark pool opacity (N1): Art. 27 asks for
+  sufficient steps, and post-trade TCA with a venue policy meets it.
+- MDR recertification vs. security patch cadence (N2): MDCG 2020-3 treats
+  security updates as non-significant changes.
+- UNECE R155/R156 vs. right to repair (N3): SERMI-accredited repairers get
+  OEM-signed access, which satisfies both.
+- CALEA lawful intercept vs. 5G SUPI concealment (N9): TS 33.501 returns the
+  SUPI to the serving network for interception; concealment covers NG-RAN only.
+- TCF consent vs. real-time bidding broadcast (N10): SSP-side consent
+  evaluation satisfies Art. 7(1) without the broadcast. Known technique.
+- DSA researcher data access vs. platform security posture (N11): Art. 40(5)
+  lets the provider propose an alternative access path on security grounds.
+
+No open leads remain from this list. New leads enter through the submission
+form and the intake test.
