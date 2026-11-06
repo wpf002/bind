@@ -5,9 +5,11 @@ import { caseTableTeX, caseToBibTeX, shapeTableTeX, sourceToBibTeX, bibtexKey, s
 import {
   prisma,
   getCase,
+  getProperty,
   getShape,
   listCases,
   listJurisdictions,
+  listProperties,
   listRejections,
   listShapes,
   previewDrafts,
@@ -53,6 +55,14 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
     const s = await getShape(req.params.slug);
     if (!s) return reply.code(404).send({ error: "not_found" });
     return { ...s, cases: s.cases.filter((c) => c.status === "published") };
+  });
+
+  app.get("/properties", async () => listProperties());
+
+  app.get<{ Params: { slug: string } }>("/properties/:slug", async (req, reply) => {
+    const p = await getProperty(req.params.slug);
+    if (!p) return reply.code(404).send({ error: "not_found" });
+    return p;
   });
 
   app.get("/jurisdictions", async () => listJurisdictions());

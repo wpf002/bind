@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { TEST_DATABASE_NAME, assertTestDatabase } from "./database";
-import { DRAFT_SLUG, PUBLISHED_SLUG, SHAPE_SLUG, buildTestApp, seedCorpus } from "./fixtures";
+import { DRAFT_SLUG, PROPERTY_SLUG, PUBLISHED_SLUG, SHAPE_SLUG, buildTestApp, seedCorpus } from "./fixtures";
 
 type CaseList = { count: number; cases: { slug: string; citations: { label: string }[]; jurisdictions: string[] }[] };
 
@@ -124,6 +124,42 @@ describe("GET /shapes/:slug", () => {
 
   it("answers a NUL byte in the slug with a 4xx", async () => {
     const res = await get("/shapes/shape%00");
+    expect(res.statusCode).toBeGreaterThanOrEqual(400);
+    expect(res.statusCode).toBeLessThan(500);
+  });
+});
+
+describe("GET /properties", () => {
+  it("lists properties with published cases only", async () => {
+    const res = await get("/properties");
+    expect(res.statusCode).toBe(200);
+    const props = res.json<{ slug: string; cases: number; resolved: boolean; shapes: { slug: string }[]; jurisdictions: string[]; caseRows: { slug: string }[] }[]>();
+    expect(props.map((p) => p.slug)).toEqual([PROPERTY_SLUG]);
+    expect(props[0]).toMatchObject({ cases: 1, resolved: false, jurisdictions: ["EU"] });
+    expect(props[0]?.shapes.map((s) => s.slug)).toEqual([SHAPE_SLUG]);
+    expect(props[0]?.caseRows.map((c) => c.slug)).toEqual([PUBLISHED_SLUG]);
+  });
+});
+
+describe("GET /properties/:slug", () => {
+  it("returns the property with its published cases grouped by shape", async () => {
+    const res = await get(`/properties/${PROPERTY_SLUG}`);
+    expect(res.statusCode).toBe(200);
+    const body = res.json<{ slug: string; cases: number; groups: { shape: { slug: string } | null; cases: { slug: string }[] }[] }>();
+    expect(body.slug).toBe(PROPERTY_SLUG);
+    expect(body.cases).toBe(1);
+    expect(body.groups.map((g) => g.shape?.slug)).toEqual([SHAPE_SLUG]);
+    expect(body.groups[0]?.cases.map((c) => c.slug)).toEqual([PUBLISHED_SLUG]);
+  });
+
+  it("answers 404 for an unknown property", async () => {
+    const res = await get("/properties/no-such-property");
+    expect(res.statusCode).toBe(404);
+    expect(res.json()).toEqual({ error: "not_found" });
+  });
+
+  it("answers a NUL byte in the slug with a 4xx", async () => {
+    const res = await get("/properties/property%00");
     expect(res.statusCode).toBeGreaterThanOrEqual(400);
     expect(res.statusCode).toBeLessThan(500);
   });

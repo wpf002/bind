@@ -36,8 +36,9 @@ export const validSubmission: SubmissionInput = {
 export const PUBLISHED_SLUG = "bind-0001";
 export const DRAFT_SLUG = "bind-0002";
 export const SHAPE_SLUG = "immutability-vs-erasure";
+export const PROPERTY_SLUG = "append-only-integrity";
 
-/** One shape holding a published case and a held draft, with the rows the read routes join. */
+/** One shape and one property holding a published case and a held draft, with the rows the read routes join. */
 export async function seedCorpus() {
   const jurisdiction = await prisma.jurisdiction.create({ data: { code: "EU", name: "European Union", level: "supranational" } });
   const instrument = await prisma.legalInstrument.create({
@@ -61,10 +62,20 @@ export async function seedCorpus() {
       boundaryCriteria: "Stores that can redact without breaking integrity are out.",
     },
   });
+  const property = await prisma.architecturalProperty.create({
+    data: {
+      slug: PROPERTY_SLUG,
+      name: "Append-Only Integrity",
+      threatModel: "Records cannot be altered or removed once written.",
+      defeatNote: "A store that can delete gives up tamper evidence.",
+      exemplars: ["Distributed ledgers"],
+    },
+  });
   const linked = {
     resolvability: "unresolvable",
     shapes: { create: { shapeId: shape.id } },
     instruments: { create: { instrumentId: instrument.id } },
+    properties: { create: { propertyId: property.id } },
   } as const;
   const published = await prisma.case.create({
     data: {
@@ -108,5 +119,5 @@ export async function seedCorpus() {
       reasoning: "More hardware meets the deadline.",
     },
   });
-  return { published, draft, shape };
+  return { published, draft, shape, property };
 }
