@@ -7,6 +7,9 @@ export const RESOLUTION_MECHANISMS = RESOLUTION.filter((r): r is ResolutionMecha
 
 const RESOLVED_STATE_PREFIX = "resolved_";
 
+/** True for the state a resolving transition moves into. */
+export const isResolvedState = (state: string) => state.startsWith(RESOLVED_STATE_PREFIX);
+
 /** The transition state a case moves to when a mechanism resolves it. */
 export const resolvedState = (mechanism: ResolutionMechanism) => `${RESOLVED_STATE_PREFIX}${mechanism}`;
 
