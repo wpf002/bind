@@ -20,22 +20,13 @@ made for engineers.
 | Properties as the entry point: 10 shared properties, Properties pages, API routes, home and nav | 4d6596c, d2f45c9 |
 | Case page for the engineer: properties, jurisdictions, instruments, workarounds and outcome above the fold | ed1b740 |
 | Design check: Check page, GET /check, matcher in core, Matrix consistency test | fb80122, a664141, 95ef3d6, a88be0c |
+| API and JSON export: OpenAPI at /openapi.json from the route schemas, GET /export/json, JSON on the Export page | 2ff3608, 8408858, 6ea008f, 7484b8b |
 
 ## Next
 
 In order. Each item ships on its own.
 
-### 1. API and JSON export
-
-Engineers integrate rather than browse. Publish an OpenAPI document for the
-read routes in `apps/api`, serve it at `/openapi.json`, and add a JSON export
-beside the BibTeX and LaTeX exports.
-
-Done when: the OpenAPI document validates, every read route is in it, and
-`GET /export/json` returns every published case with its properties, shapes,
-instruments, citations and transitions.
-
-### 2. Changes feed
+### 1. Changes feed
 
 Expose what changed: new cases, resolutions, and citations the source check
 flagged. An Atom feed and a Changes page, both from the ledger and transition
@@ -45,7 +36,7 @@ Done when: a feed reader shows an entry for each event since the corpus was
 published, newest first, and the source check adds an entry when a quote
 changes.
 
-### 3. Submit for engineers
+### 2. Submit for engineers
 
 Refocus the Submit form on the conflict an engineer hit: what they were
 building, which rule blocked it, which rule required it. Review stays as is.
