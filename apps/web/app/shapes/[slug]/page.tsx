@@ -27,7 +27,7 @@ export default async function ShapePage({ params }: Props) {
         <span>{s.name}</span>
       </nav>
       <header className="shape-hero">
-        <div style={{ display: "grid", gap: 20 }}>
+        <div className="shape-main">
           <div className="case-meta">
             <Ord n={s.ordinal} lg />
             <span className="chip chip-plain">{FAMILY_LABEL[s.family as ShapeFamily]}</span>
@@ -51,11 +51,14 @@ export default async function ShapePage({ params }: Props) {
           <span className="verdict-v">{audit ? audit.verdict : "Pending"}</span>
           {audit ? (
             <>
-              <p style={{ fontSize: 14, color: "var(--ink-2)" }}>{audit.reasoning}</p>
-              {audit.priorArt ? <p className="muted" style={{ fontSize: 12 }}>Prior art: {audit.priorArt}</p> : null}
-              <span className="mono muted" style={{ fontSize: 11 }}>
+              <span className="verdict-run">
                 {fmtDate(audit.runAt)} · {audit.model} · prompt {audit.promptVersion}
               </span>
+              <details className="verdict-more">
+                <summary>Reasoning</summary>
+                <p>{audit.reasoning}</p>
+                {audit.priorArt ? <p className="muted">Prior art: {audit.priorArt}</p> : null}
+              </details>
             </>
           ) : (
             <p className="muted" style={{ fontSize: 14 }}>Not yet run.</p>

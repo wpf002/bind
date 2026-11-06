@@ -1,15 +1,23 @@
 import Link from "next/link";
+import { DEFAULT_CASE_SORT, parseCaseSort, sortCases, type CaseSort } from "@bind/core";
 import { RESOLVABILITY } from "@bind/shared";
 import { listCases, listJurisdictions, listShapes, stats } from "@bind/db";
 import { Jur, Ord, Res, ShapeTag, Tip } from "@/components/marks";
 import { pad, resLabel, withParam } from "@/lib/format";
 
-type Params = { shape?: string; jurisdiction?: string; resolvability?: string; q?: string };
+type Params = { shape?: string; jurisdiction?: string; resolvability?: string; q?: string; sort?: string };
+
+const SORT_COLUMNS: { sort: CaseSort; label: string; className?: string }[] = [
+  { sort: "id", label: "ID", className: "col-id" },
+  { sort: "title", label: "Case" },
+  { sort: "shape", label: "Shape", className: "col-shape" },
+];
 
 export default async function Index({ searchParams }: { searchParams: Promise<Params> }) {
   const p = await searchParams;
   const resolvability = RESOLVABILITY.find((r) => r === p.resolvability);
-  const [cases, all, shapes, jurs, s] = await Promise.all([
+  const sort = parseCaseSort(p.sort);
+  const [matched, all, shapes, jurs, s] = await Promise.all([
     listCases({ shape: p.shape, jurisdiction: p.jurisdiction, resolvability, q: p.q }),
     listCases(),
     listShapes(),
@@ -17,7 +25,19 @@ export default async function Index({ searchParams }: { searchParams: Promise<Pa
     stats(),
   ]);
 
-  const active = Object.entries(p).filter(([, v]) => v) as [keyof Params, string][];
+  const cases = sortCases(matched, sort, (c) => ({
+    sortKey: c.sortKey,
+    title: c.title,
+    shapeOrdinal: c.shapes[0]?.shape.ordinal ?? null,
+    sourceCount: c.citations.length,
+  }));
+  const active = Object.entries(p).filter(([k, v]) => v && k !== "sort") as [keyof Params, string][];
+  const sortHref = (key: CaseSort) => withParam({ ...p, sort: sort === DEFAULT_CASE_SORT ? undefined : sort }, "sort", key === DEFAULT_CASE_SORT ? undefined : key);
+  const sortLink = (key: CaseSort, label: string) => (
+    <Link href={sortHref(key)} aria-current={sort === key ? "true" : undefined}>
+      {label}
+    </Link>
+  );
   const shapeName = (slug: string) => shapes.find((x) => x.slug === slug)?.name ?? slug;
   const ticks = Array.from({ length: s.gate }, (_, i) => (i < s.published ? "on" : i < s.total ? "held" : ""));
   const dist = RESOLVABILITY.map((r) => [r, s.byResolvability[r] ?? 0] as const);
@@ -132,6 +152,7 @@ export default async function Index({ searchParams }: { searchParams: Promise<Pa
             .map(([k, v]) => (
               <input key={k} type="hidden" name={k} value={v} />
             ))}
+          {sort !== DEFAULT_CASE_SORT ? <input type="hidden" name="sort" value={sort} /> : null}
           <label className="search">
             <svg width="14" height="14" viewBox="0 0 12 12" aria-hidden>
               <circle cx="5" cy="5" r="4" fill="none" stroke="currentColor" strokeWidth="1.3" />
@@ -156,12 +177,14 @@ export default async function Index({ searchParams }: { searchParams: Promise<Pa
           <table className="log">
             <thead>
               <tr>
-                <th className="col-id">ID</th>
-                <th>Case</th>
-                <th className="col-shape">Shape</th>
+                {SORT_COLUMNS.map((col) => (
+                  <th key={col.sort} className={col.className} aria-sort={sort === col.sort ? "ascending" : undefined}>
+                    {sortLink(col.sort, col.label)}
+                  </th>
+                ))}
                 <th className="col-jur">Juris.</th>
                 <th className="col-res">Resolvability</th>
-                <th>Src</th>
+                <th aria-sort={sort === "sources" ? "descending" : undefined}>{sortLink("sources", "Src")}</th>
               </tr>
             </thead>
             <tbody>

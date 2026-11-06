@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { INCLUSION_CRITERIA, caseToBibTeX, suggestedCitation } from "@bind/core";
+import { INCLUSION_CRITERIA, caseToBibTeX, splitAnalysis, suggestedCitation } from "@bind/core";
 import { getCase, previewDrafts, type CaseDetail } from "@bind/db";
 import { CopyButton } from "@/components/CopyButton";
 import { Jur, Res, ShapeTag, Tip, Verify } from "@/components/marks";
-import { fmtDate, pad, titleCase } from "@/lib/format";
+import { fmtDate, titleCase } from "@/lib/format";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,6 +21,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 type Inst = CaseDetail["instruments"][number];
+
+const REGISTRY_CONTRIBUTOR = "Bind Registry";
+const UNCHECKED_STATUSES = ["unverified", "disputed"];
+const NOTE_LABEL = { review: "Review", amendment: "Amendment" } as const;
 
 function Provision({ i }: { i: Inst }) {
   const x = i.instrument;
@@ -59,8 +63,17 @@ export default async function CasePage({ params }: Props) {
   const cite = { slug: c.slug, title: c.title, updatedAt: c.updatedAt, contributor: c.contributor };
   const citation = suggestedCitation(cite);
   const bibtex = caseToBibTeX(cite);
-  const paragraphs = (c.analysis ?? "").split(/\n{2,}/).filter(Boolean);
+  const { body: paragraphs, notes } = splitAnalysis(c.analysis);
   const passes = c.inclusionVerdict === "passes";
+  const checked = c.citations.filter((s) => !UNCHECKED_STATUSES.includes(s.verificationStatus)).length;
+  const sections = [
+    paragraphs.length || notes.length ? "analysis" : null,
+    "inclusion",
+    c.paperingOvers.length ? "papering" : null,
+    "record",
+    "sources",
+  ].filter((k) => k !== null);
+  const mark = (key: string) => `§${sections.indexOf(key) + 1}`;
 
   return (
     <article className="wrap case">
@@ -85,6 +98,36 @@ export default async function CasePage({ params }: Props) {
         </div>
         <h1 className="case-title">{c.title}</h1>
         <p className="lede">{c.statement}</p>
+        <dl className="record">
+          <div>
+            <dt>Shape</dt>
+            <dd className="record-shapes">
+              {c.shapes.map((a) => (
+                <ShapeTag key={a.shape.slug} shape={a.shape} />
+              ))}
+            </dd>
+          </div>
+          <div>
+            <dt>Sources</dt>
+            <dd>
+              <a href="#sources" className="mono">
+                {checked} / {c.citations.length} Verified
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt>Contributor</dt>
+            <dd>{c.contributor ?? REGISTRY_CONTRIBUTOR}</dd>
+          </div>
+          <div>
+            <dt>Updated</dt>
+            <dd className="mono">{fmtDate(c.updatedAt)}</dd>
+          </div>
+          <div>
+            <dt>Taxonomy</dt>
+            <dd className="mono">{c.shapes[0]?.taxonomyVersion ?? "v1"}</dd>
+          </div>
+        </dl>
         {c.resolution !== "none" ? (
           <div className="resolved">
             <b>Resolved · {titleCase(c.resolution)}</b>
@@ -183,23 +226,29 @@ export default async function CasePage({ params }: Props) {
 
       <div className="case-body">
         <div>
-          {paragraphs.length ? (
+          {sections.includes("analysis") ? (
             <section className="sect">
               <div className="sect-h">
-                <span className="n">§1</span>
-                <h2>Analysis</h2>
+                <span className="n">{mark("analysis")}</span>
+                <h2>{paragraphs.length ? "Analysis" : "Notes"}</h2>
               </div>
               {paragraphs.map((t, i) => (
                 <p key={i} className="prose">
                   {t}
                 </p>
               ))}
+              {notes.map((n, i) => (
+                <div key={i} className="note">
+                  <span className="eyebrow">{NOTE_LABEL[n.kind]}</span>
+                  <p>{n.text}</p>
+                </div>
+              ))}
             </section>
           ) : null}
 
           <section className="sect">
             <div className="sect-h">
-              <span className="n">§2</span>
+              <span className="n">{mark("inclusion")}</span>
               <h2>Inclusion Test</h2>
               <Tip text="A case qualifies only if a competent engineer with unlimited budget still cannot satisfy both sides." />
             </div>
@@ -222,7 +271,7 @@ export default async function CasePage({ params }: Props) {
           {c.paperingOvers.length ? (
             <section className="sect">
               <div className="sect-h">
-                <span className="n">§3</span>
+                <span className="n">{mark("papering")}</span>
                 <h2>Papering Over</h2>
                 <Tip text="Documented workarounds. A workaround is not a resolution; the residual column records what it gives up." />
               </div>
@@ -258,7 +307,7 @@ export default async function CasePage({ params }: Props) {
 
           <section className="sect">
             <div className="sect-h">
-              <span className="n">§4</span>
+              <span className="n">{mark("record")}</span>
               <h2>Record</h2>
             </div>
             <ol className="timeline">
@@ -294,9 +343,9 @@ export default async function CasePage({ params }: Props) {
             </ol>
           </section>
 
-          <section className="sect">
+          <section className="sect" id="sources">
             <div className="sect-h">
-              <span className="n">§5</span>
+              <span className="n">{mark("sources")}</span>
               <h2>Sources</h2>
             </div>
             <ol className="sources">
@@ -329,41 +378,6 @@ export default async function CasePage({ params }: Props) {
         <aside className="aside">
           <div className="panel">
             <div className="panel-h">
-              <span className="eyebrow">Entry</span>
-              <span className="id">{c.slug}</span>
-            </div>
-            <dl className="panel-b meta-list">
-              <dt>Shape</dt>
-              <dd>
-                {c.shapes.map((a) => (
-                  <div key={a.shape.slug}>
-                    <ShapeTag shape={a.shape} />
-                  </div>
-                ))}
-              </dd>
-              <dt>Resolvability</dt>
-              <dd>
-                <Res r={c.resolvability} />
-              </dd>
-              <dt>Resolution</dt>
-              <dd>{titleCase(c.resolution)}</dd>
-              <dt>Sources</dt>
-              <dd className="mono">{pad(c.citations.length)} verified</dd>
-              <dt>Taxonomy</dt>
-              <dd className="mono">{c.shapes[0]?.taxonomyVersion ?? "v1"}</dd>
-              <dt>Updated</dt>
-              <dd className="mono">{fmtDate(c.updatedAt)}</dd>
-              {c.contributor ? (
-                <>
-                  <dt>Contributor</dt>
-                  <dd>{c.contributor}</dd>
-                </>
-              ) : null}
-            </dl>
-          </div>
-
-          <div className="panel">
-            <div className="panel-h">
               <span className="eyebrow">Cite</span>
               <CopyButton text={citation} />
             </div>
@@ -376,6 +390,27 @@ export default async function CasePage({ params }: Props) {
               <pre className="bib">{bibtex}</pre>
             </div>
           </div>
+
+          {primary && c.related.length ? (
+            <div className="panel">
+              <div className="panel-h">
+                <span className="eyebrow">Same Shape</span>
+                <Link className="id" href={`/shapes/${primary.slug}`}>
+                  All →
+                </Link>
+              </div>
+              <ul className="related">
+                {c.related.map((r) => (
+                  <li key={r.slug}>
+                    <Link href={`/case/${r.slug}`}>
+                      <span className="id">{r.slug}</span>
+                      <span>{r.title}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
 
           <nav className="pager" aria-label="Adjacent Cases">
             {c.prev ? (

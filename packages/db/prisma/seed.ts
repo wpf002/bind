@@ -1,12 +1,13 @@
 import { SIGNOFF, SIGNOFF_NOTE } from "./signoff";
 import { PrismaClient } from "@prisma/client";
-import { INTAKE_REJECTION_PREFIX, isPublishable } from "@bind/core";
-import { audits, cases as corpusCases, instruments as corpusInstruments, jurisdictions, rejections as corpusRejections, shapes } from "./corpus";
+import { AMENDMENT_NOTE_PREFIX, INTAKE_REJECTION_PREFIX, REVIEW_NOTE_PREFIX, isPublishable } from "@bind/core";
+import { CORPUS_AUTHOR, audits, cases as corpusCases, instruments as corpusInstruments, jurisdictions, rejections as corpusRejections, shapes } from "./corpus";
 import { draftCases, draftInstruments, draftRejections, draftSourceVerifications, draftVerifications } from "./drafts";
 import { instrumentVerifications, sourceVerifications, type Verification } from "./verifications";
 const sv: Record<string, Verification> = { ...sourceVerifications, ...draftSourceVerifications };
 
-const cases = [...corpusCases, ...draftCases];
+// Corpus cases are the source author's own text. Model-drafted cases carry no contributor and cite as the registry.
+const cases = [...corpusCases.map((c) => ({ contributor: CORPUS_AUTHOR, ...c })), ...draftCases];
 const instruments: Record<string, (typeof corpusInstruments)[string]> = { ...corpusInstruments, ...draftInstruments };
 const iv: Record<string, Verification> = { ...instrumentVerifications, ...draftVerifications };
 const rejections = [...corpusRejections, ...draftRejections];
@@ -82,7 +83,8 @@ async function main() {
         corpusRef: c.ref,
         title: c.title,
         statement: c.statement,
-        analysis: [c.analysis, c.review && `Review: ${c.review}`, amended(c)].filter(Boolean).join("\n\n") || undefined,
+        contributor: c.contributor,
+        analysis: [c.analysis, c.review && `${REVIEW_NOTE_PREFIX}${c.review}`, amended(c)].filter(Boolean).join("\n\n") || undefined,
         inclusionVerdict: c.inclusionVerdict,
         inclusionReasoning: c.inclusionReasoning,
         resolvability: c.resolvability,
@@ -144,7 +146,7 @@ main()
 function amended(c: (typeof cases)[number]) {
   if (!c.amendments?.length) return undefined;
   return [
-    `Amended from v0.1 by claude-opus-5-5, 2026-10-31. ${SIGNOFF_NOTE}`,
+    `${AMENDMENT_NOTE_PREFIX}v0.1 by claude-opus-5-5, 2026-10-31. ${SIGNOFF_NOTE}`,
     ...c.amendments.map((a) => `${a.field}: "${a.from}" ${a.reason}`),
   ].join("\n");
 }

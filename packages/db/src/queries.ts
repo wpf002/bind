@@ -69,15 +69,29 @@ export async function listCases(q: Partial<CaseQuery> = {}, opts: { includeDraft
 
 export type CaseRow = Awaited<ReturnType<typeof listCases>>[number];
 
+/** Cases listed beside a case from its primary shape. */
+const RELATED_CASE_LIMIT = 5;
+
 export async function getCase(slug: string) {
   const c = await prisma.case.findUnique({ where: { slug }, include: caseInclude });
   if (!c) return null;
   const cites = await citationsFor([c.id]);
-  const [prev, next] = await Promise.all([
-    prisma.case.findFirst({ where: { status: previewDrafts ? undefined : "published", sortKey: { lt: c.sortKey } }, orderBy: { sortKey: "desc" }, select: { slug: true, title: true } }),
-    prisma.case.findFirst({ where: { status: previewDrafts ? undefined : "published", sortKey: { gt: c.sortKey } }, orderBy: { sortKey: "asc" }, select: { slug: true, title: true } }),
+  const status = previewDrafts ? undefined : ("published" as const);
+  const brief = { slug: true, title: true } as const;
+  const primaryShapeId = c.shapes[0]?.shapeId;
+  const [prev, next, related] = await Promise.all([
+    prisma.case.findFirst({ where: { status, sortKey: { lt: c.sortKey } }, orderBy: { sortKey: "desc" }, select: brief }),
+    prisma.case.findFirst({ where: { status, sortKey: { gt: c.sortKey } }, orderBy: { sortKey: "asc" }, select: brief }),
+    primaryShapeId
+      ? prisma.case.findMany({
+          where: { status, id: { not: c.id }, shapes: { some: { shapeId: primaryShapeId, supersededAt: null } } },
+          orderBy: { sortKey: "asc" },
+          take: RELATED_CASE_LIMIT,
+          select: { ...brief, resolvability: true },
+        })
+      : [],
   ]);
-  return { ...decorate(c, cites.get(c.id) ?? []), prev, next };
+  return { ...decorate(c, cites.get(c.id) ?? []), prev, next, related };
 }
 
 export type CaseDetail = NonNullable<Awaited<ReturnType<typeof getCase>>>;

@@ -530,7 +530,7 @@ export const draftCases: SeedCase[] = [
     resolvedBy: "Smart order routing with post-trade transaction cost analysis against the execution policy.",
     inclusionVerdict: "fails",
     inclusionReasoning:
-      "resolved_by_known_technique. Art. 27 asks for sufficient steps, not the best price in every hidden book. Post-trade TCA plus a documented venue policy meets it, and regulators accept that approach.",
+      "Art. 27 asks for sufficient steps, not the best price in every hidden book. Post-trade TCA plus a documented venue policy meets it, and regulators accept that approach.",
     instruments: [
       { key: "na_mifid27", role: "mandating" },
       { key: "na_mifir4", role: "context", note: "Dark trading is lawful through the pre-trade waivers." },
@@ -562,7 +562,7 @@ export const draftCases: SeedCase[] = [
     resolvedBy: "MDCG 2020-3 Rev.1 classifies security updates as non-significant changes.",
     inclusionVerdict: "fails",
     inclusionReasoning:
-      "resolved_by_known_technique. Coordination-group guidance treats security updates as non-significant, so patching doesn't cost the legacy certificate. Patches that add features still do, but that is a choice.",
+      "Coordination-group guidance treats security updates as non-significant, so patching doesn't cost the legacy certificate. Patches that add features still do, but that is a choice.",
     instruments: [
       { key: "na_mdr120", role: "mandating" },
       { key: "na_mdrAnnexI17", role: "conflicting" },
@@ -596,7 +596,7 @@ export const draftCases: SeedCase[] = [
     resolvedBy: "Reg 2018/858 Art. 61 remote security facility plus SERMI accreditation (Delegated Reg 2021/1244).",
     inclusionVerdict: "fails",
     inclusionReasoning:
-      "resolved_by_known_technique. Accredited repairers get OEM-signed access, which satisfies both R156 integrity and Art. 61 access. Owner self-repair without accreditation remains blocked, but EU law doesn't mandate it for vehicles.",
+      "Accredited repairers get OEM-signed access, which satisfies both R156 integrity and Art. 61 access. Owner self-repair without accreditation remains blocked, but EU law doesn't mandate it for vehicles.",
     instruments: [
       { key: "na_r155", role: "mandating" },
       { key: "na_r156", role: "mandating" },

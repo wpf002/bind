@@ -261,7 +261,7 @@ export const draftCases: SeedCase[] = [
     resolution: "engineering",
     resolvedBy: "TS 33.501 AUSF-to-SEAF SUPI return",
     inclusionVerdict: "fails",
-    inclusionReasoning: "resolved_by_known_technique. The 3GPP design already returns the SUPI to the serving network for lawful interception. Concealment applies only to NG-RAN. The intercept function works on the core-network identifier.",
+    inclusionReasoning: "The 3GPP design already returns the SUPI to the serving network for lawful interception. Concealment applies only to NG-RAN. The intercept function works on the core-network identifier.",
     instruments: [
       { key: "nb_calea1002", role: "mandating" },
       { key: "nb_ts33501", role: "conflicting", note: "Conflict only at the radio layer; § 6.1.3.1 NOTE 3 provides the LI path." },
@@ -281,7 +281,7 @@ export const draftCases: SeedCase[] = [
     shapeRationale: `Verification-minimization: proof of consent travels with the data and multiplies the disclosure. Fails inclusion because the broadcast is optional architecture. ${DRAFTED}`,
     resolvability: "resolvable_costly",
     inclusionVerdict: "fails",
-    inclusionReasoning: "resolved_by_known_technique, with a merely_expensive component. SSP-side consent evaluation with per-vendor filtering, or contextual / on-device auctions, satisfy Art. 7(1) without broadcasting the string. Open RTB broadcast is a revenue choice. No law requires it.",
+    inclusionReasoning: "A known technique resolves it, at a cost. SSP-side consent evaluation with per-vendor filtering, or contextual / on-device auctions, satisfy Art. 7(1) without broadcasting the string. Open RTB broadcast is a revenue choice. No law requires it.",
     instruments: [
       { key: "nb_gdpr7", role: "mandating" },
       { key: "nb_cjeuIab", role: "context" },

@@ -13,8 +13,13 @@ import auditLedger from "./ledger/audits.json";
  * are seeded unassigned.
  */
 
+/** Author of PARADOX-CORPUS.md, the v0.1 source text the 24 corpus cases are taken from. */
+export const CORPUS_AUTHOR = "Will Foti";
+
 export type SeedCase = {
   ref: string;
+  /** Who contributed the case: the submitter's name for an accepted submission. Empty cites as the registry. */
+  contributor?: string;
   title: string;
   statement: string;
   analysis?: string;
