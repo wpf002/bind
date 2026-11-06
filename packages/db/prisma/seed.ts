@@ -1,4 +1,4 @@
-import { SIGNOFF, SIGNOFF_NOTE } from "./signoff";
+import { SIGNOFF_NOTE, signoffFor } from "./signoff";
 import { PrismaClient } from "@prisma/client";
 import { AMENDMENT_NOTE_PREFIX, INTAKE_REJECTION_PREFIX, REVIEW_NOTE_PREFIX, isPublishable } from "@bind/core";
 import { CORPUS_AUTHOR, audits, cases as corpusCases, instruments as corpusInstruments, jurisdictions, rejections as corpusRejections, shapes } from "./corpus";
@@ -71,7 +71,7 @@ async function main() {
       ...(c.sources ?? []).map((s) => ({ ...s, v: sv[s.label] })),
     ] as { label: string; note?: string; v?: Verification }[];
 
-    // The owner sign-off in signoff.ts publishes a case only if it clears the gate.
+    // The owner sign-off covering the case (signoff.ts) publishes it only if it clears the gate.
     const gate = isPublishable({
       inclusionVerdict: c.inclusionVerdict,
       citations: cites.map((s) => ({ verificationStatus: s.v?.status ?? "unverified" })),
@@ -91,7 +91,7 @@ async function main() {
         resolution: c.resolution ?? "none",
         resolvedBy: c.resolvedBy,
         status: gate.ok ? "published" : "draft",
-        publishedAt: gate.ok ? new Date(SIGNOFF.at) : null,
+        publishedAt: gate.ok ? new Date(signoffFor(c.ref).at) : null,
         firstSeenAt: seenAt,
         sortKey: i + 1,
         shapes: {

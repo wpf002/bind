@@ -1,8 +1,8 @@
 // Batch B drafts. Model-drafted by claude-opus-5-5; owner sign-off in ../signoff.ts.
 // Refs run N9-N18, then N21-N22. The brief allotted N9-N16; three leads failed, so two extra refs were needed to reach the pass count.
 // N21-N22 added 2026-11-01 (N19-N20 are in drafts-a) to bring the corpus to 40.
-// N23-N24 added 2026-11-06 by claude-fable-5-1 to bring the published count to 40.
-import { SIGNOFF, SIGNOFF_NOTE } from "../signoff";
+// N23-N24 added 2026-11-06 by claude-fable-5-1 to bring the published count to 40; owner sign-off the same day.
+import { SIGNOFF_FABLE_NOTE, SIGNOFF_NOTE } from "../signoff";
 import type { SeedCase } from "../corpus";
 import type { Verification } from "../verifications";
 
@@ -10,10 +10,10 @@ const BY = "claude-opus-5-5";
 const AT = "2026-10-31";
 const AT2 = "2026-11-01";
 const DRAFTED = `Drafted by claude-opus-5-5. ${SIGNOFF_NOTE}`;
-// N23-N24 postdate the owner sign-off, so they don't carry SIGNOFF_NOTE.
+// N23-N24 carry the second sign-off.
 const BY_FABLE = "claude-fable-5-1";
 const AT_FABLE = "2026-11-06";
-const DRAFTED_FABLE = `Drafted and source-checked by ${BY_FABLE}, ${AT_FABLE}, after the owner sign-off dated ${SIGNOFF.at}.`;
+const DRAFTED_FABLE = `Drafted by ${BY_FABLE}. ${SIGNOFF_FABLE_NOTE}`;
 
 export const draftInstruments: Record<string, { regime: string; instrument: string; shortName: string; provision: string; mandate: string; jurisdiction: string }> = {
   nb_calea1002: { regime: "US lawful intercept", instrument: "Communications Assistance for Law Enforcement Act, 47 U.S.C. 1002", shortName: "CALEA", provision: "§ 1002(a)(1), (b)(3)", mandate: "Carriers must be able to isolate and deliver a subscriber's communications to the government on lawful authorization.", jurisdiction: "US" },
@@ -299,7 +299,7 @@ export const draftVerifications: Record<string, Verification> = {
     publisher: "Президент России, kremlin.ru (bank of documents)",
     quote: "(в том числе невыполнение при продаже или использовании отдельных видов технически сложных товаров с предварительно установленными программами для электронных вычислительных машин требований, установленных пунктами 41 и 42 статьи 4 настоящего Закона)",
     provision: "Art. 1(1)-(2), Art. 2",
-    note: "Working translation: (including failure, in the sale or use of certain technically complex goods with pre-installed programs, to meet the requirements of points 4.1 and 4.2 of Article 4 of this Law). The kremlin.ru text prints the superscript point numbers 4.1 and 4.2 as 41 and 42. Art. 1(1) adds these words to paragraph 8 of the preamble, which defines \"недостаток товара\" (defect of goods). Art. 1(2) inserts Art. 4(4.2). Art. 2: \"Настоящий Федеральный закон вступает в силу с 1 сентября 2025 года.\" Adopted by the State Duma 24 June 2025, approved by the Federation Council 2 July 2025. Read in the print view of the page.",
+    note: "Working translation: (including failure, in the sale or use of certain technically complex goods with pre-installed programs, to meet the requirements of points 4.1 and 4.2 of Article 4 of this Law). The kremlin.ru text prints the superscript point numbers 4.1 and 4.2 as 41 and 42. Art. 1(1) adds these words to paragraph 8 of the preamble. The consolidated text on КонсультантПлюс shows that paragraph is the definition of \"недостаток товара\" (defect of goods). Art. 1(2) inserts Art. 4(4.2). Art. 2: \"Настоящий Федеральный закон вступает в силу с 1 сентября 2025 года.\" Adopted by the State Duma 24 June 2025, approved by the Federation Council 2 July 2025. Read in the print view of the page.",
     verifiedBy: BY_FABLE, verifiedAt: AT_FABLE,
   },
 };
@@ -576,7 +576,7 @@ export const draftCases: SeedCase[] = [
     ref: "N23",
     title: "China game real-name registration vs. threshold-only age proof",
     statement: "China requires every online game user, adult or minor, to register and log in with real identity information checked through the NPPA verification system. A threshold-only age proof tells the operator one fact: whether the user is over 18.",
-    analysis: "The rule being enforced needs one bit per user. Minors may play 20:00 to 21:00 on Fridays, weekends and public holidays, and the notice sets no limit for adults. Item 2 of the 2021 NPPA notice fixes the method: every game connects to the NPPA real-name verification system, every user registers with \"真实有效身份信息\" (real and valid identity information), and guest mode is banned. Order 766 Art. 46 repeats the verification duty in a State Council regulation. So an adult who only needs to show adulthood must still register a real identity. An anonymous age credential isn't identity information, and the operator can't serve a user on it. PIPL Art. 6 limits collection to the minimum scope the purpose needs. Art. 13(1)(3) allows processing needed to meet a statutory obligation, so the real-name rule prevails. EU guidance accepts double-blind age tokens for age checks. This mandate names identity as the input, so that route is closed.",
+    analysis: "The rule being enforced needs one bit per user. Minors may play 20:00 to 21:00 on Fridays, weekends and public holidays, and the notice sets no limit for adults. Item 2 of the 2021 NPPA notice fixes the method: every game connects to the NPPA real-name verification system, every user registers with \"真实有效身份信息\" (real and valid identity information), and guest mode is banned. Order 766 Art. 46 repeats the verification duty in a State Council regulation. So an adult who only needs to show adulthood must still register a real identity. An anonymous age credential isn't identity information, and the operator can't serve a user on it. PIPL Art. 6 limits collection to the minimum scope the purpose needs. Art. 13(1)(3) allows processing needed to meet a statutory obligation, so the real-name rule prevails. The mandate names identity as the input, so a threshold-only token can't stand in for it.",
     shapes: ["verification-minimization"],
     shapeRationale: `Verification-minimization: the time-limit rule needs one bit about each user, and the mandated check collects identity from all of them. The mandate fixes the method, so a minimal proof isn't an accepted substitute. ${DRAFTED_FABLE}`,
     resolvability: "unresolvable",

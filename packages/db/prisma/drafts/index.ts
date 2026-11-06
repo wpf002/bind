@@ -1,7 +1,7 @@
 /**
  * Model-drafted cases (claude-opus-5-5, 2026-10-31). They publish under the corpus-wide owner
  * sign-off in signoff.ts, which records that no case-by-case human check was done.
- * N23-N24 (claude-fable-5-1, 2026-11-06) were drafted after that sign-off.
+ * N23-N24 (claude-fable-5-1, 2026-11-06) publish under the second sign-off in signoff.ts.
  * Drafts that failed the inclusion test become rejections, not cases.
  */
 import type { SeedCase } from "../corpus";
