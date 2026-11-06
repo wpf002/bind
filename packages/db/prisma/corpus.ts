@@ -349,7 +349,7 @@ export const cases: SeedCase[] = [
     shapes: ["deliberate-blindness"],
     resolvability: "unresolvable",
     inclusionVerdict: "fails",
-    instruments: [{ key: "publicHealth", role: "mandating", note: "Legal/institutional." }],
+    instruments: [{ key: "publicHealth", role: "mandating", note: "No binding instrument. The closest text is a non-binding Commission Recommendation." }],
     property: prop("Decentralized Exposure Notification", "The decentralized design deliberately withheld it."),
   },
   {
@@ -421,8 +421,11 @@ export const cases: SeedCase[] = [
     shapes: ["verification-minimization"],
     resolvability: "unresolvable",
     inclusionVerdict: "fails",
-    inclusionReasoning: "No, for self-hosted endpoints specifically.",
-    instruments: [{ key: "fatf", role: "mandating" }],
+    inclusionReasoning: "Yes. The Travel Rule binds VASPs and financial institutions only, and footnote 47 says the information need not travel with the transfer. A transfer between two self-hosted wallets has no obliged party, so the rule asks nothing of it. Kept as a boundary case.",
+    instruments: [{ key: "fatf", role: "mandating", note: "Binds VASPs and financial institutions only (INR.15 para 7(b))." }],
+    amendments: [
+      { field: "inclusionReasoning", from: "No, for self-hosted endpoints specifically.", reason: "The source contradicts it. Reworded to match the countersigned review, 2026-11-06." },
+    ],
     property: prop("Self-Hosted Wallets", "A self-hosted wallet has no institution to attach it to and no counterparty to receive it."),
   },
   {
@@ -534,7 +537,7 @@ export const cases: SeedCase[] = [
     inclusionVerdict: "fails",
     instruments: [
       { key: "pci10", role: "mandating" },
-      { key: "soc2", role: "mandating" },
+      { key: "soc2", role: "context", note: "An attestation against the Trust Services Criteria. No criterion requires logging IPs." },
       { key: "gdpr17", role: "conflicting" },
     ],
   },

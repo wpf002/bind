@@ -1,5 +1,6 @@
 import { SIGNOFF, SIGNOFF_NOTE } from "./signoff";
 import { PrismaClient } from "@prisma/client";
+import { isPublishable } from "@bind/core";
 import { audits, cases as corpusCases, instruments as corpusInstruments, jurisdictions, rejections as corpusRejections, shapes } from "./corpus";
 import { draftCases, draftInstruments, draftRejections, draftSourceVerifications, draftVerifications } from "./drafts";
 import { instrumentVerifications, sourceVerifications, type Verification } from "./verifications";
@@ -49,6 +50,7 @@ async function main() {
 
   const base = Date.UTC(2026, 0, 12);
   let citations = 0;
+  const held: string[] = [];
   for (const [i, c] of cases.entries()) {
     const slug = slugOf(i);
     const seenAt = new Date(base + i * 3 * 86_400_000);
@@ -60,7 +62,21 @@ async function main() {
         ).id
       : null;
 
-    // All cases carry the owner sign-off in signoff.ts.
+    const cites = [
+      ...c.instruments.map((x) => {
+        const d = instruments[x.key]!;
+        const v = iv[x.key];
+        return { label: `${d.instrument}, ${v?.provision ?? d.provision}`, note: c.flags?.[x.key], v };
+      }),
+      ...(c.sources ?? []).map((s) => ({ ...s, v: sv[s.label] })),
+    ] as { label: string; note?: string; v?: Verification }[];
+
+    // The owner sign-off in signoff.ts publishes a case only if it clears the gate.
+    const gate = isPublishable({
+      inclusionVerdict: c.inclusionVerdict,
+      citations: cites.map((s) => ({ verificationStatus: s.v?.status ?? "unverified" })),
+    });
+    if (!gate.ok) held.push(`${c.ref}: ${gate.blockers.join("; ")}`);
     const row = await prisma.case.create({
       data: {
         slug,
@@ -73,8 +89,8 @@ async function main() {
         resolvability: c.resolvability,
         resolution: c.resolution ?? "none",
         resolvedBy: c.resolvedBy,
-        status: "published",
-        publishedAt: new Date(SIGNOFF.at),
+        status: gate.ok ? "published" : "draft",
+        publishedAt: gate.ok ? new Date(SIGNOFF.at) : null,
         firstSeenAt: seenAt,
         sortKey: i + 1,
         shapes: {
@@ -90,14 +106,6 @@ async function main() {
       },
     });
 
-    const cites = [
-      ...c.instruments.map((x) => {
-        const d = instruments[x.key]!;
-        const v = iv[x.key];
-        return { label: `${d.instrument}, ${v?.provision ?? d.provision}`, note: c.flags?.[x.key], v };
-      }),
-      ...(c.sources ?? []).map((s) => ({ ...s, v: sv[s.label] })),
-    ] as { label: string; note?: string; v?: Verification }[];
     for (const s of cites) {
       await prisma.citation.create({
         data: {
@@ -122,7 +130,8 @@ async function main() {
     await prisma.rejection.create({ data: { ...r, decidedAt: new Date(base + (i * 5 + 2) * 86_400_000) } });
   }
 
-  console.log(`seeded ${shapes.length} shapes, ${cases.length} cases (${cases.length} published), ${citations} unverified citations, ${Object.keys(iv).length + Object.keys(sv).length} ledger entries, ${rejections.length} rejections`);
+  console.log(`seeded ${shapes.length} shapes, ${cases.length} cases (${cases.length - held.length} published), ${citations} unverified citations, ${Object.keys(iv).length + Object.keys(sv).length} ledger entries, ${rejections.length} rejections`);
+  for (const h of held) console.log(`held as draft: ${h}`);
 }
 
 main()

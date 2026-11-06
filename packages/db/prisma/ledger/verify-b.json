@@ -61,12 +61,12 @@
       "verifiedAt": "2026-10-31"
     },
     "publicHealth": {
-      "status": "disputed",
+      "status": "corrected",
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32020H0518",
       "publisher": "EUR-Lex (read via Internet Archive snapshot of 4 Mar 2026)",
       "quote": "(5) sharing data with relevant epidemiological public bodies and public health research institutions, including aggregated data to ECDC.",
       "provision": "Commission Recommendation (EU) 2020/518, point 13(5) (non-binding)",
-      "note": "No binding instrument required exposure-notification apps to give authorities linkage data. The closest EU text, Commission Recommendation (EU) 2020/518 point 13(5), is non-binding and asks for aggregated data. D3 has no legal mandate on the mandating side, so it fails the inclusion test as written; keep it as a control case outside the registry or name a binding instrument. EUR-Lex returned a bot challenge, so the text was read from an archived EUR-Lex snapshot.",
+      "note": "No binding instrument required exposure-notification apps to give authorities linkage data. The closest EU text, Commission Recommendation (EU) 2020/518 point 13(5), is non-binding and asks for aggregated data. D3 has no legal mandate on the mandating side, so it fails the inclusion test as written; keep it as a control case outside the registry or name a binding instrument. EUR-Lex returned a bot challenge, so the text was read from an archived EUR-Lex snapshot. Resolved 2026-11-06 by claude-fable-5-1: D3 is decided 'fails' on binding mandate and published as a boundary case. The citation records the closest non-binding text.",
       "verifiedBy": "claude-opus-5-5",
       "verifiedAt": "2026-10-31"
     },
@@ -101,12 +101,12 @@
       "verifiedAt": "2026-10-31"
     },
     "fatf": {
-      "status": "disputed",
+      "status": "corrected",
       "url": "https://www.fatf-gafi.org/content/dam/fatf-gafi/recommendations/FATF%20Recommendations%202012.pdf",
       "publisher": "FATF (read via Internet Archive copy, 'Updated June 2025')",
       "quote": "Countries should ensure that originating VASPs obtain and hold required and accurate originator information and required beneficiary information on virtual asset transfers, submit the above information to the beneficiary VASP or financial institution (if any) immediately and securely ... [fn 47:] It is not necessary for this information to be attached directly to the virtual asset transfers.",
       "provision": "FATF Recommendation 16 (renamed 'Payment transparency', June 2025) and INR.15 para 7(b), fn 47",
-      "note": "The Travel Rule binds VASPs and financial institutions only (INR.15 para 7(b)), and footnote 47 says the information need not accompany the transfer. A transfer between two self-hosted wallets has no obliged party, so the rule imposes nothing on it. A VASP sending to a self-hosted wallet collects from its own customer and the '(if any)' covers the missing counterparty. F2 fails the inclusion test as stated; it needs a rewrite around a national rule that does reach unhosted wallets, or a move to rejections.",
+      "note": "The Travel Rule binds VASPs and financial institutions only (INR.15 para 7(b)), and footnote 47 says the information need not accompany the transfer. A transfer between two self-hosted wallets has no obliged party, so the rule imposes nothing on it. A VASP sending to a self-hosted wallet collects from its own customer and the '(if any)' covers the missing counterparty. F2 fails the inclusion test as stated; it needs a rewrite around a national rule that does reach unhosted wallets, or a move to rejections. Resolved 2026-11-06 by claude-fable-5-1: F2 is decided 'fails' and its inclusion reasoning now states that the rule binds VASPs only.",
       "verifiedBy": "claude-opus-5-5",
       "verifiedAt": "2026-10-31"
     },
@@ -131,12 +131,12 @@
       "verifiedAt": "2026-10-31"
     },
     "pl94171": {
-      "status": "disputed",
+      "status": "corrected",
       "url": "https://www.law.cornell.edu/uscode/text/13/141",
       "publisher": "LII / Cornell Law School",
       "quote": "Tabulations of population for the areas identified in any plan approved by the Secretary shall be completed by him as expeditiously as possible after the decennial census date and reported to the Governor of the State involved and to the officers or public bodies having responsibility for legislative apportionment or districting of such State,",
       "provision": "13 U.S.C. § 141(c) (Pub. L. 94-171)",
-      "note": "PL 94-171 is codified at 13 U.S.C. § 141(c). It requires block-level tabulations and a deadline; it states no accuracy standard. The accuracy demand in G4 comes from one-person-one-vote case law and Alabama's Census Act arguments, which the court didn't reach. G4 should cite the equal-population requirement for the accuracy side or reword 'statutory accuracy'.",
+      "note": "PL 94-171 is codified at 13 U.S.C. § 141(c). It requires block-level tabulations and a deadline; it states no accuracy standard. The accuracy demand in G4 comes from one-person-one-vote case law and Alabama's Census Act arguments, which the court didn't reach. G4 should cite the equal-population requirement for the accuracy side or reword 'statutory accuracy'. Resolved 2026-11-06 by claude-fable-5-1: G4's title, statement and analysis no longer claim a statutory accuracy standard. The accuracy side cites Karcher v. Daggett.",
       "verifiedBy": "claude-opus-5-5",
       "verifiedAt": "2026-10-31"
     },
@@ -161,12 +161,12 @@
       "verifiedAt": "2026-10-31"
     },
     "soc2": {
-      "status": "disputed",
+      "status": "corrected",
       "url": "https://www.aicpa.org/content/dam/aicpa/interestareas/frc/assuranceadvisoryservices/downloadabledocuments/trust-services-criteria.pdf",
       "publisher": "AICPA (read via Internet Archive copy, 2017 TSC with March 2020 updates)",
       "quote": "CC7.2 The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events.",
       "provision": "AICPA 2017 Trust Services Criteria, CC7.2 (points of focus)",
-      "note": "SOC 2 is an attestation against the Trust Services Criteria, not a mandate. CC7.2 asks for monitoring and its points of focus mention 'logging of unusual system activities', but no criterion requires logging IPs or sets a retention period, and P4.3 requires secure disposal of personal information. SOC 2 should come off H2's mandating side; the AICPA's 2022 revised points of focus weren't checked.",
+      "note": "SOC 2 is an attestation against the Trust Services Criteria, not a mandate. CC7.2 asks for monitoring and its points of focus mention 'logging of unusual system activities', but no criterion requires logging IPs or sets a retention period, and P4.3 requires secure disposal of personal information. SOC 2 should come off H2's mandating side; the AICPA's 2022 revised points of focus weren't checked. Resolved 2026-11-06 by claude-fable-5-1: SOC 2 moved from H2's mandating side to context. H2 is decided 'fails'.",
       "verifiedBy": "claude-opus-5-5",
       "verifiedAt": "2026-10-31"
     }
