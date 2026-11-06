@@ -44,26 +44,57 @@ export type CaseQuery = z.infer<typeof caseQuerySchema>;
 /// The review page renders the source URL as a link, so schemes like javascript: are refused.
 const HTTP_URL = /^https?:\/\//i;
 
-/// The inclusion test as a form. Every field is required because the test is the gate.
-export const submissionSchema = z.object({
-  title: z.string().trim().min(8).max(160),
-  statement: z.string().trim().min(40, "State both mandates and why they cannot both hold."),
-  inclusionArgument: z
-    .string()
-    .trim()
-    .min(80, "Explain why a competent engineer with unlimited budget still fails."),
-  legalCitation: z.string().trim().min(4),
-  legalUrl: z
+/** Shortest answer accepted for what was built and what was tried. */
+export const SUBMISSION_TEXT_MIN = 40;
+/** Property slug stored for submissions migrated from the free-text form. Never offered by the form. */
+export const UNKNOWN_PROPERTY = "unknown";
+
+/// A rule by citation and primary source.
+const ruleSchema = z.object({
+  citation: z.string().trim().min(4, "Cite the provision."),
+  url: z
     .string()
     .url("Primary sources only: EUR-Lex, eCFR, CourtListener, official gazettes.")
     .regex(HTTP_URL, "The source URL starts with http:// or https://."),
-  architecturalProperty: z.string().trim().min(8),
-  proposedShape: z.string().optional(),
-  submitterName: z.string().trim().min(2),
-  submitterEmail: z.string().email(),
-  submitterAffiliation: z.string().optional(),
 });
-export type SubmissionInput = z.infer<typeof submissionSchema>;
+export type RuleInput = z.infer<typeof ruleSchema>;
+
+export type SubmissionOptions = {
+  /** Slugs of the registry's properties. */
+  properties: readonly string[];
+  /** Codes of the corpus's jurisdictions. */
+  jurisdictions: readonly string[];
+};
+
+/// The conflict an engineer hit, as a form. Property and jurisdictions are checked against the corpus.
+export function buildSubmissionSchema(options: SubmissionOptions) {
+  const properties = new Set(options.properties);
+  const jurisdictions = new Set(options.jurisdictions);
+  return z.object({
+    title: z.string().trim().min(8).max(160),
+    building: z.string().trim().min(SUBMISSION_TEXT_MIN, "Name the system and the architectural choice."),
+    property: z.string().refine((slug) => properties.has(slug), "Pick one of the registry's properties."),
+    jurisdictions: z
+      .array(z.string())
+      .min(1, "Pick at least one jurisdiction.")
+      .refine((codes) => codes.every((code) => jurisdictions.has(code)), "Pick jurisdictions from the corpus."),
+    requiredBy: ruleSchema,
+    blockedBy: ruleSchema,
+    workaround: z.string().trim().min(SUBMISSION_TEXT_MIN, "Say what you tried and why it fails."),
+    submitterName: z.string().trim().min(2),
+    submitterEmail: z.string().email(),
+    submitterAffiliation: z.string().optional(),
+  });
+}
+export type SubmissionInput = z.infer<ReturnType<typeof buildSubmissionSchema>>;
+
+/** Title the form offers before the submitter edits it: the property and where the design runs. */
+export function suggestSubmissionTitle(propertyName: string | undefined, jurisdictionNames: string[]) {
+  if (!propertyName) return "";
+  if (jurisdictionNames.length === 0) return propertyName;
+  const where = jurisdictionNames.length === 1 ? jurisdictionNames[0] : `${jurisdictionNames.slice(0, -1).join(", ")} and ${jurisdictionNames.at(-1)}`;
+  return `${propertyName} under ${where} rules`;
+}
 
 export const RECOMMENDATION = ["accept", "reject", "needs_work"] as const;
 export const SUBMISSION_STATUS = ["pending", "in_review", "accepted", "rejected"] as const;
@@ -114,12 +145,12 @@ export const reviewQueueSchema = z.object({
     z.object({
       id: z.string(),
       title: z.string(),
-      statement: z.string(),
-      inclusionArgument: z.string(),
-      legalCitation: z.string(),
-      legalUrl: z.string(),
-      architecturalProperty: z.string(),
-      proposedShape: z.string().nullable(),
+      building: z.string(),
+      property: z.string(),
+      jurisdictions: z.array(z.string()),
+      requiredBy: ruleSchema,
+      blockedBy: ruleSchema,
+      workaround: z.string(),
       submitterName: z.string(),
       submitterAffiliation: z.string().nullable(),
       submittedAt: z.string(),
