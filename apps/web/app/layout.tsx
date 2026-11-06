@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { IBM_Plex_Mono, IBM_Plex_Sans, Newsreader } from "next/font/google";
-import { listCases, listShapes, previewDrafts, stats } from "@bind/db";
+import { listCases, listProperties, listShapes, previewDrafts, stats } from "@bind/db";
 import { Nav } from "@/components/Nav";
 import { ThemeToggle, themeScript } from "@/components/ThemeToggle";
 import { CommandPalette, type PalItem } from "@/components/CommandPalette";
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [s, cases, shapes] = await Promise.all([stats(), listCases(), listShapes()]);
+  const [s, cases, shapes, properties] = await Promise.all([stats(), listCases(), listShapes(), listProperties()]);
   const items: PalItem[] = [
     ...cases.map((c) => ({
       href: `/case/${c.slug}`,
@@ -37,6 +37,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       meta: `${sh.published}`,
       group: "Shapes",
       keywords: `${sh.slug} ${sh.name} ${sh.definition} shape`.toLowerCase(),
+    })),
+    ...properties.map((p) => ({
+      href: `/properties/${p.slug}`,
+      id: "Property",
+      label: p.name,
+      meta: `${p.cases}`,
+      group: "Properties",
+      keywords: `${p.slug} ${p.name} ${p.threatModel} ${p.exemplars.join(" ")} property`.toLowerCase(),
     })),
   ];
 
