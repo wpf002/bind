@@ -57,3 +57,69 @@ export const submissionSchema = z.object({
   submitterAffiliation: z.string().optional(),
 });
 export type SubmissionInput = z.infer<typeof submissionSchema>;
+
+export const RECOMMENDATION = ["accept", "reject", "needs_work"] as const;
+export const SUBMISSION_STATUS = ["pending", "in_review", "accepted", "rejected"] as const;
+export const REJECTION_REASON = [
+  "merely_expensive",
+  "implementation_defect",
+  "no_primary_source",
+  "not_a_binding_mandate",
+  "duplicate_of_existing",
+  "out_of_scope",
+  "resolved_by_known_technique",
+] as const;
+
+export type Recommendation = (typeof RECOMMENDATION)[number];
+export type SubmissionStatus = (typeof SUBMISSION_STATUS)[number];
+export type RejectionReason = (typeof REJECTION_REASON)[number];
+
+export const RECOMMENDATION_LABEL: Record<Recommendation, string> = {
+  accept: "Accept",
+  reject: "Reject",
+  needs_work: "Needs Work",
+};
+
+/// One reviewer's verdict on a submission. A rejection has to name the criterion it failed.
+export const reviewSchema = z
+  .object({
+    recommendation: z.enum(RECOMMENDATION),
+    notes: z.string().min(40, "Say which criterion decided it and why."),
+    rejectionReason: z.enum(REJECTION_REASON).optional(),
+  })
+  .refine((r) => r.recommendation !== "reject" || r.rejectionReason !== undefined, {
+    path: ["rejectionReason"],
+    message: "A rejection names the criterion it failed.",
+  });
+export type ReviewInput = z.infer<typeof reviewSchema>;
+
+const filedReviewSchema = z.object({
+  reviewer: z.string(),
+  recommendation: z.enum(RECOMMENDATION),
+  notes: z.string(),
+});
+
+/** Response of GET /review/queue, parsed by the Review page. */
+export const reviewQueueSchema = z.object({
+  reviewer: z.string(),
+  required: z.number(),
+  submissions: z.array(
+    z.object({
+      id: z.string(),
+      title: z.string(),
+      statement: z.string(),
+      inclusionArgument: z.string(),
+      legalCitation: z.string(),
+      legalUrl: z.string(),
+      architecturalProperty: z.string(),
+      proposedShape: z.string().nullable(),
+      submitterName: z.string(),
+      submitterAffiliation: z.string().nullable(),
+      submittedAt: z.string(),
+      reviewCount: z.number(),
+      mine: filedReviewSchema.nullable(),
+      others: z.array(filedReviewSchema),
+    })
+  ),
+});
+export type ReviewQueue = z.infer<typeof reviewQueueSchema>;

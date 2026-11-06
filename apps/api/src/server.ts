@@ -2,7 +2,7 @@ import "dotenv/config";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { caseQuerySchema, submissionSchema } from "@bind/shared";
-import { caseTableTeX, caseToBibTeX, shapeTableTeX, sourceToBibTeX, bibtexKey, suggestedCitation } from "@bind/core";
+import { caseTableTeX, caseToBibTeX, parseReviewers, shapeTableTeX, sourceToBibTeX, bibtexKey, suggestedCitation } from "@bind/core";
 import {
   prisma,
   getCase,
@@ -15,6 +15,10 @@ import {
   listTransitions,
   stats,
 } from "@bind/db";
+import { registerReviewRoutes } from "./review";
+
+// Fails at startup if REVIEWERS is set but malformed.
+const reviewers = process.env.REVIEWERS ? parseReviewers(process.env.REVIEWERS) : [];
 
 const app = Fastify({ logger: { level: "info" } });
 await app.register(cors, { origin: true });
@@ -53,6 +57,8 @@ app.post("/submissions", async (req, reply) => {
   const s = await prisma.submission.create({ data: parsed.data, select: { id: true, status: true, submittedAt: true } });
   return reply.code(201).send(s);
 });
+
+registerReviewRoutes(app, reviewers);
 
 app.get("/export/bibtex", async (_req, reply) => {
   const cases = await listCases({ limit: 200 });

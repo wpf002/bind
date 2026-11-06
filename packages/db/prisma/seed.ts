@@ -1,6 +1,6 @@
 import { SIGNOFF, SIGNOFF_NOTE } from "./signoff";
 import { PrismaClient } from "@prisma/client";
-import { isPublishable } from "@bind/core";
+import { INTAKE_REJECTION_PREFIX, isPublishable } from "@bind/core";
 import { audits, cases as corpusCases, instruments as corpusInstruments, jurisdictions, rejections as corpusRejections, shapes } from "./corpus";
 import { draftCases, draftInstruments, draftRejections, draftSourceVerifications, draftVerifications } from "./drafts";
 import { instrumentVerifications, sourceVerifications, type Verification } from "./verifications";
@@ -17,15 +17,14 @@ const slugOf = (i: number) => `bind-${String(i + 1).padStart(4, "0")}`;
 async function main() {
   // Order matters: children first, Restrict relations last.
   await prisma.citation.deleteMany();
-  await prisma.submissionReview.deleteMany();
-  await prisma.submission.deleteMany();
   await prisma.case.deleteMany();
   await prisma.adversarialAudit.deleteMany();
   await prisma.shape.deleteMany();
   await prisma.legalInstrument.deleteMany();
   await prisma.jurisdiction.deleteMany();
   await prisma.architecturalProperty.deleteMany();
-  await prisma.rejection.deleteMany();
+  // Submissions and the rejections that came from them aren't seed data.
+  await prisma.rejection.deleteMany({ where: { NOT: { slug: { startsWith: INTAKE_REJECTION_PREFIX } } } });
 
   const jur = new Map<string, string>();
   for (const j of jurisdictions) jur.set(j.code, (await prisma.jurisdiction.create({ data: j })).id);
