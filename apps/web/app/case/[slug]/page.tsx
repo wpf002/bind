@@ -25,6 +25,8 @@ type Inst = CaseDetail["instruments"][number];
 const REGISTRY_CONTRIBUTOR = "Bind Registry";
 const UNCHECKED_STATUSES = ["unverified", "disputed"];
 const NOTE_LABEL = { review: "Review", amendment: "Amendment" } as const;
+const STANDING_CHIP: Record<string, string> = { endorsed_by_regulator: "chip-ok", rejected_by_regulator: "chip-accent" };
+const standingChip = (standing: string) => STANDING_CHIP[standing] ?? "chip-plain";
 
 function Provision({ i }: { i: Inst }) {
   const x = i.instrument;
@@ -111,24 +113,82 @@ export default async function CasePage({ params }: Props) {
         <div className="case-meta">
           <span className="case-id">{c.slug}</span>
           <span className="id muted">{c.corpusRef}</span>
-          <Res r={c.resolvability} />
-          <span className="jurs">
-            {c.jurisdictions.map((j) => (
-              <Jur key={j} code={j} link />
-            ))}
-          </span>
+          {c.shapes.map((a) => (
+            <ShapeTag key={a.shape.slug} shape={a.shape} />
+          ))}
         </div>
         <h1 className="case-title">{c.title}</h1>
+        <div className="brief">
+          <dl>
+            <div className="brief-row">
+              <dt>Properties</dt>
+              <dd className="brief-chips">
+                {c.properties.length ? (
+                  c.properties.map(({ property: p }) => (
+                    <Link key={p.slug} href={`/properties/${p.slug}`} className="prop-chip">
+                      {p.name}
+                    </Link>
+                  ))
+                ) : (
+                  <span className="muted">None</span>
+                )}
+              </dd>
+            </div>
+            <div className="brief-row">
+              <dt>Jurisdictions</dt>
+              <dd className="jurs">
+                {c.jurisdictions.map((j) => (
+                  <Jur key={j} code={j} link />
+                ))}
+              </dd>
+            </div>
+          </dl>
+          <dl>
+            {binding.map((i) => (
+              <div className="brief-row" key={i.instrumentId}>
+                <dt>{titleCase(i.role)}</dt>
+                <dd className="brief-item brief-inst">
+                  <Jur code={i.instrument.jurisdiction.code} />
+                  <a href="#contradiction">
+                    {i.instrument.shortName} {i.instrument.provision}
+                  </a>
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <dl>
+            <div className="brief-row">
+              <dt>Workarounds</dt>
+              <dd className="brief-list">
+                {c.paperingOvers.length ? (
+                  c.paperingOvers.map((w) => (
+                    <a key={w.id} href="#workarounds" className="brief-item">
+                      <span>{w.technique}</span>
+                      <span className={`chip ${standingChip(w.standing)}`}>{titleCase(w.standing)}</span>
+                    </a>
+                  ))
+                ) : (
+                  <span className="muted">None Recorded</span>
+                )}
+              </dd>
+            </div>
+            <div className="brief-row">
+              <dt>Outcome</dt>
+              <dd className="brief-list">
+                <Res r={c.resolvability} />
+                {c.resolution !== "none" ? (
+                  <Link href="/resolutions" className="brief-item outcome">
+                    <span className="chip chip-ok">Resolved · {titleCase(c.resolution)}</span>
+                    <span className="mono">{fmtDate(c.resolvedAt)}</span>
+                    {c.resolvedBy ? <span className="muted">{c.resolvedBy}</span> : null}
+                  </Link>
+                ) : null}
+              </dd>
+            </div>
+          </dl>
+        </div>
         <p className="lede">{c.statement}</p>
         <dl className="record">
-          <div>
-            <dt>Shape</dt>
-            <dd className="record-shapes">
-              {c.shapes.map((a) => (
-                <ShapeTag key={a.shape.slug} shape={a.shape} />
-              ))}
-            </dd>
-          </div>
           <div>
             <dt>Sources</dt>
             <dd>
@@ -151,18 +211,9 @@ export default async function CasePage({ params }: Props) {
             <dd className="mono">{c.shapes[0]?.taxonomyVersion ?? "v1"}</dd>
           </div>
         </dl>
-        {c.resolution !== "none" ? (
-          <div className="resolved">
-            <b>Resolved · {titleCase(c.resolution)}</b>
-            <span>
-              {fmtDate(c.resolvedAt)}
-              {c.resolvedBy ? ` · ${c.resolvedBy}` : ""}
-            </span>
-          </div>
-        ) : null}
       </header>
 
-      <section className="contra" aria-label="The Contradiction">
+      <section className="contra" id="contradiction" aria-label="The Contradiction">
         <div className="side side-law">
           <div className="side-head">
             <span className="side-kicker">{conflictOfLaw ? "Mandate A" : "The Law Requires"}</span>
@@ -292,10 +343,10 @@ export default async function CasePage({ params }: Props) {
           </section>
 
           {c.paperingOvers.length ? (
-            <section className="sect">
+            <section className="sect" id="workarounds">
               <div className="sect-h">
                 <span className="n">{mark("papering")}</span>
-                <h2>Papering Over</h2>
+                <h2>Workarounds</h2>
                 <Tip text="Documented workarounds. A workaround is not a resolution; the residual column records what it gives up." />
               </div>
               <table className="tbl">
@@ -316,7 +367,7 @@ export default async function CasePage({ params }: Props) {
                         </div>
                       </td>
                       <td>
-                        <span className={`chip ${w.standing === "endorsed_by_regulator" ? "chip-ok" : w.standing === "rejected_by_regulator" ? "chip-accent" : "chip-plain"}`}>
+                        <span className={`chip ${standingChip(w.standing)}`}>
                           {titleCase(w.standing)}
                         </span>
                       </td>

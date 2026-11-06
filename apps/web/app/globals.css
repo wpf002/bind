@@ -216,17 +216,28 @@ a.jur:hover { border-color: var(--accent); }
 .case-id { font: 500 var(--t14)/1 var(--font-mono); color: var(--accent); letter-spacing: 0.04em; }
 .case-title { font: 400 44px/1.08 var(--font-display); letter-spacing: -0.015em; text-wrap: balance; }
 .lede { font: 400 var(--t20)/1.5 var(--font-display); color: var(--ink-2); max-width: 60ch; text-wrap: pretty; }
-.resolved { display: flex; gap: var(--s3); align-items: center; padding: var(--s3) var(--s4); border: 1px solid var(--ok); background: var(--ok-wash); color: var(--ok); font-size: var(--t14); border-radius: var(--r); }
-.resolved b { font-weight: 600; }
-.record { display: flex; flex-wrap: wrap; gap: var(--s4) var(--s7); margin: var(--s2) 0 0; padding: var(--s4) 0; border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule); }
+.brief { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 var(--s6); margin-top: var(--s2); border-top: 2px solid var(--rule-strong); }
+.brief dl { margin: 0; display: grid; align-content: start; }
+.brief-row { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: var(--s3); padding: var(--s3) 0; border-bottom: 1px solid var(--rule); align-items: start; }
+.brief dt { font: 500 11px/20px var(--font-text); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.brief dd { margin: 0; font-size: var(--t14); line-height: 20px; color: var(--ink); min-width: 0; }
+.brief dd.jurs { padding-top: 2px; }
+.brief-chips { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.brief-list { display: grid; gap: var(--s2); justify-items: start; }
+.brief-item { display: grid; grid-template-columns: auto auto; justify-content: start; gap: var(--s2); align-items: center; text-decoration: none; color: inherit; }
+.brief-item:hover { color: var(--accent); }
+.brief-inst { grid-template-columns: auto minmax(0, 1fr); align-items: baseline; }
+.outcome { grid-template-columns: auto auto; }
+.outcome .muted { grid-column: 1 / -1; }
+.prop-chip { display: inline-flex; align-items: center; padding: 3px 8px; border: 1px solid var(--ink); border-radius: var(--r); font: 500 var(--t12)/1.2 var(--font-text); color: var(--ink); text-decoration: none; }
+.prop-chip:hover { border-color: var(--accent); color: var(--accent); }
+.record { display: flex; flex-wrap: wrap; gap: var(--s4) var(--s7); margin: var(--s2) 0 0; padding: var(--s4) 0 0; border-top: 1px solid var(--rule); }
 .record > div { display: grid; gap: var(--s2); align-content: start; }
 .record dt { font: 500 11px/1 var(--font-text); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
 .record dd { margin: 0; font-size: var(--t14); line-height: 20px; color: var(--ink); }
 .record dd a { text-decoration: none; border-bottom: 1px solid var(--rule); }
 .record dd a:hover { border-color: var(--ink); }
 .record-flag { margin-left: var(--s2); }
-.record-shapes { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); }
-.record-shapes a { border-bottom: 0; }
 
 .contra { display: grid; grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr); border-top: 2px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); }
 .side { padding: var(--s5) 0 var(--s6); display: grid; gap: var(--s5); align-content: start; }
@@ -484,6 +495,7 @@ a.jur:hover { border-color: var(--accent); }
   .taxon-prop { grid-template-columns: 1fr; }
   .taxon-prop > :nth-child(3), .taxon-prop .taxon-side { grid-column: 1; }
   .prop-grid { grid-template-columns: 1fr; }
+  .brief { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cells { justify-content: flex-start; }
   .method { grid-template-columns: 1fr; }
   .toc { display: none; }
@@ -527,6 +539,10 @@ a.jur:hover { border-color: var(--accent); }
   .kv { grid-template-columns: 1fr; gap: var(--s1); }
   .note { grid-template-columns: 1fr; gap: var(--s2); }
   .record { gap: var(--s4) var(--s6); }
+  .brief { grid-template-columns: 1fr; }
+  .brief-row { grid-template-columns: 88px minmax(0, 1fr); padding: var(--s2) 0; }
+  .case-head { gap: var(--s3); }
+  .case .crumbs { margin-bottom: var(--s4); }
   .related a { grid-template-columns: 1fr; gap: var(--s1); }
   .kv dd { margin-bottom: var(--s2); }
   .ledger-end { display: none; }
