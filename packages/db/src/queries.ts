@@ -1,5 +1,6 @@
 import type { CaseQuery, Resolution, Resolvability } from "@bind/shared";
-import { FLAGGED_SOURCE_STATUSES, changeEvents, groupByPrimaryShape, summariseProperty } from "@bind/core";
+import { FLAGGED_SOURCE_STATUSES, changeEvents, groupByPrimaryShape, instrumentSlug, provisionAnchor, summariseProperty } from "@bind/core";
+import { INSTRUMENT_ROLE } from "@bind/shared";
 import { prisma } from "./client";
 
 /** Read layer shared by the API and the web app. Published cases only unless asked. */
@@ -224,6 +225,115 @@ export async function listCheckCases(opts: { includeDrafts?: boolean } = {}) {
 }
 
 export type CheckCaseRow = Awaited<ReturnType<typeof listCheckCases>>[number];
+
+const instrumentCaseSelect = {
+  id: true,
+  slug: true,
+  title: true,
+  corpusRef: true,
+  sortKey: true,
+  status: true,
+  resolvability: true,
+  resolution: true,
+} as const;
+
+function instrumentInclude(status: "published" | undefined) {
+  return {
+    jurisdiction: true,
+    cases: { where: { case: { status } }, include: { case: { select: instrumentCaseSelect } } },
+  } as const;
+}
+
+type InstrumentRow = Awaited<ReturnType<typeof loadInstrumentRows>>[number];
+
+async function loadInstrumentRows(status: "published" | undefined) {
+  return prisma.legalInstrument.findMany({
+    orderBy: [{ jurisdiction: { code: "asc" } }, { shortName: "asc" }, { instrument: "asc" }, { provision: "asc" }],
+    include: instrumentInclude(status),
+  });
+}
+
+const byProvision = (a: { provision: string }, b: { provision: string }) =>
+  a.provision.localeCompare(b.provision, "en", { numeric: true });
+
+const distinct = (values: string[]) => [...new Set(values)];
+
+const caseIds = (rows: InstrumentRow[]) => new Set(rows.flatMap((r) => r.cases.map((c) => c.case.id)));
+
+/** Rows sharing a short name make one instrument page: /instruments/{instrumentSlug(shortName)}. */
+function groupBySlug(rows: InstrumentRow[]) {
+  const groups = new Map<string, InstrumentRow[]>();
+  for (const r of rows) {
+    const slug = instrumentSlug(r.shortName);
+    groups.set(slug, [...(groups.get(slug) ?? []), r]);
+  }
+  return groups;
+}
+
+function summariseInstrument(slug: string, rows: InstrumentRow[]) {
+  const first = rows[0]!;
+  return {
+    slug,
+    shortName: first.shortName,
+    instruments: distinct(rows.map((r) => r.instrument)),
+    regimes: distinct(rows.map((r) => r.regime)),
+    provisions: rows.length,
+    cases: caseIds(rows).size,
+  };
+}
+
+export type InstrumentSummary = ReturnType<typeof summariseInstrument>;
+
+/** Every instrument with a published case, grouped by jurisdiction then instrument. Case-less instruments only with includeDrafts. */
+export async function listInstruments(opts: { includeDrafts?: boolean } = {}) {
+  const includeDrafts = opts.includeDrafts ?? previewDrafts;
+  const rows = await loadInstrumentRows(includeDrafts ? undefined : "published");
+  const jurisdictions = new Map<string, { code: string; name: string; level: string; rows: InstrumentRow[] }>();
+  for (const r of rows) {
+    const j = jurisdictions.get(r.jurisdiction.code) ?? { ...r.jurisdiction, rows: [] };
+    j.rows.push(r);
+    jurisdictions.set(r.jurisdiction.code, j);
+  }
+  return [...jurisdictions.values()]
+    .map(({ rows: jurisdictionRows, ...j }) => ({
+      ...j,
+      instruments: [...groupBySlug(jurisdictionRows)]
+        .map(([slug, group]) => summariseInstrument(slug, group))
+        .filter((i) => includeDrafts || i.cases > 0),
+    }))
+    .filter((j) => j.instruments.length > 0);
+}
+
+export type InstrumentJurisdictionRow = Awaited<ReturnType<typeof listInstruments>>[number];
+
+const ROLE_ORDER = new Map(INSTRUMENT_ROLE.map((role, i) => [role, i] as const));
+
+/** One instrument with every provision and, per provision, its published cases by role. Null when unknown or case-less. */
+export async function getInstrument(slug: string, opts: { includeDrafts?: boolean } = {}) {
+  const includeDrafts = opts.includeDrafts ?? previewDrafts;
+  const rows = (await loadInstrumentRows(includeDrafts ? undefined : "published")).filter(
+    (r) => instrumentSlug(r.shortName) === slug
+  );
+  if (!rows.length) return null;
+  const summary = summariseInstrument(slug, rows);
+  if (!includeDrafts && summary.cases === 0) return null;
+  const provisions = rows
+    .map(({ cases, jurisdiction, ...p }) => ({
+      ...p,
+      anchor: provisionAnchor(p.provision),
+      cases: cases
+        .map(({ role, note, case: c }) => ({ role, note, ...c }))
+        .sort((a, b) => (ROLE_ORDER.get(a.role) ?? 0) - (ROLE_ORDER.get(b.role) ?? 0) || a.sortKey - b.sortKey),
+    }))
+    .sort(byProvision);
+  return {
+    ...summary,
+    jurisdictions: distinct(rows.map((r) => r.jurisdiction.code)).map((code) => rows.find((r) => r.jurisdiction.code === code)!.jurisdiction),
+    provisions,
+  };
+}
+
+export type InstrumentDetail = NonNullable<Awaited<ReturnType<typeof getInstrument>>>;
 
 export async function listJurisdictions() {
   const rows = await prisma.jurisdiction.findMany({

@@ -16,7 +16,8 @@ export function slugify(text: string): string {
 export const instrumentSlug = (shortName: string) => slugify(shortName);
 
 /** The provision's anchor on its instrument page: `Art. 17(1)` → `art-17-1`. */
-export const provisionAnchor = (provision: string) => slugify(provision);
+/** Anchor on the instrument page: the provision's first clause, so "Art. 17(1); exception at Art. 17(3)(b)" is #art-17-1. */
+export const provisionAnchor = (provision: string) => slugify(provision.split(";")[0] ?? provision);
 
 /** The link from a case page to the provision on its instrument page. */
 export const instrumentHref = (row: { shortName: string; provision: string }) =>

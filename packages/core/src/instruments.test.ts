@@ -19,6 +19,12 @@ describe("instrumentSlug", () => {
 });
 
 describe("provisionAnchor", () => {
+  it("keeps only the first clause", () => {
+    expect(provisionAnchor("Art. 17(1); exception at Art. 17(3)(b)")).toBe("art-17-1");
+  });
+});
+
+describe("provisionAnchor", () => {
   it.each([
     ["Art. 17", "art-17"],
     ["Art. 17(1)", "art-17-1"],
