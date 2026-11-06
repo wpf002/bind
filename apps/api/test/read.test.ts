@@ -146,10 +146,12 @@ describe("GET /rejections", () => {
 });
 
 describe("GET /transitions", () => {
-  it("lists transitions with the case they belong to", async () => {
+  it("lists published cases' transitions with the case they belong to, and no held case's", async () => {
     const res = await get("/transitions");
     expect(res.statusCode).toBe(200);
-    expect(res.json()).toMatchObject([{ fromState: "open", toState: "contested", case: { slug: PUBLISHED_SLUG, corpusRef: "A1" } }]);
+    const rows = res.json<{ toState: string; case: { slug: string; corpusRef: string } }[]>();
+    expect(rows).toMatchObject([{ fromState: "open", toState: "contested", case: { slug: PUBLISHED_SLUG, corpusRef: "A1" } }]);
+    expect(rows.map((t) => t.case.slug)).not.toContain(DRAFT_SLUG);
   });
 });
 
@@ -163,7 +165,7 @@ describe("GET /stats", () => {
       held: 1,
       shapes: 1,
       rejections: 1,
-      transitions: 1,
+      transitions: 2,
       unverifiedCitations: 0,
       byResolvability: { unresolvable: 1 },
     });

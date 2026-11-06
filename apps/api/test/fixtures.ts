@@ -87,6 +87,7 @@ export async function seedCorpus() {
       statement: "Escrow is ordered and the protocol holds no keys.",
       status: "draft",
       sortKey: 2,
+      transitions: { create: { fromState: "open", toState: "resolved", trigger: "Draft trigger", occurredAt: new Date("2025-01-01") } },
     },
   });
   await prisma.citation.create({

@@ -222,8 +222,10 @@ export async function stats() {
 
 export type Stats = Awaited<ReturnType<typeof stats>>;
 
+/** Transitions of published cases, newest first. Held cases' transitions show only in draft preview. */
 export async function listTransitions() {
   return prisma.caseTransition.findMany({
+    where: previewDrafts ? undefined : { case: { status: "published" } },
     orderBy: { occurredAt: "desc" },
     include: { case: { select: { slug: true, title: true, corpusRef: true } } },
   });
