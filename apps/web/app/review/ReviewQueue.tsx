@@ -121,6 +121,16 @@ function ReviewForm(props: { token: string; submission: QueuedSubmission; onReco
   );
 }
 
+/** A rule as a link to its source. Rows migrated from the old form carry no required-by source, so the citation stands alone. */
+function RuleLink({ rule }: { rule: { citation: string; url: string } }) {
+  if (!rule.url) return <>{rule.citation}</>;
+  return (
+    <a href={rule.url} target="_blank" rel="noreferrer noopener">
+      {rule.citation}
+    </a>
+  );
+}
+
 function SubmissionCard(props: { token: string; required: number; submission: QueuedSubmission; onRecorded: () => void }) {
   const s = props.submission;
   return (
@@ -133,20 +143,28 @@ function SubmissionCard(props: { token: string; required: number; submission: Qu
       </div>
       <div className="panel-b review-card">
         <dl className="kv">
-          <dt>Statement</dt>
-          <dd className="rej-claim">{s.statement}</dd>
-          <dt>Provision</dt>
-          <dd>
-            <a href={s.legalUrl} target="_blank" rel="noreferrer noopener">
-              {s.legalCitation}
-            </a>
-          </dd>
+          <dt>Building</dt>
+          <dd className="rej-claim">{s.building}</dd>
           <dt>Property</dt>
-          <dd>{s.architecturalProperty}</dd>
-          <dt>Shape</dt>
-          <dd>{s.proposedShape ?? "Unsure"}</dd>
-          <dt>Argument</dt>
-          <dd>{s.inclusionArgument}</dd>
+          <dd>{titleCase(s.property.replace(/-/g, "_"))}</dd>
+          <dt>Jurisdictions</dt>
+          <dd className="jur-row">
+            {s.jurisdictions.map((code) => (
+              <span key={code} className="jur">
+                {code}
+              </span>
+            ))}
+          </dd>
+          <dt>Required By</dt>
+          <dd>
+            <RuleLink rule={s.requiredBy} />
+          </dd>
+          <dt>Blocked By</dt>
+          <dd>
+            <RuleLink rule={s.blockedBy} />
+          </dd>
+          <dt>Workaround</dt>
+          <dd>{s.workaround}</dd>
           <dt>Submitted</dt>
           <dd>
             {[s.submitterName, s.submitterAffiliation, fmtDate(s.submittedAt)].filter(Boolean).join(" · ")}

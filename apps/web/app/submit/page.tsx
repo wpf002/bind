@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { listShapes } from "@bind/db";
+import { listJurisdictions, listProperties } from "@bind/db";
 import { SubmitForm } from "./SubmitForm";
 
 export const metadata = { title: "Submit" };
 
 export default async function Submit() {
-  const shapes = await listShapes();
+  const [properties, jurisdictions] = await Promise.all([listProperties(), listJurisdictions()]);
   return (
     <div className="wrap page">
       <header className="page-head">
@@ -22,7 +22,10 @@ export default async function Submit() {
         </div>
       </header>
       <div className="submit">
-        <SubmitForm shapes={shapes.map((s) => ({ slug: s.slug, name: s.name, ordinal: s.ordinal }))} />
+        <SubmitForm
+          properties={properties.map((p) => ({ slug: p.slug, name: p.name }))}
+          jurisdictions={jurisdictions.map((j) => ({ code: j.code, name: j.name }))}
+        />
         <aside className="aside">
           <div className="panel">
             <div className="panel-h">
