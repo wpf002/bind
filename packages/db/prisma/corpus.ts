@@ -180,7 +180,7 @@ const prop = (name: string, text: string, defeat?: string) => ({ name, text, def
 export const cases: SeedCase[] = [
   {
     ref: "A1",
-    review: "EDPB Guidelines 02/2025 (draft) say encrypted data stays personal data, so key destruction isn't erasure. Strengthens the case. Final text not yet checked. Review by claude-opus-5-5, 2026-10-31, countersigned by Will Foti, 2026-11-06.",
+    review: "EDPB Guidelines 02/2025 (draft) say encrypted data stays personal data, so key destruction isn't erasure. Strengthens the case. Final text not yet checked. Review by claude-opus-5-5, 2026-10-31, signed off by the owner without domain review, 2026-11-06.",
     title: "GDPR Art. 17 erasure vs. append-only ledgers",
     statement: "Erasure requires the operation the threat model forbids.",
     shapes: ["mandate-mutation"],
@@ -323,12 +323,12 @@ export const cases: SeedCase[] = [
     amendments: [
       { field: "statement", from: "The law requires the operator to know something the architecture was specifically built to prevent it from knowing.", reason: "Art. 33(3)(a) qualifies the content duty with 'where possible' and Art. 34(3)(a) waives notice for encrypted data." },
       { field: "inclusionReasoning", from: "No.", reason: "Verdict moved to undecided pending a regulator's reading of 'where possible'." },
-      { field: "inclusionReasoning", from: "Either the operator can inspect user data or it can't.", reason: "Verdict decided as fails by claude-opus-5-5 and approved by the owner, 2026-11-05." },
+      { field: "inclusionReasoning", from: "Either the operator can inspect user data or it can't.", reason: "Verdict decided as fails by claude-opus-5-5 and signed off by the owner without domain review, 2026-11-05." },
     ],
   },
   {
     ref: "D2",
-    review: "'When technically feasible' isn't in OSA s.121. It's a ministerial assurance (HL Deb 6 Sept 2023, col 458), now cited. The analysis calls it the legislature's admission; it's the Government's, and Lord Moylan said in the same debate that the clause text doesn't contain it. Review by claude-opus-5-5, 2026-11-01, countersigned by Will Foti, 2026-11-06.",
+    review: "'When technically feasible' isn't in OSA s.121. It's a ministerial assurance (HL Deb 6 Sept 2023, col 458), now cited. The analysis calls it the legislature's admission; it's the Government's, and Lord Moylan said in the same debate that the clause text doesn't contain it. Review by claude-opus-5-5, 2026-11-01, signed off by the owner without domain review, 2026-11-06.",
     title: "UK Online Safety Act s.121 scanning notices vs. E2EE",
     statement: "Same shape, different direction: the law requires detection capability that the architecture exists to preclude.",
     analysis: "Deferred in practice (\"when technically feasible\"), which is a legislature admitting the incompatibility without repealing the clause.",
@@ -342,7 +342,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "D3",
-    review: "No binding mandate found. Commission Recommendation (EU) 2020/518 is non-binding and asks for aggregated data. Fails criterion 'binding mandate'. Review by claude-opus-5-5, 2026-10-31, countersigned by Will Foti, 2026-11-06.",
+    review: "No binding mandate found. Commission Recommendation (EU) 2020/518 is non-binding and asks for aggregated data. Fails criterion 'binding mandate'. Review by claude-opus-5-5, 2026-10-31, signed off by the owner without domain review, 2026-11-06.",
     title: "Exposure notification: DP-3T/GAEN vs. epidemiological need",
     statement: "The decentralized design deliberately withheld the linkage data public health authorities needed.",
     analysis: "The clearest case where the architecture won and the requirement went unmet. Useful control case.",
@@ -354,7 +354,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "E1",
-    review: "Directive 2024/1799 Art. 5(6) exempts techniques 'justified by legitimate and objective factors'. If security attestation qualifies, the directive resolves the conflict. Verdict decided as passes on 2026-11-05 because the US laws carry no such exemption. Review by claude-opus-5-5, 2026-10-31, countersigned by Will Foti, 2026-11-06.",
+    review: "Directive 2024/1799 Art. 5(6) exempts techniques 'justified by legitimate and objective factors'. If security attestation qualifies, the directive resolves the conflict. Verdict decided as passes on 2026-11-05 because the US laws carry no such exemption. Review by claude-opus-5-5, 2026-10-31, signed off by the owner without domain review, 2026-11-06.",
     title: "Right to repair vs. parts pairing / attested firmware",
     statement: "Secure boot and component attestation work by rejecting unattested parts. Repair requires installing exactly those.",
     shapes: ["trust-root-plurality"],
@@ -367,7 +367,7 @@ export const cases: SeedCase[] = [
     ],
     property: prop("Component Attestation", "Secure boot and component attestation work by rejecting unattested parts."),
     flags: { euR2r: "⚠ in source: least confident on the specific provision." },
-    amendments: [{ field: "inclusionReasoning", from: "No, not without a plural attestation model that doesn't currently exist.", reason: "Verdict decided by claude-opus-5-5 and approved by the owner, 2026-11-05." }],
+    amendments: [{ field: "inclusionReasoning", from: "No, not without a plural attestation model that doesn't currently exist.", reason: "Verdict decided by claude-opus-5-5 and signed off by the owner without domain review, 2026-11-05." }],
   },
   {
     ref: "E2",
@@ -411,11 +411,11 @@ export const cases: SeedCase[] = [
       { key: "ageVerif", role: "mandating" },
       { key: "gdpr5c", role: "conflicting" },
     ],
-    amendments: [{ field: "inclusionReasoning", from: "Yes, in principle: ZK age attestation. Not deployed at scale. This is a technology gap, not a true incompatibility, and belongs in a different bucket than D.", reason: "Verdict decided by claude-opus-5-5 and approved by the owner, 2026-11-05." }],
+    amendments: [{ field: "inclusionReasoning", from: "Yes, in principle: ZK age attestation. Not deployed at scale. This is a technology gap, not a true incompatibility, and belongs in a different bucket than D.", reason: "Verdict decided by claude-opus-5-5 and signed off by the owner without domain review, 2026-11-05." }],
   },
   {
     ref: "F2",
-    review: "The Travel Rule binds VASPs and financial institutions only, and the data needn't travel on-chain. Self-hosted to self-hosted transfers carry no obligation. Fails inclusion. Review by claude-opus-5-5, 2026-10-31, countersigned by Will Foti, 2026-11-06.",
+    review: "The Travel Rule binds VASPs and financial institutions only, and the data needn't travel on-chain. Self-hosted to self-hosted transfers carry no obligation. Fails inclusion. Review by claude-opus-5-5, 2026-10-31, signed off by the owner without domain review, 2026-11-06.",
     title: "FATF Travel Rule vs. self-hosted wallets",
     statement: "The rule requires originator/beneficiary information to accompany the transfer. A self-hosted wallet has no institution to attach it to and no counterparty to receive it.",
     shapes: ["verification-minimization"],
@@ -424,7 +424,7 @@ export const cases: SeedCase[] = [
     inclusionReasoning: "Yes. The Travel Rule binds VASPs and financial institutions only, and footnote 47 says the information need not travel with the transfer. A transfer between two self-hosted wallets has no obliged party, so the rule asks nothing of it. Kept as a boundary case.",
     instruments: [{ key: "fatf", role: "mandating", note: "Binds VASPs and financial institutions only (INR.15 para 7(b))." }],
     amendments: [
-      { field: "inclusionReasoning", from: "No, for self-hosted endpoints specifically.", reason: "The source contradicts it. Reworded to match the countersigned review, 2026-11-06." },
+      { field: "inclusionReasoning", from: "No, for self-hosted endpoints specifically.", reason: "The source contradicts it. Reworded to match the review, 2026-11-06." },
     ],
     property: prop("Self-Hosted Wallets", "A self-hosted wallet has no institution to attach it to and no counterparty to receive it."),
   },
@@ -486,7 +486,7 @@ export const cases: SeedCase[] = [
     ],
     sources: [{ label: "Karcher v. Daggett, 462 U.S. 725 (1983)" }],
     amendments: [
-      { field: "inclusionReasoning", from: "Turns on the Bureau's reconstruction-risk reading of § 9, which no court has tested.", reason: "Verdict decided by claude-opus-5-5 and approved by the owner, 2026-11-05." },
+      { field: "inclusionReasoning", from: "Turns on the Bureau's reconstruction-risk reading of § 9, which no court has tested.", reason: "Verdict decided by claude-opus-5-5 and signed off by the owner without domain review, 2026-11-05." },
       { field: "title", from: "Differential privacy budget vs. statutory accuracy", reason: "Neither statute sets an accuracy standard." },
       { field: "statement", from: "The privacy budget is a dial with no setting that satisfies both statutes.", reason: "The conflict is between § 9 as the Bureau reads it and equal-population accuracy, not between two statutes." },
     ],
@@ -528,7 +528,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "H2",
-    review: "SOC 2 doesn't require logging IPs, and PCI DSS is contractual. Supports the 'fails' verdict. Review by claude-opus-5-5, 2026-10-31, countersigned by Will Foti, 2026-11-06.",
+    review: "SOC 2 doesn't require logging IPs, and PCI DSS is contractual. Supports the 'fails' verdict. Review by claude-opus-5-5, 2026-10-31, signed off by the owner without domain review, 2026-11-06.",
     title: "PCI DSS 10.x / SOC2 logging vs. deletion rights over IPs and access records",
     statement: "Legitimate interest usually carries this, but the tension is permanent.",
     shapes: ["mandate-mutation"],
