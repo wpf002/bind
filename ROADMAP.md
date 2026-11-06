@@ -17,22 +17,13 @@ made for engineers.
 | Source check that flags a citation whose quote left its source | 628d0ab, 013728d |
 | ESLint, API integration tests, Prisma migrations | a60d989, ac43b70, c57b4f6 |
 | Publication gate derived from corpus size | 5fb810d |
+| Properties as the entry point: 10 shared properties, Properties pages, API routes, home and nav | 4d6596c, d2f45c9 |
 
 ## Next
 
 In order. Each item ships on its own.
 
-### 1. Enter by architecture
-
-An engineer arrives with a design choice, not a case number. Add a Properties
-page that lists every architectural property in the corpus (`CaseProperty`),
-with the shapes and cases it appears in and whether any case with that property
-was ever resolved. Make it the first nav item. Cases becomes second.
-
-Done when: every published case is reachable from a property, the home page
-leads with properties, and the nav still fits at 375px.
-
-### 2. Case page for the engineer
+### 1. Case page for the engineer
 
 Put what an engineer needs at the top of each case: the property that
 triggers it, the jurisdictions, what people do instead (`PaperingOver`, labelled
@@ -42,7 +33,7 @@ inclusion reasoning and citations move below.
 Done when: the top block of a case page answers "does this break my design,
 and what did others do" without scrolling, on desktop and phone.
 
-### 3. Design check
+### 2. Design check
 
 A page where the engineer picks properties and jurisdictions and gets the shapes
 and cases they'll hit, from the data that already drives the Matrix. No model
@@ -51,7 +42,7 @@ calls; it's a query.
 Done when: picking any property and jurisdiction pair returns the same cases
 the Matrix shows for that cell, with an empty state for no match.
 
-### 4. API and JSON export
+### 3. API and JSON export
 
 Engineers integrate rather than browse. Publish an OpenAPI document for the
 read routes in `apps/api`, serve it at `/openapi.json`, and add a JSON export
@@ -61,7 +52,7 @@ Done when: the OpenAPI document validates, every read route is in it, and
 `GET /export/json` returns every published case with its properties, shapes,
 instruments, citations and transitions.
 
-### 5. Changes feed
+### 4. Changes feed
 
 Expose what changed: new cases, resolutions, and citations the source check
 flagged. An Atom feed and a Changes page, both from the ledger and transition
@@ -71,7 +62,7 @@ Done when: a feed reader shows an entry for each event since the corpus was
 published, newest first, and the source check adds an entry when a quote
 changes.
 
-### 6. Submit for engineers
+### 5. Submit for engineers
 
 Refocus the Submit form on the conflict an engineer hit: what they were
 building, which rule blocked it, which rule required it. Review stays as is.
