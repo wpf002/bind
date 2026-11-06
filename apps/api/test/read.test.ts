@@ -1,9 +1,14 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { instrumentSlug } from "@bind/core";
+import { getInstrument } from "@bind/db";
 import { TEST_DATABASE_NAME, assertTestDatabase } from "./database";
 import {
   DRAFT_SLUG,
+  INSTRUMENT_SLUG,
   PROPERTY_SLUG,
+  PROVISION_SLUGS,
   PUBLISHED_SLUG,
+  SECOND_INSTRUMENT_SLUG,
   SECOND_PROPERTY_SLUG,
   SECOND_SHAPE_SLUG,
   SECOND_SLUG,
@@ -12,6 +17,7 @@ import {
   buildTestApp,
   seedCorpus,
   seedSecondCorner,
+  seedSecondProvision,
 } from "./fixtures";
 
 type CaseList = { count: number; cases: { slug: string; citations: { label: string }[]; jurisdictions: string[] }[] };
@@ -316,5 +322,80 @@ describe("GET /check", () => {
     const res = await get("/check?p=%00");
     expect(res.statusCode).toBeGreaterThanOrEqual(400);
     expect(res.statusCode).toBeLessThan(500);
+  });
+});
+
+type InstrumentList = { code: string; instruments: { slug: string; shortName: string; provisions: number; cases: number }[] }[];
+type InstrumentDetail = {
+  slug: string;
+  cases: number;
+  jurisdictions: { code: string }[];
+  provisions: { slug: string; anchor: string; cases: { slug: string; role: string; resolution: string }[] }[];
+};
+type CaseInstruments = { cases: { slug: string; instruments: { instrument: { shortName: string } }[] }[] };
+
+describe("GET /instruments", () => {
+  beforeEach(async () => {
+    await seedSecondCorner();
+    await seedSecondProvision();
+  });
+
+  it("lists every instrument a published case cites, grouped by jurisdiction", async () => {
+    const res = await get("/instruments");
+    expect(res.statusCode).toBe(200);
+    const body = res.json<InstrumentList>();
+    expect(body.map((j) => j.code)).toEqual(["EU", "US"]);
+    expect(body[0]?.instruments).toEqual([
+      expect.objectContaining({ slug: INSTRUMENT_SLUG, shortName: "GDPR", provisions: 2, cases: 2 }),
+    ]);
+    expect(body[1]?.instruments).toEqual([expect.objectContaining({ slug: SECOND_INSTRUMENT_SLUG, provisions: 1, cases: 1 })]);
+  });
+
+  it("returns one instrument with its provisions and the same cases the page query reads", async () => {
+    const res = await get(`/instruments/${INSTRUMENT_SLUG}`);
+    expect(res.statusCode).toBe(200);
+    const body = res.json<InstrumentDetail>();
+    expect(body.cases).toBe(2);
+    expect(body.jurisdictions.map((j) => j.code)).toEqual(["EU"]);
+    expect(body.provisions.map((p) => p.slug)).toEqual([PROVISION_SLUGS[1], PROVISION_SLUGS[0]]);
+    expect(body.provisions.map((p) => p.anchor)).toEqual(["art-5-1-c", "art-17-1"]);
+    expect(body.provisions[0]?.cases).toEqual([expect.objectContaining({ slug: THIRD_SLUG, role: "context", resolution: "engineering" })]);
+    expect(body.provisions[1]?.cases.map((c) => c.slug)).toEqual([PUBLISHED_SLUG, THIRD_SLUG]);
+    const page = await getInstrument(INSTRUMENT_SLUG);
+    expect(body.provisions.map((p) => p.cases.map((c) => c.slug))).toEqual(page?.provisions.map((p) => p.cases.map((c) => c.slug)));
+  });
+
+  it("leaves a held draft out of every provision", async () => {
+    const body = (await get(`/instruments/${INSTRUMENT_SLUG}`)).json<InstrumentDetail>();
+    expect(body.provisions.flatMap((p) => p.cases.map((c) => c.slug))).not.toContain(DRAFT_SLUG);
+  });
+
+  it("answers 404 for an unknown instrument", async () => {
+    const res = await get("/instruments/no-such-instrument");
+    expect(res.statusCode).toBe(404);
+    expect(res.json()).toEqual({ error: "not_found" });
+  });
+
+  it("answers a NUL byte in the slug with a 4xx", async () => {
+    const res = await get("/instruments/gdpr%00");
+    expect(res.statusCode).toBeGreaterThanOrEqual(400);
+    expect(res.statusCode).toBeLessThan(500);
+  });
+
+  it("shows each instrument exactly the published cases that cite it", async () => {
+    const index = (await get("/instruments")).json<InstrumentList>();
+    const published = (await get("/cases")).json<CaseInstruments>().cases;
+    const listed = index.flatMap((j) => j.instruments.map((i) => i.slug));
+    const cited = new Set(published.flatMap((c) => c.instruments.map((i) => instrumentSlug(i.instrument.shortName))));
+    expect(new Set(listed)).toEqual(cited);
+    for (const slug of listed) {
+      const detail = (await get(`/instruments/${slug}`)).json<InstrumentDetail>();
+      const onPage = new Set(detail.provisions.flatMap((p) => p.cases.map((c) => c.slug)));
+      const citing = new Set(
+        published.filter((c) => c.instruments.some((i) => instrumentSlug(i.instrument.shortName) === slug)).map((c) => c.slug)
+      );
+      expect(onPage).toEqual(citing);
+      expect(detail.cases).toBe(citing.size);
+    }
   });
 });

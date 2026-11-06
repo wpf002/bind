@@ -256,6 +256,40 @@ export const checkResponseSchema = z.object({
 
 export const jurisdictionListSchema = z.array(jurisdictionSchema.extend({ instruments: count, cases: count }));
 
+/** Provision rows sharing a short name roll up into one instrument: /instruments/{slug}. */
+const instrumentSummarySchema = z.object({
+  slug: z.string(),
+  shortName: z.string(),
+  instruments: z.array(z.string()),
+  regimes: z.array(z.string()),
+  provisions: count,
+  cases: count,
+});
+
+export const instrumentListSchema = z.array(jurisdictionSchema.extend({ instruments: z.array(instrumentSummarySchema) }));
+
+const instrumentProvisionCaseSchema = z.object({
+  role: z.enum(INSTRUMENT_ROLE),
+  note: nullableString,
+  id: z.string(),
+  slug: z.string(),
+  title: z.string(),
+  corpusRef: z.string(),
+  sortKey: count,
+  status: z.enum(CASE_STATUS),
+  resolvability: z.enum(RESOLVABILITY),
+  resolution: z.enum(RESOLUTION),
+});
+
+const instrumentProvisionSchema = instrumentSchema
+  .omit({ jurisdiction: true })
+  .extend({ anchor: z.string(), cases: z.array(instrumentProvisionCaseSchema) });
+
+export const instrumentDetailSchema = instrumentSummarySchema.extend({
+  jurisdictions: z.array(jurisdictionSchema),
+  provisions: z.array(instrumentProvisionSchema),
+});
+
 export const rejectionListSchema = z.array(
   z.object({
     id: z.string(),

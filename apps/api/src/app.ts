@@ -24,11 +24,13 @@ import {
   corpusExportText,
   prisma,
   getCase,
+  getInstrument,
   getProperty,
   getShape,
   listCases,
   listChanges,
   listCheckCases,
+  listInstruments,
   listJurisdictions,
   listProperties,
   listRejections,
@@ -48,6 +50,8 @@ import {
   changeListSchema,
   checkResponseSchema,
   healthSchema,
+  instrumentDetailSchema,
+  instrumentListSchema,
   jurisdictionListSchema,
   latexQuerySchema,
   notFoundSchema,
@@ -221,6 +225,28 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
       const p = await getProperty(req.params.slug);
       if (!p) return reply.code(404).send({ error: "not_found" });
       return p;
+    }
+  );
+
+  api.get(
+    "/instruments",
+    { schema: { summary: "Instruments with a published case, grouped by jurisdiction", response: { 200: instrumentListSchema } } },
+    async () => listInstruments()
+  );
+
+  api.get(
+    "/instruments/:slug",
+    {
+      schema: {
+        summary: "One instrument with every provision and its published cases by role",
+        params: slugParamsSchema,
+        response: { 200: instrumentDetailSchema, 400: badRequestSchema, 404: notFoundSchema },
+      },
+    },
+    async (req, reply) => {
+      const i = await getInstrument(req.params.slug);
+      if (!i) return reply.code(404).send({ error: "not_found" });
+      return i;
     }
   );
 

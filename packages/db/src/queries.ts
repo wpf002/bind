@@ -288,7 +288,7 @@ export type InstrumentSummary = ReturnType<typeof summariseInstrument>;
 export async function listInstruments(opts: { includeDrafts?: boolean } = {}) {
   const includeDrafts = opts.includeDrafts ?? previewDrafts;
   const rows = await loadInstrumentRows(includeDrafts ? undefined : "published");
-  const jurisdictions = new Map<string, { code: string; name: string; level: string; rows: InstrumentRow[] }>();
+  const jurisdictions = new Map<string, InstrumentRow["jurisdiction"] & { rows: InstrumentRow[] }>();
   for (const r of rows) {
     const j = jurisdictions.get(r.jurisdiction.code) ?? { ...r.jurisdiction, rows: [] };
     j.rows.push(r);
@@ -306,6 +306,12 @@ export async function listInstruments(opts: { includeDrafts?: boolean } = {}) {
 
 export type InstrumentJurisdictionRow = Awaited<ReturnType<typeof listInstruments>>[number];
 
+/** The provision row without its relations. */
+function provisionFields(r: InstrumentRow) {
+  const { id, slug, regime, instrument, shortName, provision, mandate, inForceSince, amendedAt, jurisdictionId, sourceUrl, sourceKind, createdAt } = r;
+  return { id, slug, regime, instrument, shortName, provision, mandate, inForceSince, amendedAt, jurisdictionId, sourceUrl, sourceKind, createdAt };
+}
+
 const ROLE_ORDER = new Map(INSTRUMENT_ROLE.map((role, i) => [role, i] as const));
 
 /** One instrument with every provision and, per provision, its published cases by role. Null when unknown or case-less. */
@@ -318,10 +324,10 @@ export async function getInstrument(slug: string, opts: { includeDrafts?: boolea
   const summary = summariseInstrument(slug, rows);
   if (!includeDrafts && summary.cases === 0) return null;
   const provisions = rows
-    .map(({ cases, jurisdiction, ...p }) => ({
-      ...p,
-      anchor: provisionAnchor(p.provision),
-      cases: cases
+    .map((r) => ({
+      ...provisionFields(r),
+      anchor: provisionAnchor(r.provision),
+      cases: r.cases
         .map(({ role, note, case: c }) => ({ role, note, ...c }))
         .sort((a, b) => (ROLE_ORDER.get(a.role) ?? 0) - (ROLE_ORDER.get(b.role) ?? 0) || a.sortKey - b.sortKey),
     }))

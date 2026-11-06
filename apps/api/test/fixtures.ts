@@ -130,6 +130,28 @@ export const SECOND_SLUG = "bind-0003";
 export const THIRD_SLUG = "bind-0004";
 export const SECOND_SHAPE_SLUG = "custody-vs-access";
 export const SECOND_PROPERTY_SLUG = "key-custody";
+export const INSTRUMENT_SLUG = "gdpr";
+export const SECOND_INSTRUMENT_SLUG = "wiretap-act";
+export const PROVISION_SLUGS = ["gdpr17", "gdpr5c"] as const;
+
+/** A second GDPR provision, cited as context by the third case: one instrument page, two provisions, cases shared between them. */
+export async function seedSecondProvision() {
+  const eu = await prisma.jurisdiction.findUniqueOrThrow({ where: { code: "EU" } });
+  const third = await prisma.case.findUniqueOrThrow({ where: { slug: THIRD_SLUG } });
+  await prisma.legalInstrument.create({
+    data: {
+      regime: "EU data protection",
+      instrument: "Regulation (EU) 2016/679",
+      shortName: "GDPR",
+      slug: PROVISION_SLUGS[1],
+      provision: "Art. 5(1)(c)",
+      mandate: "Collect no more than the purpose needs.",
+      jurisdictionId: eu.id,
+      sourceUrl: "https://eur-lex.europa.eu/eli/reg/2016/679/oj",
+      cases: { create: { caseId: third.id, role: "context", note: "Minimisation bounds what the operator may hold." } },
+    },
+  });
+}
 
 /**
  * A second corner of the corpus for the design check: a US jurisdiction, a second shape and property,
