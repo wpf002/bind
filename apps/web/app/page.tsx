@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { DEFAULT_CASE_SORT, parseCaseSort, sortCases, type CaseSort } from "@bind/core";
 import { RESOLVABILITY } from "@bind/shared";
-import { listCases, listJurisdictions, listShapes, stats } from "@bind/db";
+import { listCases, listJurisdictions, listProperties, listShapes, stats } from "@bind/db";
 import { Jur, Ord, Res, ShapeTag, Tip } from "@/components/marks";
 import { pad, resLabel, withParam } from "@/lib/format";
 
@@ -20,12 +20,13 @@ export default async function Index({ searchParams }: { searchParams: Promise<Pa
   const p = await searchParams;
   const resolvability = RESOLVABILITY.find((r) => r === p.resolvability);
   const sort = parseCaseSort(p.sort);
-  const [matched, all, shapes, jurs, s] = await Promise.all([
+  const [matched, all, shapes, jurs, s, properties] = await Promise.all([
     listCases({ shape: p.shape, jurisdiction: p.jurisdiction, resolvability, q: p.q }),
     listCases(),
     listShapes(),
     listJurisdictions(),
     stats(),
+    listProperties(),
   ]);
 
   const cases = sortCases(matched, sort, (c) => ({
@@ -148,6 +149,34 @@ export default async function Index({ searchParams }: { searchParams: Promise<Pa
           </div>
         </div>
 
+        <div className="props">
+          <div className="sect-h">
+            <h2>Properties</h2>
+            <span className="n">{properties.length}</span>
+            <Link href="/properties" className="sect-link">
+              All Properties
+            </Link>
+          </div>
+          <div className="prop-grid">
+            {properties.map((pr) => (
+              <Link key={pr.slug} href={`/properties/${pr.slug}`} className="prop">
+                <span className="prop-name">{pr.name}</span>
+                <span className="prop-shapes">
+                  {pr.shapes.map((sh) => (
+                    <Ord key={sh.slug} n={sh.ordinal} />
+                  ))}
+                </span>
+                {pr.resolved ? <span className="chip chip-ok">Resolved</span> : <span />}
+                <span className="facet-n">{pr.cases}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className="sect-h" style={{ marginTop: 40 }}>
+          <h2>Cases</h2>
+          <span className="n">{all.length}</span>
+        </div>
         <form className="toolbar" action="/" role="search">
           {active
             .filter(([k]) => k !== "q")
