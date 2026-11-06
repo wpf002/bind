@@ -180,7 +180,7 @@ const prop = (name: string, text: string, defeat?: string) => ({ name, text, def
 export const cases: SeedCase[] = [
   {
     ref: "A1",
-    review: "EDPB Guidelines 02/2025 (draft) say encrypted data stays personal data, so key destruction isn't erasure. Strengthens the case. Final text not yet checked. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
+    review: "EDPB Guidelines 02/2025 (draft) say encrypted data stays personal data, so key destruction isn't erasure. Strengthens the case. Final text not yet checked. Review by claude-opus-5-5, 2026-10-31, countersigned by Will Foti, 2026-11-06.",
     title: "GDPR Art. 17 erasure vs. append-only ledgers",
     statement: "Erasure requires the operation the threat model forbids.",
     shapes: ["mandate-mutation"],
@@ -328,7 +328,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "D2",
-    review: "'When technically feasible' isn't in OSA s.121. It's a ministerial assurance (HL Deb 6 Sept 2023, col 458), now cited. The analysis calls it the legislature's admission; it's the Government's, and Lord Moylan said in the same debate that the clause text doesn't contain it. Review by claude-opus-5-5, 2026-11-01, pending human countersign.",
+    review: "'When technically feasible' isn't in OSA s.121. It's a ministerial assurance (HL Deb 6 Sept 2023, col 458), now cited. The analysis calls it the legislature's admission; it's the Government's, and Lord Moylan said in the same debate that the clause text doesn't contain it. Review by claude-opus-5-5, 2026-11-01, countersigned by Will Foti, 2026-11-06.",
     title: "UK Online Safety Act s.121 scanning notices vs. E2EE",
     statement: "Same shape, different direction: the law requires detection capability that the architecture exists to preclude.",
     analysis: "Deferred in practice (\"when technically feasible\"), which is a legislature admitting the incompatibility without repealing the clause.",
@@ -342,7 +342,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "D3",
-    review: "No binding mandate found. Commission Recommendation (EU) 2020/518 is non-binding and asks for aggregated data. Fails criterion 'binding mandate'. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
+    review: "No binding mandate found. Commission Recommendation (EU) 2020/518 is non-binding and asks for aggregated data. Fails criterion 'binding mandate'. Review by claude-opus-5-5, 2026-10-31, countersigned by Will Foti, 2026-11-06.",
     title: "Exposure notification: DP-3T/GAEN vs. epidemiological need",
     statement: "The decentralized design deliberately withheld the linkage data public health authorities needed.",
     analysis: "The clearest case where the architecture won and the requirement went unmet. Useful control case.",
@@ -354,7 +354,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "E1",
-    review: "Directive 2024/1799 Art. 5(6) exempts techniques 'justified by legitimate and objective factors'. If security attestation qualifies, the directive resolves the conflict. Verdict decided as passes on 2026-11-05 because the US laws carry no such exemption. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
+    review: "Directive 2024/1799 Art. 5(6) exempts techniques 'justified by legitimate and objective factors'. If security attestation qualifies, the directive resolves the conflict. Verdict decided as passes on 2026-11-05 because the US laws carry no such exemption. Review by claude-opus-5-5, 2026-10-31, countersigned by Will Foti, 2026-11-06.",
     title: "Right to repair vs. parts pairing / attested firmware",
     statement: "Secure boot and component attestation work by rejecting unattested parts. Repair requires installing exactly those.",
     shapes: ["trust-root-plurality"],
@@ -415,7 +415,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "F2",
-    review: "The Travel Rule binds VASPs and financial institutions only, and the data needn't travel on-chain. Self-hosted to self-hosted transfers carry no obligation. Fails inclusion. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
+    review: "The Travel Rule binds VASPs and financial institutions only, and the data needn't travel on-chain. Self-hosted to self-hosted transfers carry no obligation. Fails inclusion. Review by claude-opus-5-5, 2026-10-31, countersigned by Will Foti, 2026-11-06.",
     title: "FATF Travel Rule vs. self-hosted wallets",
     statement: "The rule requires originator/beneficiary information to accompany the transfer. A self-hosted wallet has no institution to attach it to and no counterparty to receive it.",
     shapes: ["verification-minimization"],
@@ -525,7 +525,7 @@ export const cases: SeedCase[] = [
   },
   {
     ref: "H2",
-    review: "SOC 2 doesn't require logging IPs, and PCI DSS is contractual. Supports the 'fails' verdict. Review by claude-opus-5-5, 2026-10-31, pending human countersign.",
+    review: "SOC 2 doesn't require logging IPs, and PCI DSS is contractual. Supports the 'fails' verdict. Review by claude-opus-5-5, 2026-10-31, countersigned by Will Foti, 2026-11-06.",
     title: "PCI DSS 10.x / SOC2 logging vs. deletion rights over IPs and access records",
     statement: "Legitimate interest usually carries this, but the tension is permanent.",
     shapes: ["mandate-mutation"],
