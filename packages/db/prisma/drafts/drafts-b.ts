@@ -1,7 +1,8 @@
 // Batch B drafts. Model-drafted by claude-opus-5-5; owner sign-off in ../signoff.ts.
 // Refs run N9-N18, then N21-N22. The brief allotted N9-N16; three leads failed, so two extra refs were needed to reach the pass count.
 // N21-N22 added 2026-11-01 (N19-N20 are in drafts-a) to bring the corpus to 40.
-import { SIGNOFF_NOTE } from "../signoff";
+// N23-N24 added 2026-11-06 by claude-fable-5-1 to bring the published count to 40.
+import { SIGNOFF, SIGNOFF_NOTE } from "../signoff";
 import type { SeedCase } from "../corpus";
 import type { Verification } from "../verifications";
 
@@ -9,6 +10,10 @@ const BY = "claude-opus-5-5";
 const AT = "2026-10-31";
 const AT2 = "2026-11-01";
 const DRAFTED = `Drafted by claude-opus-5-5. ${SIGNOFF_NOTE}`;
+// N23-N24 postdate the owner sign-off, so they don't carry SIGNOFF_NOTE.
+const BY_FABLE = "claude-fable-5-1";
+const AT_FABLE = "2026-11-06";
+const DRAFTED_FABLE = `Drafted and source-checked by ${BY_FABLE}, ${AT_FABLE}, after the owner sign-off dated ${SIGNOFF.at}.`;
 
 export const draftInstruments: Record<string, { regime: string; instrument: string; shortName: string; provision: string; mandate: string; jurisdiction: string }> = {
   nb_calea1002: { regime: "US lawful intercept", instrument: "Communications Assistance for Law Enforcement Act, 47 U.S.C. 1002", shortName: "CALEA", provision: "§ 1002(a)(1), (b)(3)", mandate: "Carriers must be able to isolate and deliver a subscriber's communications to the government on lawful authorization.", jurisdiction: "US" },
@@ -34,6 +39,11 @@ export const draftInstruments: Record<string, { regime: string; instrument: stri
   nb_certinFaq: { regime: "Indian cybersecurity regulation", instrument: "CERT-In FAQs on Cyber Security Directions of 28.04.2022 (May 2022)", shortName: "CERT-In FAQ", provision: "Q34, Q35", mandate: "Para (v) covers VPN providers offering Internet proxy-like services to general subscribers, not enterprise VPNs; logs may sit outside India if produced in reasonable time.", jurisdiction: "IN" },
   nb_dsa28: { regime: "EU platform regulation", instrument: "Digital Services Act, Regulation (EU) 2022/2065", shortName: "DSA", provision: "Art. 28(1), (3)", mandate: "Platforms accessible to minors must ensure a high level of privacy, safety and security for minors, without being obliged to process additional personal data to assess whether a user is a minor.", jurisdiction: "EU" },
   nb_dsa28Guidelines: { regime: "EU platform regulation", instrument: "Commission Guidelines on the protection of minors under Art. 28(4) DSA, C(2025) 6826 final", shortName: "Art. 28 Guidelines", provision: "Paras 41, 46; § 6.1.4(c)-(d)", mandate: "Age verification for high-risk and 18+ services; methods must be robust against circumvention by minors and non-intrusive, with double-blind tokens encouraged.", jurisdiction: "EU" },
+  nb_cnNppa2021: { regime: "Chinese online game regulation", instrument: "NPPA Notice on Further Strict Management to Prevent Minors' Addiction to Online Games, 国新出发〔2021〕14号", shortName: "NPPA Notice 2021", provision: "Items 1, 2", mandate: "Every online game must connect to the NPPA real-name verification system. Every user must register and log in with real identity information. No service, guest mode included, to anyone who hasn't. Minors may play 20:00-21:00 on Fridays, weekends and public holidays.", jurisdiction: "CN" },
+  nb_cnMinors46: { regime: "Chinese minors protection law", instrument: "Regulations on the Protection of Minors in Cyberspace, State Council Order No. 766", shortName: "Order 766", provision: "Art. 46", mandate: "Online game providers must verify minor users' real identity information through the unified electronic identity authentication system for minors' online games or other necessary means.", jurisdiction: "CN" },
+  nb_cnPipl6: { regime: "Chinese data protection", instrument: "Personal Information Protection Law of the PRC", shortName: "PIPL", provision: "Art. 6", mandate: "Processing must use the means with the least impact on individual rights. Collection is limited to the minimum scope the purpose needs.", jurisdiction: "CN" },
+  nb_ruZpp42: { regime: "Russian consumer protection law", instrument: "Law of the Russian Federation No. 2300-1 of 07.02.1992 On Protection of Consumer Rights", shortName: "Consumer Rights Law", provision: "Art. 4(4.2)", mandate: "Listed devices sold with pre-installed software, the unified app store included, must carry no condition that restricts installing apps through that store, the functions of its apps, or the payment methods used through it.", jurisdiction: "RU" },
+  nb_ru194fz: { regime: "Russian consumer protection law", instrument: "Federal Law No. 194-FZ of 07.07.2025 amending the Law On Protection of Consumer Rights", shortName: "194-FZ", provision: "Art. 1, Art. 2", mandate: "Inserts Art. 4(4.2) and makes failure to meet Art. 4(4.1) and (4.2) a defect of the goods. In force 1 September 2025.", jurisdiction: "RU" },
 };
 
 const eurlex = (celex: string) => `https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:${celex}`;
@@ -246,6 +256,51 @@ export const draftVerifications: Record<string, Verification> = {
     provision: "Para 46",
     note: "Para 41: ID-based methods \"may constitute an effective age verification method, in so far as they are based on anonymised age tokens\", issued by an independent third party. § 6.1.4(c): \"A method that is easy for minors to circumvent will not be considered robust enough and will therefore not be considered effective.\" § 6.1.4(d) cites Art. 28(3): process only \"the age-related attributes that are strictly necessary\". The PDF is dated 7.10.2025; the Commission web page gives 14 July 2025 as publication. Read with pdftotext.",
     verifiedBy: BY, verifiedAt: AT2,
+  },
+  nb_cnNppa2021: {
+    status: "verified",
+    url: "https://www.gov.cn/zhengce/zhengceku/2021-09/01/content_5634661.htm",
+    publisher: "中国政府网 gov.cn (State Council policy document library)",
+    quote: "所有网络游戏必须接入国家新闻出版署网络游戏防沉迷实名验证系统，所有网络游戏用户必须使用真实有效身份信息进行游戏账号注册并登录网络游戏，网络游戏企业不得以任何形式（含游客体验模式）向未实名注册和登录的用户提供游戏服务。",
+    provision: "Items 1, 2",
+    note: "Working translation: all online games must connect to the NPPA anti-addiction real-name verification system; all online game users must register game accounts and log in with real and valid identity information; game companies must not provide game services in any form (guest mode included) to users who have not registered and logged in under their real name. Item 1: \"所有网络游戏企业仅可在周五、周六、周日和法定节假日每日20时至21时向未成年人提供1小时网络游戏服务\". Item 3 tells publication authorities to deal with non-compliant companies \"依法依规严肃处理\". Item 5 defines a minor as a citizen under 18. In force 1 September 2021. The nppa.gov.cn copy returns 404; this is the gov.cn policy-library copy.",
+    verifiedBy: BY_FABLE, verifiedAt: AT_FABLE,
+  },
+  nb_cnMinors46: {
+    status: "verified",
+    url: "https://www.gov.cn/zhengce/content/202310/content_6911288.htm",
+    publisher: "中国政府网 gov.cn (State Council)",
+    quote: "网络游戏服务提供者应当通过统一的未成年人网络游戏电子身份认证系统等必要手段验证未成年人用户真实身份信息。",
+    provision: "Art. 46(1)",
+    note: "Working translation: online game service providers shall verify minor users' real identity information through the unified electronic identity authentication system for minors' online games and other necessary means. State Council Order No. 766, adopted 20 September 2023, in force 1 January 2024. Art. 56 fines breaches of Art. 46(2) (account rental and sale) and Art. 47. It doesn't list Art. 46(1).",
+    verifiedBy: BY_FABLE, verifiedAt: AT_FABLE,
+  },
+  nb_cnPipl6: {
+    status: "verified",
+    url: "http://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html",
+    publisher: "中国人大网 (National People's Congress)",
+    quote: "收集个人信息，应当限于实现处理目的的最小范围，不得过度收集个人信息。",
+    provision: "Art. 6",
+    note: "Working translation: collection of personal information shall be limited to the minimum scope needed for the processing purpose; excessive collection is prohibited. Art. 6 para 1 requires \"采取对个人权益影响最小的方式\" (the means with the least impact on individual rights). Art. 13(1)(3) allows processing \"为履行法定职责或者法定义务所必需\" (necessary to perform statutory duties or obligations), which is the legal basis for real-name collection. Adopted 20 August 2021.",
+    verifiedBy: BY_FABLE, verifiedAt: AT_FABLE,
+  },
+  nb_ruZpp42: {
+    status: "verified",
+    url: "https://www.consultant.ru/document/cons_doc_LAW_305/030ee6c590df5a57ef7c36c7cc5c6a59e5373ecc/",
+    publisher: "КонсультантПлюс (commercial legal database)",
+    quote: "При продаже и использовании отдельных видов технически сложных товаров с предварительно установленными программами для электронных вычислительных машин, включая единый магазин приложений, обеспечивается отсутствие следующих условий: 1) приводящих к ограничению возможности приобретения (установки) программ для электронных вычислительных машин с использованием единого магазина приложений;",
+    provision: "Art. 4(4.2), inserted by Federal Law No. 194-FZ of 07.07.2025",
+    note: "Working translation: in the sale and use of certain technically complex goods with pre-installed programs, the unified app store included, the following conditions must be absent: 1) conditions that restrict acquiring (installing) programs through the unified app store. Sub-item 2 bars conditions that restrict the functions of pre-installed programs, the unified store, and programs installed through it, naming limits on search, updates, \"управление их настройками, обеспечение взаимодействия с потребителями, направление им уведомлений\", and special pricing terms. Sub-item 3 bars conditions \"приводящих к ограничению способов оплаты с использованием единого магазина приложений\". The three sub-items have no exception for security or integrity measures. Art. 4(4.1) para 3 puts among the mandatory pre-installed programs one \"которая предназначена для поиска, просмотра и приобретения программ для электронных вычислительных машин\" (the unified app store), run under principles approved by the federal IT ministry. Consolidated text, edition of 28.12.2025. Not the official publication; the amending law was read on kremlin.ru. Which store holds the designation wasn't checked against an official act. Press names RuStore. The defect remedies in Art. 18 weren't read.",
+    verifiedBy: BY_FABLE, verifiedAt: AT_FABLE,
+  },
+  nb_ru194fz: {
+    status: "verified",
+    url: "http://www.kremlin.ru/acts/bank/52093",
+    publisher: "Президент России, kremlin.ru (bank of documents)",
+    quote: "(в том числе невыполнение при продаже или использовании отдельных видов технически сложных товаров с предварительно установленными программами для электронных вычислительных машин требований, установленных пунктами 41 и 42 статьи 4 настоящего Закона)",
+    provision: "Art. 1(1)-(2), Art. 2",
+    note: "Working translation: (including failure, in the sale or use of certain technically complex goods with pre-installed programs, to meet the requirements of points 4.1 and 4.2 of Article 4 of this Law). The kremlin.ru text prints the superscript point numbers 4.1 and 4.2 as 41 and 42. Art. 1(1) adds these words to paragraph 8 of the preamble, which defines \"недостаток товара\" (defect of goods). Art. 1(2) inserts Art. 4(4.2). Art. 2: \"Настоящий Федеральный закон вступает в силу с 1 сентября 2025 года.\" Adopted by the State Duma 24 June 2025, approved by the Federation Council 2 July 2025. Read in the print view of the page.",
+    verifiedBy: BY_FABLE, verifiedAt: AT_FABLE,
   },
 };
 
@@ -516,5 +571,57 @@ export const draftCases: SeedCase[] = [
       { technique: "Device-local holder binding", description: "Wallet requires an on-device biometric or PIN before presenting the token.", standing: "untested", residual: "PIN binding is shareable. Biometric binding is still biometric processing, done by the wallet instead of the platform." },
     ],
     sources: [{ label: "DSA Art. 28(1), (3)" }, { label: "Commission Guidelines C(2025) 6826 final, paras 41, 46" }],
+  },
+  {
+    ref: "N23",
+    title: "China game real-name registration vs. threshold-only age proof",
+    statement: "China requires every online game user, adult or minor, to register and log in with real identity information checked through the NPPA verification system. A threshold-only age proof tells the operator one fact: whether the user is over 18.",
+    analysis: "The rule being enforced needs one bit per user. Minors may play 20:00 to 21:00 on Fridays, weekends and public holidays, and the notice sets no limit for adults. Item 2 of the 2021 NPPA notice fixes the method: every game connects to the NPPA real-name verification system, every user registers with \"真实有效身份信息\" (real and valid identity information), and guest mode is banned. Order 766 Art. 46 repeats the verification duty in a State Council regulation. So an adult who only needs to show adulthood must still register a real identity. An anonymous age credential isn't identity information, and the operator can't serve a user on it. PIPL Art. 6 limits collection to the minimum scope the purpose needs. Art. 13(1)(3) allows processing needed to meet a statutory obligation, so the real-name rule prevails. EU guidance accepts double-blind age tokens for age checks. This mandate names identity as the input, so that route is closed.",
+    shapes: ["verification-minimization"],
+    shapeRationale: `Verification-minimization: the time-limit rule needs one bit about each user, and the mandated check collects identity from all of them. The mandate fixes the method, so a minimal proof isn't an accepted substitute. ${DRAFTED_FABLE}`,
+    resolvability: "unresolvable",
+    inclusionVerdict: "passes",
+    inclusionReasoning: "No. A threshold-only proof would be enough to apply the time limits, but item 2 requires real identity registration through the NPPA system and bans service to anyone without it. An operator can't comply and also learn only one bit. Spending doesn't change what the notice names as the input. The national network ID hides the plaintext ID from the platform and still hands it an identifier tied to one person.",
+    instruments: [
+      { key: "nb_cnNppa2021", role: "mandating" },
+      { key: "nb_cnMinors46", role: "mandating" },
+      { key: "nb_cnPipl6", role: "conflicting", note: "Art. 13(1)(3) supplies the statutory-obligation basis, so Art. 6 doesn't override the mandate." },
+    ],
+    property: { name: "Threshold-only age proof", text: "The operator learns whether the user is over 18 and nothing else, and no party can link the proof to a person.", defeat: "Item 2 requires real identity registration for every user and bans service without it." },
+    paperingOvers: [
+      { technique: "National network ID (网号, 网证)", description: "A state service authenticates the user and gives the platform a non-plaintext identifier in place of ID details.", standing: "untested", residual: "MPS Order No. 173 makes it voluntary for platforms and users. The identifier corresponds to one person and the state issues it. Whether the NPPA system accepts it wasn't found." },
+      { technique: "Hashing after verification", description: "Operator keeps a hash of the identity once the NPPA check returns.", standing: "untested", residual: "The identity was already collected and sent for verification. Hashing changes what is stored afterwards." },
+    ],
+    sources: [
+      { label: "NPPA Notice 国新出发〔2021〕14号, items 1-2" },
+      { label: "Regulations on the Protection of Minors in Cyberspace, Art. 46" },
+      { label: "PIPL Art. 6, Art. 13(1)(3)" },
+      { label: "Measures for the National Network Identity Authentication Public Service (MPS Order No. 173), Arts. 2, 7" },
+    ],
+  },
+  {
+    ref: "N24",
+    title: "Russia unified app store mandate vs. single-root iOS distribution",
+    statement: "Since 1 September 2025 Russian consumer law bars any condition on smartphones and tablets that restricts installing apps through the unified app store, or the functions, updates and payments of those apps. iOS installs only code the platform vendor has reviewed and signed.",
+    analysis: "Art. 4(4.1) puts a unified app store among the programs that listed devices must carry pre-installed. Government Decree No. 1867 lists smartphones and tablets. Art. 4(4.2), added by 194-FZ, removes the platform's controls over that store. No condition may restrict installing programs through it, restrict search, updates, settings or notifications for its apps, set special pricing terms, or limit payment methods. 194-FZ also amended the preamble, so a device that fails 4.1 or 4.2 is a defective good under the law. The iOS security model has one root: the vendor reviews and signs everything that runs. A second store that installs and updates code on its own decision is a second root. A vendor review or signing step that can refuse one of that store's apps is a condition restricting installation, which sub-item 1 bars. The three sub-items carry no exception for security or integrity measures.",
+    shapes: ["trust-root-plurality"],
+    shapeRationale: `Trust-root-plurality: the platform's property is one review and signing root, and the statute requires a second store to install and update code free of the platform's conditions. ${DRAFTED_FABLE}`,
+    resolvability: "unresolvable",
+    inclusionVerdict: "passes",
+    inclusionReasoning: "No. Single-root distribution means one party decides what installs. Art. 4(4.2)(1) bars any condition that restricts installation through the unified store, so the vendor can't keep its review as a gate. Notarization, capability limits and payment rules are each a restriction the sub-items name. Spending doesn't help, because the conflict is over who holds the root. A vendor keeps the property only on devices that aren't sold in Russia.",
+    instruments: [
+      { key: "nb_ruZpp42", role: "mandating" },
+      { key: "nb_ru194fz", role: "mandating", note: "Makes non-compliance a defect of the goods. In force 1 September 2025." },
+    ],
+    property: { name: "Single-root code distribution", text: "Only code reviewed and signed by the platform vendor installs and runs on the device.", defeat: "Art. 4(4.2)(1)-(2) bars conditions that restrict installing, updating or running apps from the unified store." },
+    paperingOvers: [
+      { technique: "Notarization of the store's apps", description: "Vendor scans and signs each app the unified store distributes before it can install.", standing: "untested", residual: "A signing step the vendor can refuse is a condition restricting installation under sub-item 1. No regulator or court reading was found." },
+      { technique: "Market exit", description: "Vendor doesn't sell the device in Russia, and units arrive through third-party importers.", standing: "untested", residual: "The conditions are barred in the sale and use of the goods, so whoever sells a non-compliant device sells a defective one. The property survives only outside the Russian market." },
+    ],
+    sources: [
+      { label: "Federal Law No. 194-FZ of 07.07.2025, kremlin.ru" },
+      { label: "Law No. 2300-1 Art. 4(4.1)-(4.2), consolidated text via КонсультантПлюс" },
+      { label: "Government Decree No. 1867 of 18.11.2020, device list item 1" },
+    ],
   },
 ];
