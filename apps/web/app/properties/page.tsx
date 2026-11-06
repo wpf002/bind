@@ -14,22 +14,27 @@ export default async function Properties() {
           Properties
           <Tip text="The architectural property a system is built around. Each case is reached from at least one." />
         </h1>
-        <div className="page-stats">
-          <div className="page-stat">
-            <b>{properties.length}</b>
-            <span>Properties</span>
+        <div className="page-side">
+          <div className="page-stats">
+            <div className="page-stat">
+              <b>{properties.length}</b>
+              <span>Properties</span>
+            </div>
+            <div className="page-stat">
+              <b>{cases.size}</b>
+              <span>Cases</span>
+            </div>
+            <div className="page-stat">
+              <b>{properties.filter((p) => p.resolved).length}</b>
+              <span>
+                With A Resolution
+                <Tip text="At least one case under this property has stopped being live." />
+              </span>
+            </div>
           </div>
-          <div className="page-stat">
-            <b>{cases.size}</b>
-            <span>Cases</span>
-          </div>
-          <div className="page-stat">
-            <b>{properties.filter((p) => p.resolved).length}</b>
-            <span>
-              With A Resolution
-              <Tip text="At least one case under this property has stopped being live." />
-            </span>
-          </div>
+          <Link href="/check" className="btn">
+            Check A Design
+          </Link>
         </div>
       </header>
       <div>

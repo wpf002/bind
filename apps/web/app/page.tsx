@@ -147,6 +147,9 @@ export default async function Index({ searchParams }: { searchParams: Promise<Pa
               </div>
             </div>
           </div>
+          <Link href="/check" className="btn">
+            Check A Design
+          </Link>
         </div>
 
         <div className="props">

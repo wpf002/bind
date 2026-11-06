@@ -144,9 +144,13 @@ a.jur:hover { border-color: var(--accent); }
 .facet-n { font: 400 var(--t12)/1 var(--font-mono); color: var(--ink-3); }
 .facet[aria-current="true"] .facet-n { color: var(--bg); }
 .facet-dim { opacity: 0.45; }
+.pick { width: 12px; height: 12px; border: 1.5px solid var(--ink-3); border-radius: 2px; }
+.facet[aria-current="true"] .pick { background: var(--bg); border-color: var(--bg); }
+.check-picked { align-items: center; margin: calc(var(--s4) * -1) 0 var(--s5); }
+.check-shape { margin-bottom: var(--s7); }
 .jur-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px var(--s3); }
 
-.findings { display: grid; grid-template-columns: auto 1fr; gap: var(--s6); align-items: end; padding-bottom: var(--s5); border-bottom: 1px solid var(--rule-strong); }
+.findings { display: grid; grid-template-columns: auto 1fr auto; gap: var(--s6); align-items: end; padding-bottom: var(--s5); border-bottom: 1px solid var(--rule-strong); }
 .finding { display: grid; grid-template-columns: auto auto; column-gap: var(--s4); align-items: end; }
 .finding-n { font: 400 104px/0.78 var(--font-display); letter-spacing: -0.04em; color: var(--accent); grid-row: span 2; }
 .finding-label { font: 500 var(--t20)/1.15 var(--font-display); max-width: 11ch; }
@@ -338,6 +342,7 @@ a.jur:hover { border-color: var(--accent); }
 .page { padding-block: var(--s6) var(--s9); }
 .page-head { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--s5); padding-bottom: var(--s5); border-bottom: 1px solid var(--rule-strong); margin-bottom: var(--s6); flex-wrap: wrap; }
 .page-title { font: 400 var(--t48)/1 var(--font-display); letter-spacing: -0.02em; }
+.page-side { display: flex; align-items: flex-end; gap: var(--s6); flex-wrap: wrap; }
 .page-stats { display: flex; gap: var(--s6); }
 .page-stat { display: grid; gap: var(--s1); text-align: right; }
 .page-stat b { font: 400 var(--t32)/1 var(--font-display); }
@@ -500,6 +505,7 @@ a.jur:hover { border-color: var(--accent); }
   .method { grid-template-columns: 1fr; }
   .toc { display: none; }
   .findings { grid-template-columns: 1fr; }
+  .findings .btn { justify-self: start; }
   .brand-sub { display: none; }
 }
 @media (max-width: 860px) {
