@@ -32,6 +32,7 @@ function decorate<T extends { id: string; instruments: { instrument: { jurisdict
     citations: cites,
     jurisdictions: [...new Set(c.instruments.map((i) => i.instrument.jurisdiction.code))],
     verification: unverified.length ? ("unverified" as const) : ("verified" as const),
+    changedSources: cites.filter((x) => x.sourceCheck === "changed").length,
   };
 }
 
@@ -187,12 +188,13 @@ export async function listRejections() {
 }
 
 export async function stats() {
-  const [total, published, byRes, byResolution, unverified, rejections, shapes, transitions] = await Promise.all([
+  const [total, published, byRes, byResolution, unverified, changedSources, rejections, shapes, transitions] = await Promise.all([
     prisma.case.count(),
     prisma.case.count({ where: { status: "published" } }),
     prisma.case.groupBy({ by: ["resolvability"], where: { status: "published" }, _count: true }),
     prisma.case.groupBy({ by: ["resolution"], _count: true }),
     prisma.citation.count({ where: { verificationStatus: { in: ["unverified", "disputed"] } } }),
+    prisma.citation.count({ where: { targetType: "case", sourceCheck: "changed" } }),
     prisma.rejection.count(),
     prisma.shape.count({ where: { retiredAt: null } }),
     prisma.caseTransition.count(),
@@ -206,6 +208,7 @@ export async function stats() {
     shapes,
     rejections,
     unverifiedCitations: unverified,
+    changedSources,
     transitions,
     byResolvability: Object.fromEntries(byRes.map((r) => [r.resolvability, r._count])) as Record<string, number>,
     resolvedBy: {

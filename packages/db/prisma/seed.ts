@@ -1,9 +1,10 @@
 import { SIGNOFF_NOTE, signoffFor } from "./signoff";
 import { PrismaClient } from "@prisma/client";
-import { AMENDMENT_NOTE_PREFIX, INTAKE_REJECTION_PREFIX, REVIEW_NOTE_PREFIX, isPublishable, resolvedAtFrom } from "@bind/core";
+import { AMENDMENT_NOTE_PREFIX, INTAKE_REJECTION_PREFIX, REVIEW_NOTE_PREFIX, isPublishable, resolvedAtFrom, sourceCheckKey } from "@bind/core";
 import { CORPUS_AUTHOR, audits, cases as corpusCases, instruments as corpusInstruments, jurisdictions, rejections as corpusRejections, shapes } from "./corpus";
 import { draftCases, draftInstruments, draftRejections, draftSourceVerifications, draftVerifications } from "./drafts";
 import { instrumentVerifications, sourceVerifications, type Verification } from "./verifications";
+import { readSourceChecks } from "./source-checks";
 const sv: Record<string, Verification> = { ...sourceVerifications, ...draftSourceVerifications };
 
 // Corpus cases are the source author's own text. Model-drafted cases carry no contributor and cite as the registry.
@@ -11,6 +12,9 @@ const cases = [...corpusCases.map((c) => ({ contributor: CORPUS_AUTHOR, ...c }))
 const instruments: Record<string, (typeof corpusInstruments)[string]> = { ...corpusInstruments, ...draftInstruments };
 const iv: Record<string, Verification> = { ...instrumentVerifications, ...draftVerifications };
 const rejections = [...corpusRejections, ...draftRejections];
+
+// A reseed rebuilds every Citation row, so the last check run is re-applied from its ledger file.
+const sourceChecks = readSourceChecks();
 
 const prisma = new PrismaClient();
 const slugOf = (i: number) => `bind-${String(i + 1).padStart(4, "0")}`;
@@ -111,6 +115,7 @@ async function main() {
     });
 
     for (const s of cites) {
+      const check = s.v ? sourceChecks.get(sourceCheckKey(s.v.url, s.v.quote)) : undefined;
       await prisma.citation.create({
         data: {
           targetType: "case",
@@ -124,6 +129,8 @@ async function main() {
           verifiedAt: s.v ? new Date(s.v.verifiedAt) : undefined,
           verifiedBy: s.v?.verifiedBy,
           verificationNote: s.v?.note ?? s.note ?? "Source states citations are from working memory and need verification.",
+          sourceCheck: check?.status,
+          sourceCheckedAt: check ? new Date(check.checkedAt) : undefined,
         },
       });
       if (!s.v) citations++;

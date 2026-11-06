@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { resLabel, resNote } from "@/lib/format";
+import { fmtDate, resLabel, resNote } from "@/lib/format";
 
 export function Res({ r, short }: { r: string; short?: boolean }) {
   return (
@@ -47,6 +47,23 @@ export function Verify({ s }: { s: string }) {
     <span className={`chip ${cls}`}>
       <span className="dot" aria-hidden />
       {label}
+    </span>
+  );
+}
+
+const SOURCE_CHECK: Record<string, [string, string, string]> = {
+  current: ["mono muted", "Current", "Quote found at the source on this date"],
+  changed: ["chip chip-accent", "Changed", "Quote no longer at the source on this date"],
+  unreachable: ["mono muted", "Unreachable", "Source could not be read on this date"],
+};
+
+/** Result of the last re-fetch of a citation's source. Renders nothing for a citation never checked. */
+export function SourceCheck({ status, at }: { status: string | null; at: Date | string | null }) {
+  const [cls, label, tip] = (status ? SOURCE_CHECK[status] : undefined) ?? [];
+  if (!label) return null;
+  return (
+    <span className={cls} data-tip={tip} tabIndex={0}>
+      {label} {fmtDate(at)}
     </span>
   );
 }

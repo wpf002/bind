@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { INCLUSION_CRITERIA, caseToBibTeX, splitAnalysis, suggestedCitation } from "@bind/core";
 import { getCase, previewDrafts, type CaseDetail } from "@bind/db";
 import { CopyButton } from "@/components/CopyButton";
-import { Jur, Res, ShapeTag, Tip, Verify } from "@/components/marks";
+import { Jur, Res, ShapeTag, SourceCheck, Tip, Verify } from "@/components/marks";
 import { fmtDate, titleCase } from "@/lib/format";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -135,6 +135,7 @@ export default async function CasePage({ params }: Props) {
               <a href="#sources" className="mono">
                 {checked} / {c.citations.length} Verified
               </a>
+              {c.changedSources ? <span className="chip chip-accent record-flag">{c.changedSources} Changed</span> : null}
             </dd>
           </div>
           <div>
@@ -370,6 +371,7 @@ export default async function CasePage({ params }: Props) {
                       {s.publisher ? <span className="muted">{s.publisher}</span> : null}
                       {s.verifiedAt ? <span className="mono muted">Checked {fmtDate(s.verifiedAt)}</span> : null}
                       {s.verifiedBy ? <span className="muted">{s.verifiedBy}</span> : null}
+                      <SourceCheck status={s.sourceCheck} at={s.sourceCheckedAt} />
                     </div>
                   </div>
                   <span />

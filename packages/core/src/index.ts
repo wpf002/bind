@@ -4,3 +4,4 @@ export * from "./review.js";
 export * from "./analysis.js";
 export * from "./sort.js";
 export * from "./resolutions.js";
+export * from "./sourceCheck.js";

@@ -44,6 +44,13 @@ enum VerificationStatus {
   disputed
 }
 
+/// Outcome of re-fetching a verified citation's source and looking for its quote.
+enum SourceCheck {
+  current
+  changed
+  unreachable
+}
+
 enum InclusionVerdict {
   passes
   fails
@@ -337,6 +344,11 @@ model Citation {
   verifiedAt         DateTime?
   verifiedBy         String?
   verificationNote   String?
+
+  /// Result of the last re-fetch of `url`: does `quote` still appear there. Null means never checked.
+  /// `retrieved` isn't reused for the timestamp: it is the verification read date and exports as urldate.
+  sourceCheck     SourceCheck?
+  sourceCheckedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -218,6 +218,11 @@ export default async function Index({ searchParams }: { searchParams: Promise<Pa
                           Resolved
                         </div>
                       ) : null}
+                      {c.changedSources ? (
+                        <div className="chip chip-accent" style={{ marginTop: 6 }}>
+                          Source Changed
+                        </div>
+                      ) : null}
                     </td>
                     <td className="c-src mono muted">{c.citations.length}</td>
                   </tr>

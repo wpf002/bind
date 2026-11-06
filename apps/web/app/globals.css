@@ -216,6 +216,7 @@ a.jur:hover { border-color: var(--accent); }
 .record dd { margin: 0; font-size: var(--t14); line-height: 20px; color: var(--ink); }
 .record dd a { text-decoration: none; border-bottom: 1px solid var(--rule); }
 .record dd a:hover { border-color: var(--ink); }
+.record-flag { margin-left: var(--s2); }
 .record-shapes { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); }
 .record-shapes a { border-bottom: 0; }
 

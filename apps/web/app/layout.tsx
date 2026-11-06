@@ -71,6 +71,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <span className="ledger-sep" />
             <span><b>{s.rejections}</b> Rejected</span>
             <span className="ledger-sep" />
+            <span><b>{s.changedSources}</b> Sources Changed</span>
+            <span className="ledger-sep" />
             <span className="zero"><b>{s.resolvedBy.engineering}</b> Resolved By Engineering</span>
             <span className="ledger-end">Taxonomy v1 · Gate {s.published}/{s.gate}</span>
           </div>
