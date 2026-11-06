@@ -56,8 +56,11 @@ export function runInclusionTest(answers: Partial<InclusionAnswers>): InclusionR
   return { verdict: failures.length === 0 ? "passes" : "fails", failures };
 }
 
+/** Decided verdicts. A "fails" case is published as a boundary case that marks where the test stops. */
+export const DECIDED_VERDICTS = ["passes", "fails"] as const;
+
 /**
- * Publication gate. Unverified citations keep a case unpublished.
+ * Publication gate. An undecided verdict or an unverified citation keeps a case unpublished.
  * No provisional tier, no exceptions.
  */
 export function isPublishable(input: {
@@ -65,7 +68,7 @@ export function isPublishable(input: {
   citations: { verificationStatus: string }[];
 }): { ok: boolean; blockers: string[] } {
   const blockers: string[] = [];
-  if (input.inclusionVerdict !== "passes") blockers.push("Inclusion test not passed");
+  if (!(DECIDED_VERDICTS as readonly string[]).includes(input.inclusionVerdict)) blockers.push("Inclusion verdict undecided");
   if (input.citations.length === 0) blockers.push("No citations");
   const unverified = input.citations.filter(
     (c) => c.verificationStatus === "unverified" || c.verificationStatus === "disputed"

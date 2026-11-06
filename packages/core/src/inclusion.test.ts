@@ -28,4 +28,12 @@ describe("isPublishable", () => {
   it("allows a passing case with verified citations", () => {
     expect(isPublishable({ inclusionVerdict: "passes", citations: [{ verificationStatus: "verified" }] }).ok).toBe(true);
   });
+
+  it("allows a failing boundary case with verified citations", () => {
+    expect(isPublishable({ inclusionVerdict: "fails", citations: [{ verificationStatus: "verified" }] }).ok).toBe(true);
+  });
+
+  it("blocks an undecided verdict", () => {
+    expect(isPublishable({ inclusionVerdict: "undecided", citations: [{ verificationStatus: "verified" }] }).blockers).toEqual(["Inclusion verdict undecided"]);
+  });
 });

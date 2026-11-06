@@ -1,7 +1,7 @@
 /**
- * Model-drafted cases (claude-opus-5-5, 2026-10-31). The roadmap rules out LLM-generated
- * cases as a source of truth, so every one seeds as a draft and needs a human reviewer before
- * publication. Drafts that failed the inclusion test become rejections, not cases.
+ * Model-drafted cases (claude-opus-5-5, 2026-10-31). They publish under the corpus-wide owner
+ * sign-off in signoff.ts, which records that no case-by-case human check was done.
+ * Drafts that failed the inclusion test become rejections, not cases.
  */
 import type { SeedCase } from "../corpus";
 import type { Verification } from "../verifications";
