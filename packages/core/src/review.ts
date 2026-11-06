@@ -44,3 +44,17 @@ export function parseReviewers(raw: string): Reviewer[] {
   if (reviewers.length < REVIEWS_REQUIRED) throw new Error(`REVIEWERS needs at least ${REVIEWS_REQUIRED} reviewers`);
   return reviewers;
 }
+
+/** Prefix of the corpusRef given to a draft case opened from an accepted submission. */
+export const INTAKE_CASE_PREFIX = "SUB-";
+
+export type DraftSource = { building: string; requiredByCitation: string; blockedByCitation: string };
+
+const endsWithStop = /[.!?]$/;
+
+/** The draft case's one-sentence statement: what was built, the rule that forces it, the rule that forbids it. */
+export function draftStatement(s: DraftSource): string {
+  const building = s.building.trim();
+  const built = endsWithStop.test(building) ? building : `${building}.`;
+  return `${built} ${s.requiredByCitation.trim()} requires it and ${s.blockedByCitation.trim()} forbids it.`;
+}
