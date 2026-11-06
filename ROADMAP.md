@@ -22,18 +22,11 @@ made for engineers.
 | Design check: Check page, GET /check, matcher in core, Matrix consistency test | fb80122, a664141, 95ef3d6, a88be0c |
 | API and JSON export: OpenAPI at /openapi.json from the route schemas, GET /export/json, JSON on the Export page | 2ff3608, 8408858, 6ea008f, 7484b8b |
 | Changes feed: publishes, transitions and failed source checks as events, GET /changes, Atom at /changes.atom, Changes page | a5d5559, 7755bb3, c598d4b, d573dc1 |
+| Submit for engineers: building, property, jurisdictions, the required-by and blocked-by rules with sources, workaround; accept opens a draft case with the property linked | 055555c, d85a34e, f739cfa, 82953f3, e379a4f |
 
 ## Next
 
-In order. Each item ships on its own.
-
-### 1. Submit for engineers
-
-Refocus the Submit form on the conflict an engineer hit: what they were
-building, which rule blocked it, which rule required it. Review stays as is.
-
-Done when: a submission from the form reaches the review queue with those
-fields and the API tests cover the new schema.
+Every planned item has shipped. New items come from submissions and from use.
 
 ## Not planned
 
