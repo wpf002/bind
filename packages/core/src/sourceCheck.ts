@@ -11,8 +11,10 @@ export type SourceCheckStatus = (typeof SOURCE_CHECK_STATUSES)[number];
 /**
  * What a fetch produced: the source's text, or the reason there isn't one. `blocked` marks a
  * source the publisher keeps from scripts (a bot challenge, a CAPTCHA, a sign-in or a licence step).
+ * `capturedAt` is set when the text is the Internet Archive's capture of a blocked source, and
+ * is the time the archive read it.
  */
-export type FetchedSource = { ok: true; text: string } | { ok: false; reason: string; blocked?: boolean };
+export type FetchedSource = { ok: true; text: string; capturedAt?: string } | { ok: false; reason: string; blocked?: boolean };
 
 export type SourceCheckResult = { status: SourceCheckStatus; detail?: string };
 
@@ -27,6 +29,10 @@ const EDITORIAL = /\[[^\]]*\]|\.{3}|…/g;
 
 /** Reason recorded when a quote is missing and this check has never once found it at the URL. */
 export const QUOTE_NEVER_FOUND = "quote never found at this URL";
+/** Detail recorded when the text checked was the Internet Archive's capture of a blocked source. */
+export const READ_FROM_ARCHIVE = "read from the Internet Archive capture";
+/** Reason recorded when a blocked source's archive capture doesn't hold the quote. */
+export const ARCHIVE_LACKS_QUOTE = "quote not in the Internet Archive capture";
 
 /**
  * Folds differences that don't change what a provision says: Unicode form, quote-mark style,
@@ -64,26 +70,62 @@ export function quoteAppearsIn(quote: string, text: string): boolean {
  * which a person with a browser can still read, and "unreachable" otherwise. A missing quote is
  * "changed" only if this check found it at the same URL before. Without that baseline the page
  * may be a search form or a gate that never showed the text, which is also "unreachable".
+ * An archive capture stands in for a blocked source only when it holds the quote. A capture
+ * without it can be an old or partial copy, so the source stays "blocked".
  */
 export function checkQuote(quote: string, source: FetchedSource, foundBefore: boolean): SourceCheckResult {
   if (!source.ok) return { status: source.blocked ? "blocked" : "unreachable", detail: source.reason };
   if (!quoteSegments(quote).length) throw new Error("checkQuote needs a non-empty quote");
-  if (quoteAppearsIn(quote, source.text)) return { status: "current" };
+  const found = quoteAppearsIn(quote, source.text);
+  if (source.capturedAt) return found ? { status: "current", detail: READ_FROM_ARCHIVE } : { status: "blocked", detail: ARCHIVE_LACKS_QUOTE };
+  if (found) return { status: "current" };
   return foundBefore ? { status: "changed" } : { status: "unreachable", detail: QUOTE_NEVER_FOUND };
 }
 
 /**
  * One source out of the documents a quote draws on. A quote that joins passages from two
- * documents needs both, so the first failure stands for the whole.
+ * documents needs both, so the first failure stands for the whole. If any text is an archive
+ * capture, the whole is dated by the oldest capture.
  */
 export function combineSources(sources: FetchedSource[]): FetchedSource {
   if (!sources.length) throw new Error("combineSources needs at least one source");
   const texts: string[] = [];
+  const captures: string[] = [];
   for (const source of sources) {
     if (!source.ok) return source;
     texts.push(source.text);
+    if (source.capturedAt) captures.push(source.capturedAt);
   }
-  return { ok: true, text: texts.join("\n") };
+  const text = texts.join("\n");
+  return captures.length ? { ok: true, text, capturedAt: captures.sort()[0] } : { ok: true, text };
+}
+
+const WAYBACK_HOST = "https://web.archive.org";
+const WAYBACK_TIMESTAMP = /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/;
+const HTTP_OK = "200";
+
+/** The Internet Archive availability API's answer for one URL. `closest` is absent when it has no capture. */
+const waybackAvailabilitySchema = z.object({
+  archived_snapshots: z.object({
+    closest: z.object({ available: z.boolean(), status: z.string(), timestamp: z.string().regex(WAYBACK_TIMESTAMP) }).optional(),
+  }),
+});
+
+export type ArchiveCapture = { url: string; capturedAt: string };
+
+/**
+ * The capture the availability API reports for `sourceUrl`, or null when there is no capture of
+ * a 200 response. `url` returns the captured bytes without the archive's page frame (`id_`).
+ * Throws on a response that isn't the API's shape.
+ */
+export function archiveCaptureOf(sourceUrl: string, availabilityJson: string): ArchiveCapture | null {
+  const closest = waybackAvailabilitySchema.parse(JSON.parse(availabilityJson)).archived_snapshots.closest;
+  if (!closest?.available || closest.status !== HTTP_OK) return null;
+  const [, year, month, day, hour, minute, second] = closest.timestamp.match(WAYBACK_TIMESTAMP)!;
+  return {
+    url: `${WAYBACK_HOST}/web/${closest.timestamp}id_/${sourceUrl}`,
+    capturedAt: `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`,
+  };
 }
 
 const NAMED_ENTITIES: Record<string, string> = {

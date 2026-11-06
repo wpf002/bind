@@ -1,6 +1,6 @@
 import { execFile } from "node:child_process";
 import { writeFile } from "node:fs/promises";
-import { checkQuote, combineSources, countSourceChecks, htmlToText, jsonToText, sourceCheckKey, type FetchedSource, type SourceCheckEntry, type SourceCheckLedger } from "@bind/core";
+import { archiveCaptureOf, checkQuote, combineSources, countSourceChecks, htmlToText, jsonToText, sourceCheckKey, type ArchiveCapture, type FetchedSource, type SourceCheckEntry, type SourceCheckLedger } from "@bind/core";
 import { prisma } from "../src/client";
 import { SOURCE_CHECK_LEDGER_PATH, readSourceChecks } from "./source-checks";
 
@@ -11,7 +11,8 @@ import { SOURCE_CHECK_LEDGER_PATH, readSourceChecks } from "./source-checks";
  *
  * "changed" means the quote was found at the URL on an earlier run and is gone now. A quote that
  * has never been found is "unreachable": the page may be a search form or a licence gate.
- * "blocked" means the publisher keeps the text from scripts: an HTTP 401 or 403, or a URL in SCRIPT_GATED.
+ * "blocked" means the publisher keeps the text from scripts (an HTTP 401 or 403) and the Internet
+ * Archive has no capture holding the quote. A quote found in a capture is "current" as of the capture date.
  * It only reports. A "changed" result needs someone to reread the provision; nothing here edits a case.
  */
 
@@ -46,14 +47,11 @@ const HANSARD_DEBATE_PATH = /\/debates\/([0-9A-F]{8}(?:-[0-9A-F]{4}){3}-[0-9A-F]
 const hansardApiUrl = (debateId: string) => `https://hansard-api.parliament.uk/debates/debate/${debateId}.json`;
 const JSON_HEADERS = { Accept: "application/json" };
 
-/**
- * Cited pages whose text a script can't reach even though the page itself loads. Each was read
- * by a person. They aren't fetched; the reason is recorded as the check's detail.
- */
-const SCRIPT_GATED: Record<string, string> = {
-  "https://delhihighcourt.nic.in/app/get-case-type-status": "case-status search needs a CAPTCHA",
-  "https://www.pcisecuritystandards.org/document_library/": "download needs licence acceptance",
-};
+/** The Internet Archive shows a capture inside its own page frame. The `id_` form returns the captured bytes. */
+const WAYBACK_CAPTURE_URL = /^(https:\/\/web\.archive\.org\/web\/\d{14})(\/.+)$/;
+
+/** Returns the Internet Archive's most recent capture of a URL. */
+const WAYBACK_AVAILABILITY_URL = "https://archive.org/wayback/available";
 
 /** Statuses a server uses to refuse the client, as opposed to a missing page or a fault. */
 const REFUSED_STATUSES = [401, 403];
@@ -77,6 +75,8 @@ function requestFor(citationUrl: string): Request {
     const debateId = parsed.pathname.match(HANSARD_DEBATE_PATH)?.[1];
     if (debateId) return { url: hansardApiUrl(debateId), headers: JSON_HEADERS };
   }
+  const capture = citationUrl.match(WAYBACK_CAPTURE_URL);
+  if (capture) return { url: `${capture[1]}id_${capture[2]}`, headers: DEFAULT_HEADERS };
   return { url: citationUrl, headers: DEFAULT_HEADERS };
 }
 
@@ -157,10 +157,7 @@ async function fetchOnce(request: Request): Promise<FetchedSource & { retry?: bo
   return bodyToText(response.headers.get("content-type") ?? "", body);
 }
 
-async function fetchSource(citationUrl: string): Promise<FetchedSource> {
-  const gate = SCRIPT_GATED[citationUrl];
-  if (gate) return { ok: false, reason: gate, blocked: true };
-  const request = requestFor(citationUrl);
+async function fetchWithRetries(request: Request): Promise<FetchedSource> {
   let last: FetchedSource = { ok: false, reason: "not attempted" };
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     const { retry, ...result } = await fetchOnce(request);
@@ -169,6 +166,37 @@ async function fetchSource(citationUrl: string): Promise<FetchedSource> {
     if (attempt < MAX_ATTEMPTS) await sleep(BACKOFF_BASE_MS * 2 ** (attempt - 1));
   }
   return last;
+}
+
+/** The Internet Archive's latest capture of a URL, or null when it has none or can't be asked. */
+async function findArchiveCapture(citationUrl: string): Promise<ArchiveCapture | null> {
+  try {
+    const response = await fetch(`${WAYBACK_AVAILABILITY_URL}?url=${encodeURIComponent(citationUrl)}`, {
+      headers: { "User-Agent": USER_AGENT, ...JSON_HEADERS },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
+    if (response.status !== 200) {
+      await response.body?.cancel();
+      return null;
+    }
+    return archiveCaptureOf(citationUrl, await response.text());
+  } catch (error) {
+    console.warn(`archive lookup failed for ${citationUrl}: ${(error as Error).message.split("\n")[0]}`);
+    return null;
+  }
+}
+
+/**
+ * The cited page, or the Internet Archive's latest capture of it when the publisher refuses
+ * scripts. The archive read the same URL, so its copy is the source as of the capture time.
+ */
+async function fetchSource(citationUrl: string): Promise<FetchedSource> {
+  const live = await fetchWithRetries(requestFor(citationUrl));
+  if (live.ok || !live.blocked) return live;
+  const capture = await findArchiveCapture(citationUrl);
+  if (!capture) return live;
+  const archived = await fetchWithRetries({ url: capture.url, headers: DEFAULT_HEADERS });
+  return archived.ok ? { ...archived, capturedAt: capture.capturedAt } : live;
 }
 
 /** One fetch per URL per run. A second document is often one that other citations cite directly. */
@@ -224,9 +252,11 @@ async function main() {
   await inPool(byHost(targets), HOST_CONCURRENCY, async (urlGroups) => {
     for (const group of urlGroups) {
       const first = await fetchSourceOnce(group[0]!.url);
-      const checkedAt = new Date().toISOString();
+      const fetchedAt = new Date().toISOString();
       for (const target of group) {
         const source = target.secondUrl ? combineSources([first, await fetchSourceOnce(target.secondUrl)]) : first;
+        // A capture shows the source as it was when the archive read it, so that is the check's date.
+        const checkedAt = (source.ok && source.capturedAt) || fetchedAt;
         const foundAt = previous.get(sourceCheckKey(target.url, target.quote))?.foundAt;
         const result = checkQuote(target.quote, source, foundAt !== undefined);
         checks.push({ ...target, ...result, checkedAt, foundAt: result.status === "current" ? checkedAt : foundAt });

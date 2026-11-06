@@ -5,48 +5,40 @@
       "quote": "При сборе персональных данных, в том числе посредством информационно-телекоммуникационной сети \"Интернет\", оператор обязан обеспечить запись, систематизацию, накопление, хранение, уточнение (обновление, изменение), извлечение персональных данных граждан Российской Федерации с использованием баз данных, находящихся на территории Российской Федерации [When collecting personal data, including via the Internet, the operator must ensure the recording, systematization, accumulation, storage, clarification and retrieval of personal data of Russian citizens using databases located in the Russian Federation]",
       "label": "Federal Law 242-FZ, 152-FZ Art. 18(5), inserted by 242-FZ Art. 2(1)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:36.739Z",
-      "foundAt": "2026-11-06T19:27:36.739Z"
+      "checkedAt": "2026-11-06T19:39:57.443Z",
+      "foundAt": "2026-11-06T19:39:57.443Z"
     },
     {
       "url": "http://www.kremlin.ru/acts/bank/52093",
       "quote": "(в том числе невыполнение при продаже или использовании отдельных видов технически сложных товаров с предварительно установленными программами для электронных вычислительных машин требований, установленных пунктами 41 и 42 статьи 4 настоящего Закона)",
       "label": "Federal Law No. 194-FZ of 07.07.2025 amending the Law On Protection of Consumer Rights, Art. 1(1)-(2), Art. 2",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:44.506Z",
-      "foundAt": "2026-11-06T19:27:44.506Z"
+      "checkedAt": "2026-11-06T19:39:57.728Z",
+      "foundAt": "2026-11-06T19:39:57.728Z"
     },
     {
       "url": "http://www.npc.gov.cn/englishnpc/c2759/c23934/202112/t20211209_385109.html",
       "quote": "Without the approval of the competent authorities of the People's Republic of China, organizations or individuals in the People's Republic of China shall not provide data stored within the territory of the People's Republic of China to any overseas judicial or law enforcement body.",
       "label": "Data Security Law of the People's Republic of China (2021), Art. 36",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:29.138Z",
-      "foundAt": "2026-11-06T19:27:29.138Z"
+      "checkedAt": "2026-11-06T19:39:56.838Z",
+      "foundAt": "2026-11-06T19:39:56.838Z"
     },
     {
       "url": "http://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html",
       "quote": "收集个人信息，应当限于实现处理目的的最小范围，不得过度收集个人信息。",
       "label": "Personal Information Protection Law of the PRC, Art. 6",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:29.397Z",
-      "foundAt": "2026-11-06T19:27:29.397Z"
+      "checkedAt": "2026-11-06T19:39:57.052Z",
+      "foundAt": "2026-11-06T19:39:57.052Z"
     },
     {
       "url": "https://cppa.ca.gov/regulations/pdf/ccpa_statute.pdf",
       "quote": "A business that receives a verifiable consumer request from a consumer to delete the consumer's personal information pursuant to subdivision (a) of this section shall delete the consumer's personal information from its records ... [(d)] A business ... shall not be required to comply with a consumer's request to delete ... if it is reasonably necessary ... to maintain the consumer's personal information in order to: ... (8) Comply with a legal obligation.",
       "label": "California Consumer Privacy Act, Cal. Civ. Code § 1798.105(a), (c)(1); exception (d)(8)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:30.061Z",
-      "foundAt": "2026-11-06T19:27:30.061Z"
-    },
-    {
-      "url": "https://delhihighcourt.nic.in/app/get-case-type-status",
-      "quote": "W.P.(C) - 7284 / 2021 [PENDING] WHATSAPP LLC VS. UNION OF INDIA",
-      "label": "WhatsApp v Union of India, Delhi HC, 2021",
-      "status": "blocked",
-      "detail": "case-status search needs a CAPTCHA",
-      "checkedAt": "2026-11-06T19:27:28.120Z"
+      "checkedAt": "2026-11-06T19:39:59.161Z",
+      "foundAt": "2026-11-06T19:39:59.161Z"
     },
     {
       "url": "https://digichina.stanford.edu/work/translation-personal-information-protection-law-of-the-peoples-republic-of-china-effective-nov-1-2021/",
@@ -54,232 +46,232 @@
       "quote": "[PIPL Art. 40:] Critical information infrastructure operators and personal information handlers handling personal information reaching quantities provided by the State cybersecurity and informatization department shall store personal information collected and produced within the borders of the People's Republic of China domestically. [CSL Art. 37:] Critical information infrastructure operators that gather or produce personal information or important data during operations within the mainland territory of the People's Republic of China, shall store it within mainland China.",
       "label": "PIPL / CSL, PIPL Art. 40; CSL Art. 37",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:29.079Z",
-      "foundAt": "2026-11-06T19:27:29.079Z"
+      "checkedAt": "2026-11-06T19:39:56.732Z",
+      "foundAt": "2026-11-06T19:39:56.732Z"
     },
     {
       "url": "https://ec.europa.eu/competition/digital_markets_act/cases/202523/DMA_100203_1655.pdf",
       "quote": "However, some privacy and security aspects fall outside the scope of integrity within the meaning of Regulation (EU) 2022/1925. In particular, the concept of integrity in Regulation (EU) 2022/1925 does not allow gatekeepers to impose their own model of security and privacy on third-party services.",
       "label": "Commission Decision C(2025) 3000 final, Case DMA.100203 (Apple, connected devices), C(2025) 3000 final, 19.3.2025, para 107",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:35.307Z",
-      "foundAt": "2026-11-06T19:27:35.307Z"
+      "checkedAt": "2026-11-06T19:40:03.649Z",
+      "foundAt": "2026-11-06T19:40:03.649Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:31996R2271",
       "quote": "No person referred to in Article 11 shall comply, whether directly or through a subsidiary or other intermediary person, actively or by deliberate omission, with any requirement or prohibition, including requests of foreign courts, based on or resulting, directly or indirectly, from the laws specified in the Annex or from actions based thereon or resulting therefrom.",
       "label": "Council Regulation (EC) No 2271/96, with Annex as replaced by Delegated Regulation (EU) 2018/1100, Art. 5, first paragraph; Annex (ITSR Act 2012)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:30.355Z",
-      "foundAt": "2026-11-06T19:27:30.355Z"
+      "checkedAt": "2026-11-06T19:39:57.725Z",
+      "foundAt": "2026-11-06T19:39:57.725Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32002L0058",
       "quote": "To this end, Member States may, inter alia, adopt legislative measures providing for the retention of data for a limited period justified on the grounds laid down in this paragraph.",
       "label": "Member-state data retention regimes, Directive 2002/58/EC Art. 15(1) (enabling clause); national retention statutes",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:30.726Z",
-      "foundAt": "2026-11-06T19:27:30.726Z"
+      "checkedAt": "2026-11-06T19:39:58.082Z",
+      "foundAt": "2026-11-06T19:39:58.082Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "quote": "adequate, relevant and limited to what is necessary in relation to the purposes for which they are processed ('data minimisation');",
       "label": "General Data Protection Regulation, Art. 5(1)(c)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.419Z",
-      "foundAt": "2026-11-06T19:27:31.419Z"
+      "checkedAt": "2026-11-06T19:39:58.775Z",
+      "foundAt": "2026-11-06T19:39:58.775Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "quote": "processed in a manner that ensures appropriate security of the personal data, including protection against unauthorised or unlawful processing and against accidental loss, destruction or damage, using appropriate technical or organisational measures (‘integrity and confidentiality’).",
       "label": "General Data Protection Regulation, Art. 5(1)(f)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.419Z",
-      "foundAt": "2026-11-06T19:27:31.419Z"
+      "checkedAt": "2026-11-06T19:39:58.775Z",
+      "foundAt": "2026-11-06T19:39:58.775Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "quote": "Processing of personal data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, or trade union membership, and the processing of genetic data, biometric data for the purpose of uniquely identifying a natural person, data concerning health or data concerning a natural person's sex life or sexual orientation shall be prohibited.",
       "label": "General Data Protection Regulation, Art. 9(1)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.419Z",
-      "foundAt": "2026-11-06T19:27:31.419Z"
+      "checkedAt": "2026-11-06T19:39:58.775Z",
+      "foundAt": "2026-11-06T19:39:58.775Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "quote": "That right should not adversely affect the rights or freedoms of others, including trade secrets or intellectual property and in particular the copyright protecting the software. However, the result of those considerations should not be a refusal to provide all information to the data subject.",
       "label": "Trade secret protection, Directive (EU) 2016/943, Art. 2(1); GDPR Recital 63",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.419Z",
-      "foundAt": "2026-11-06T19:27:31.419Z"
+      "checkedAt": "2026-11-06T19:39:58.775Z",
+      "foundAt": "2026-11-06T19:39:58.775Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "quote": "the controller shall without undue delay and, where feasible, not later than 72 hours after having become aware of it, notify the personal data breach to the supervisory authority ... [Art. 33(3)(a):] describe the nature of the personal data breach including where possible, the categories and approximate number of data subjects concerned and the categories and approximate number of personal data records concerned;",
       "label": "General Data Protection Regulation, Art. 33(1), 33(3)(a); Art. 34(1), 34(3)(a)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.419Z",
-      "foundAt": "2026-11-06T19:27:31.419Z"
+      "checkedAt": "2026-11-06T19:39:58.775Z",
+      "foundAt": "2026-11-06T19:39:58.775Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "quote": "The data subject shall have the right not to be subject to a decision based solely on automated processing, including profiling, which produces legal effects concerning him or her or similarly significantly affects him or her. [Recital 71:] ... the right to obtain human intervention, to express his or her point of view, to obtain an explanation of the decision reached after such assessment and to challenge the decision.",
       "label": "General Data Protection Regulation, Art. 22(1), 22(3); Recital 71",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.419Z",
-      "foundAt": "2026-11-06T19:27:31.419Z"
+      "checkedAt": "2026-11-06T19:39:58.775Z",
+      "foundAt": "2026-11-06T19:39:58.775Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "quote": "The data subject shall have the right to obtain from the controller the erasure of personal data concerning him or her without undue delay and the controller shall have the obligation to erase personal data without undue delay where one of the following grounds applies:",
       "label": "General Data Protection Regulation, Art. 17(1); exception at Art. 17(3)(b)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.419Z",
-      "foundAt": "2026-11-06T19:27:31.419Z"
+      "checkedAt": "2026-11-06T19:39:58.775Z",
+      "foundAt": "2026-11-06T19:39:58.775Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "quote": "The data subject shall have the right to obtain from the controller without undue delay the rectification of inaccurate personal data concerning him or her.",
       "label": "General Data Protection Regulation, Art. 16",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.419Z",
-      "foundAt": "2026-11-06T19:27:31.419Z"
+      "checkedAt": "2026-11-06T19:39:58.775Z",
+      "foundAt": "2026-11-06T19:39:58.775Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "quote": "the existence of automated decision-making, including profiling, referred to in Article 22(1) and (4) and, at least in those cases, meaningful information about the logic involved, as well as the significance and the envisaged consequences of such processing for the data subject.",
       "label": "General Data Protection Regulation, Art. 15(1)(h)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.419Z",
-      "foundAt": "2026-11-06T19:27:31.419Z"
+      "checkedAt": "2026-11-06T19:39:58.775Z",
+      "foundAt": "2026-11-06T19:39:58.775Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "quote": "The principles of data protection should therefore not apply to anonymous information, namely information which does not relate to an identified or identifiable natural person or to personal data rendered anonymous in such a manner that the data subject is not or no longer identifiable.",
       "label": "General Data Protection Regulation, Recital 26",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.419Z",
-      "foundAt": "2026-11-06T19:27:31.419Z"
+      "checkedAt": "2026-11-06T19:39:58.775Z",
+      "foundAt": "2026-11-06T19:39:58.775Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R2144",
       "quote": "An event data recorder shall not be capable of recording and storing the last four digits of the vehicle indicator section of the vehicle identification number or any other information which could allow the individual vehicle itself, its owner or holder, to be identified.",
       "label": "Regulation (EU) 2019/2144 on type-approval requirements for motor vehicles (General Safety Regulation), Art. 6(5)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.927Z",
-      "foundAt": "2026-11-06T19:27:31.927Z"
+      "checkedAt": "2026-11-06T19:39:59.278Z",
+      "foundAt": "2026-11-06T19:39:59.278Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R2144",
       "quote": "Any processing of personal data, such as information about the driver processed in event data recorders ... should be carried out in accordance with ... Regulation (EU) 2016/679",
       "label": "Regulation (EU) 2019/2144 on type-approval requirements for motor vehicles (General Safety Regulation), Recital 14",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.927Z",
-      "foundAt": "2026-11-06T19:27:31.927Z"
+      "checkedAt": "2026-11-06T19:39:59.278Z",
+      "foundAt": "2026-11-06T19:39:59.278Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R2144",
       "quote": "the data that they collect is anonymised and protected against manipulation and misuse",
       "label": "Regulation (EU) 2019/2144 on type-approval requirements for motor vehicles (General Safety Regulation), Art. 6(4)(a)-(c)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.927Z",
-      "foundAt": "2026-11-06T19:27:31.927Z"
+      "checkedAt": "2026-11-06T19:39:59.278Z",
+      "foundAt": "2026-11-06T19:39:59.278Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925",
       "quote": "it shall make the basic functionalities of its number-independent interpersonal communications services interoperable with the number-independent interpersonal communications services of another provider ... [Art. 7(3):] The level of security, including the end-to-end encryption, where applicable, that the gatekeeper provides to its own end users shall be preserved across the interoperable services.",
       "label": "Digital Markets Act, Art. 7(1), 7(3)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:32.303Z",
-      "foundAt": "2026-11-06T19:27:32.303Z"
+      "checkedAt": "2026-11-06T19:39:59.650Z",
+      "foundAt": "2026-11-06T19:39:59.650Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925",
       "quote": "The gatekeeper shall allow and technically enable the installation and effective use of third-party software applications or software application stores using, or interoperating with, its operating system ... The gatekeeper shall not be prevented from taking, to the extent that they are strictly necessary and proportionate, measures to ensure that third-party software applications or software application stores do not endanger the integrity of the hardware or operating system provided by the gatekeeper, provided that such measures are duly justified by the gatekeeper.",
       "label": "Digital Markets Act, Art. 6(4)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:32.303Z",
-      "foundAt": "2026-11-06T19:27:32.303Z"
+      "checkedAt": "2026-11-06T19:39:59.650Z",
+      "foundAt": "2026-11-06T19:39:59.650Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925",
       "quote": "The gatekeeper shall not be prevented from taking strictly necessary and proportionate measures to ensure that interoperability does not compromise the integrity of the operating system, virtual assistant, hardware or software features provided by the gatekeeper, provided that such measures are duly justified by the gatekeeper.",
       "label": "Digital Markets Act, Regulation (EU) 2022/1925, Art. 6(7), second subparagraph",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:32.303Z",
-      "foundAt": "2026-11-06T19:27:32.303Z"
+      "checkedAt": "2026-11-06T19:39:59.650Z",
+      "foundAt": "2026-11-06T19:39:59.650Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2065",
       "quote": "Further, this Regulation does not require providers of online platforms or of online search engines to perform specific tracking of individuals online.",
       "label": "Digital Services Act, Regulation (EU) 2022/2065, Recital 77",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:32.790Z",
-      "foundAt": "2026-11-06T19:27:32.790Z"
+      "checkedAt": "2026-11-06T19:40:00.236Z",
+      "foundAt": "2026-11-06T19:40:00.236Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2065",
       "quote": "Providers of online platforms shall not present advertisements to recipients of the service based on profiling as defined in Article 4, point (4), of Regulation (EU) 2016/679 using special categories of personal data referred to in Article 9(1) of Regulation (EU) 2016/679.",
       "label": "Digital Services Act, Regulation (EU) 2022/2065, Art. 26(3)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:32.790Z",
-      "foundAt": "2026-11-06T19:27:32.790Z"
+      "checkedAt": "2026-11-06T19:40:00.236Z",
+      "foundAt": "2026-11-06T19:40:00.236Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114",
       "quote": "an assessment of the development of decentralised-finance in markets in crypto-assets and of the appropriate regulatory treatment of decentralised crypto-asset systems without an issuer or crypto-asset service provider, including an assessment of the necessity and feasibility of regulating decentralised finance;",
       "label": "Regulation (EU) 2023/1114 on markets in crypto-assets, Art. 142(2)(a)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:33.217Z",
-      "foundAt": "2026-11-06T19:27:33.217Z"
+      "checkedAt": "2026-11-06T19:40:00.725Z",
+      "foundAt": "2026-11-06T19:40:00.725Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114",
       "quote": "Upon request by a holder of an e-money token, the issuer of that e-money token shall redeem it, at any time and at par value, by paying in funds, other than electronic money, the monetary value of the e-money token held to the holder of the e-money token.",
       "label": "Regulation (EU) 2023/1114 on markets in crypto-assets, Art. 49(4)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:33.217Z",
-      "foundAt": "2026-11-06T19:27:33.217Z"
+      "checkedAt": "2026-11-06T19:40:00.725Z",
+      "foundAt": "2026-11-06T19:40:00.725Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114",
       "quote": "Where crypto-asset services are provided in a fully decentralised manner without any intermediary, they should not fall within the scope of this Regulation.",
       "label": "Regulation (EU) 2023/1114 on markets in crypto-assets, Recital 22",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:33.217Z",
-      "foundAt": "2026-11-06T19:27:33.217Z"
+      "checkedAt": "2026-11-06T19:40:00.725Z",
+      "foundAt": "2026-11-06T19:40:00.725Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024L1799",
       "quote": "Manufacturers shall not use any contractual clauses, hardware or software techniques that impede the repair of goods covered by Union legal acts listed in Annex II unless justified by legitimate and objective factors including the protection of intellectual property rights under Union and national law.",
       "label": "Directive (EU) 2024/1799, Art. 5(6)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:33.623Z",
-      "foundAt": "2026-11-06T19:27:33.623Z"
+      "checkedAt": "2026-11-06T19:40:01.128Z",
+      "foundAt": "2026-11-06T19:40:01.128Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1183",
       "quote": "Qualified certificates for website authentication issued in accordance with paragraph 1 of this Article shall be recognised by providers of web-browsers. [Recital 65:] The obligation of recognition ... does not affect the freedom of providers of web-browsers to ensure web security, domain authentication and the encryption of web traffic in a manner and by means of technology that they consider to be the most appropriate.",
       "label": "eIDAS 2.0, Art. 45(1a), Art. 45a",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:34.010Z",
-      "foundAt": "2026-11-06T19:27:34.010Z"
+      "checkedAt": "2026-11-06T19:40:01.505Z",
+      "foundAt": "2026-11-06T19:40:01.505Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689",
       "quote": "To the extent that it is strictly necessary for the purpose of ensuring bias detection and correction in relation to the high-risk AI systems ... the providers of such systems may exceptionally process special categories of personal data, subject to appropriate safeguards ...",
       "label": "AI Act, Art. 10(5)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:34.392Z",
-      "foundAt": "2026-11-06T19:27:34.392Z"
+      "checkedAt": "2026-11-06T19:40:01.923Z",
+      "foundAt": "2026-11-06T19:40:01.923Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62016CJ0434",
       "quote": "Of course, the right of rectification provided for in Article 12(b) of Directive 95/46 cannot enable a candidate to 'correct', a posteriori, answers that are 'incorrect'. ... the assessment of whether personal data is accurate and complete must be made in the light of the purpose for which that data was collected.",
       "label": "Nowak, C-434/16 (20 December 2017), paras. 52-53",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:34.759Z",
-      "foundAt": "2026-11-06T19:27:34.759Z"
+      "checkedAt": "2026-11-06T19:40:02.303Z",
+      "foundAt": "2026-11-06T19:40:02.303Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62018CJ0311",
@@ -287,416 +279,427 @@
       "quote": "[C-311/18, operative part 3:] unless there is a valid European Commission adequacy decision, the competent supervisory authority is required to suspend or prohibit a transfer of data to a third country pursuant to standard data protection clauses ... [GDPR Art. 48:] Any judgment of a court or tribunal and any decision of an administrative authority of a third country requiring a controller or processor to transfer or disclose personal data may only be recognised or enforceable in any manner if based on an international agreement",
       "label": "Schrems II, C-311/18 (Schrems II); GDPR Arts. 46, 48",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:35.407Z",
-      "foundAt": "2026-11-06T19:27:35.407Z"
+      "checkedAt": "2026-11-06T19:40:02.706Z",
+      "foundAt": "2026-11-06T19:40:02.706Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62018CJ0511",
       "quote": "[C-511/18, operative part 1:] must be interpreted as precluding legislative measures which, for the purposes laid down in Article 15(1), provide, as a preventive measure, for the general and indiscriminate retention of traffic and location data.",
       "label": "Digital Rights Ireland, Tele2, La Quadrature, C-293/12 & C-594/12; C-203/15 & C-698/15; C-511/18, C-512/18 & C-520/18; C-140/20; C-793/19 & C-794/19",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:36.051Z",
-      "foundAt": "2026-11-06T19:27:36.051Z"
+      "checkedAt": "2026-11-06T19:40:03.103Z",
+      "foundAt": "2026-11-06T19:40:03.103Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62020CJ0124",
       "quote": "must be interpreted as prohibiting persons referred to in Article 11 of Regulation No 2271/96, as amended, from complying with the requirements or prohibitions laid down in the laws specified in the annex to that regulation, even in the absence of an order directing compliance issued by the administrative or judicial authorities of the third countries which adopted those laws.",
       "label": "CJEU C-124/20 Bank Melli Iran v Telekom Deutschland (Grand Chamber, 2021), Ruling, point 1",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:36.450Z",
-      "foundAt": "2026-11-06T19:27:36.450Z"
+      "checkedAt": "2026-11-06T19:40:03.460Z",
+      "foundAt": "2026-11-06T19:40:03.460Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62020CJ0184",
       "quote": "the publication, on the website of the public authority ... of personal data that are liable to disclose indirectly the sexual orientation of a natural person constitutes processing of special categories of personal data, for the purpose of those provisions.",
       "label": "CJEU, Case C-184/20 OT v Vyriausioji tarnybinės etikos komisija, Judgment of 1 August 2022, operative part, point 2",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:36.833Z",
-      "foundAt": "2026-11-06T19:27:36.833Z"
+      "checkedAt": "2026-11-06T19:40:03.833Z",
+      "foundAt": "2026-11-06T19:40:03.833Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62021CJ0252",
       "quote": "must be regarded as ‘processing of special categories of personal data’ within the meaning of that provision, which is in principle prohibited, subject to the derogations provided for in Article 9(2), where that data processing allows information falling within one of those categories to be revealed, irrespective of whether that information concerns a user of that network or any other natural person",
       "label": "CJEU C-252/21, C-184/20",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:37.199Z",
-      "foundAt": "2026-11-06T19:27:37.199Z"
+      "checkedAt": "2026-11-06T19:40:04.211Z",
+      "foundAt": "2026-11-06T19:40:04.211Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62021CJ0634",
       "quote": "the automated establishment, by a credit information agency, of a probability value based on personal data relating to a person and concerning his or her ability to meet payment commitments in the future constitutes 'automated individual decision-making' within the meaning of that provision, where a third party, to which that probability value is transmitted, draws strongly on that probability value",
       "label": "SCHUFA (C-634/21), C-634/21 (7 December 2023), on GDPR Art. 22(1)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:37.588Z",
-      "foundAt": "2026-11-06T19:27:37.588Z"
+      "checkedAt": "2026-11-06T19:40:04.560Z",
+      "foundAt": "2026-11-06T19:40:04.560Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62022CJ0203",
       "quote": "the data subject may require the controller, as ‘meaningful information about the logic involved’, to explain, by means of relevant information and in a concise, transparent, intelligible and easily accessible form, the procedure and principles actually applied in order to use, by automated means, the personal data concerning that person with a view to obtaining a specific result",
       "label": "CJEU C-203/22 Dun & Bradstreet Austria, 27 Feb 2025",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:38.010Z",
-      "foundAt": "2026-11-06T19:27:38.010Z"
+      "checkedAt": "2026-11-06T19:40:04.927Z",
+      "foundAt": "2026-11-06T19:40:04.927Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32002L0058",
       "quote": "Member States may adopt legislative measures to restrict the scope of the rights and obligations provided for in Article 5, Article 6, Article 8(1), (2), (3) and (4), and Article 9 of this Directive when such restriction constitutes a necessary, appropriate and proportionate measure within a democratic society ... To this end, Member States may, inter alia, adopt legislative measures providing for the retention of data for a limited period justified on the grounds laid down in this paragraph.",
       "label": "Directive 2002/58/EC (ePrivacy), Art. 15(1)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:38.392Z",
-      "foundAt": "2026-11-06T19:27:38.392Z"
+      "checkedAt": "2026-11-06T19:40:05.289Z",
+      "foundAt": "2026-11-06T19:40:05.289Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679",
       "quote": "Any judgment of a court or tribunal and any decision of an administrative authority of a third country requiring a controller or processor to transfer or disclose personal data may only be recognised or enforceable in any manner if based on an international agreement, such as a mutual legal assistance treaty, in force between the requesting third country and the Union or a Member State, without prejudice to other grounds for transfer pursuant to this Chapter.",
       "label": "General Data Protection Regulation, Art. 48",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:38.799Z",
-      "foundAt": "2026-11-06T19:27:38.799Z"
+      "checkedAt": "2026-11-06T19:40:05.696Z",
+      "foundAt": "2026-11-06T19:40:05.696Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32019L0882",
       "quote": "The provision of services in order to maximise their foreseeable use by persons with disabilities, shall be achieved by including functions, practices, policies and procedures and alterations in the operation of the service targeted to address the needs of persons with disabilities and ensure interoperability with assistive technologies:",
       "label": "Accessibility and interoperability obligations, Directive (EU) 2019/882 (European Accessibility Act), Annex I, Section IV",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:39.185Z",
-      "foundAt": "2026-11-06T19:27:39.185Z"
+      "checkedAt": "2026-11-06T19:40:06.119Z",
+      "foundAt": "2026-11-06T19:40:06.119Z"
     },
     {
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32020H0518",
       "quote": "(5) sharing data with relevant epidemiological public bodies and public health research institutions, including aggregated data to ECDC.",
       "label": "Public health authorities, Commission Recommendation (EU) 2020/518, point 13(5) (non-binding)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:39.601Z",
-      "foundAt": "2026-11-06T19:27:39.601Z"
+      "checkedAt": "2026-11-06T19:40:06.469Z",
+      "foundAt": "2026-11-06T19:40:06.469Z"
     },
     {
       "url": "https://hansard.parliament.uk/Lords/2023-09-06/debates/4AC6A32E-0C53-46C7-A714-AD4165C484D7/OnlineSafetyBill",
       "quote": "A notice can be issued only where technically feasible and where technology has been accredited as meeting minimum standards of accuracy in detecting only child sexual abuse and exploitation content.",
       "label": "HL Deb 6 Sept 2023, col 458 (Lord Parkinson of Whitley Bay)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:30.432Z",
-      "foundAt": "2026-11-06T19:27:30.432Z"
+      "checkedAt": "2026-11-06T19:39:57.998Z",
+      "foundAt": "2026-11-06T19:39:57.998Z"
     },
     {
       "url": "https://home.treasury.gov/news/press-releases/sb0057",
       "quote": "Based on the Administration's review of the novel legal and policy issues raised by use of financial sanctions",
       "label": "US Treasury press release sb0057, Tornado Cash delisting (Mar. 21, 2025), Press release sb0057",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:30.596Z",
-      "foundAt": "2026-11-06T19:27:30.596Z"
+      "checkedAt": "2026-11-06T19:39:58.417Z",
+      "foundAt": "2026-11-06T19:39:58.417Z"
     },
     {
       "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=56.101",
       "quote": "Segregate medical information related to gender affirming care, abortion and abortion-related services, and contraception from the rest of the patient's record.",
       "label": "California Civil Code § 56.101 (as amended by AB 352 and AB 3281), § 56.101(c)(1)(A)-(D)",
-      "status": "blocked",
-      "detail": "HTTP 403",
-      "checkedAt": "2026-11-06T19:27:30.661Z"
+      "status": "current",
+      "detail": "read from the Internet Archive capture",
+      "checkedAt": "2026-01-02T19:57:01.000Z",
+      "foundAt": "2026-01-02T19:57:01.000Z"
     },
     {
       "url": "https://olis.oregonlegislature.gov/liz/2024R1/Downloads/MeasureDocument/SB1596/Enrolled",
       "quote": "For consumer electronic equipment that is manufactured for the first time, and first sold or used in this state, after January 1, 2025, an original equipment manufacturer may not use parts pairing to: (A) Prevent or inhibit an independent repair provider or an owner from installing or enabling the function of an otherwise functional replacement part or a component of consumer electronic equipment, including a replacement part or a component that the original equipment manufacturer has not approved;",
       "label": "US state right-to-repair statutes, Or. SB 1596 (2024), Or. Laws 2024 ch. 69, § 1(2)(b)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.351Z",
-      "foundAt": "2026-11-06T19:27:31.351Z"
+      "checkedAt": "2026-11-06T19:39:59.842Z",
+      "foundAt": "2026-11-06T19:39:59.842Z"
     },
     {
       "url": "https://redistricting.lls.edu/wp-content/uploads/AL-commerce2-20210629-motion-deny-pi.pdf",
       "quote": "After the benefit of oral argument, the court concludes that Plaintiffs' motion for a preliminary injunction and petition for writ of mandamus are due to be DENIED.",
       "label": "Alabama v. Commerce, Alabama v. U.S. Dep't of Commerce, No. 3:21-cv-211 (M.D. Ala. June 29, 2021) (three-judge court), Doc. 139",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.671Z",
-      "foundAt": "2026-11-06T19:27:31.671Z"
+      "checkedAt": "2026-11-06T19:40:00.013Z",
+      "foundAt": "2026-11-06T19:40:00.013Z"
     },
     {
       "url": "https://support.apple.com/en-us/122234",
       "quote": "Apple can no longer offer Advanced Data Protection in the United Kingdom to new users",
       "label": "Apple support article 122234",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:31.795Z",
-      "foundAt": "2026-11-06T19:27:31.795Z"
+      "checkedAt": "2026-11-06T19:40:00.259Z",
+      "foundAt": "2026-11-06T19:40:00.259Z"
     },
     {
       "url": "https://tile.loc.gov/storage-services/service/ll/usrep/usrep462/usrep462725/usrep462725.pdf",
       "quote": "We thus reaffirm that there are no de minimis population variations, which could practicably be avoided, but which nonetheless meet the standard of Art. I, §2, without justification.",
       "label": "Karcher v. Daggett, 462 U.S. 725 (1983)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:32.024Z",
-      "foundAt": "2026-11-06T19:27:32.024Z"
+      "checkedAt": "2026-11-06T19:40:00.947Z",
+      "foundAt": "2026-11-06T19:40:00.947Z"
     },
     {
-      "url": "https://www.aicpa.org/content/dam/aicpa/interestareas/frc/assuranceadvisoryservices/downloadabledocuments/trust-services-criteria.pdf",
-      "quote": "CC7.2 The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events.",
+      "url": "https://web.archive.org/web/20210923033012/https://www.aicpa.org/content/dam/aicpa/interestareas/frc/assuranceadvisoryservices/downloadabledocuments/trust-services-criteria.pdf",
+      "quote": "[CC7.2] The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events.",
       "label": "SOC 2, AICPA 2017 Trust Services Criteria, CC7.2 (points of focus)",
-      "status": "unreachable",
-      "detail": "HTTP 404",
-      "checkedAt": "2026-11-06T19:27:32.525Z"
+      "status": "current",
+      "checkedAt": "2026-11-06T19:40:01.276Z",
+      "foundAt": "2026-11-06T19:40:01.276Z"
+    },
+    {
+      "url": "https://withpci.pages.dev/requirements/10/10.2/10.2.2",
+      "secondUrl": "https://withpci.pages.dev/requirements/10/10.5/10.5.1",
+      "quote": "10.2.2 Audit logs record the following details for each auditable event: User identification. Type of event. Date and time. Success and failure indication. Origination of event. Identity or name of affected data, system component, resource, or service ... 10.5.1 Retain audit log history for at least 12 months, with at least the most recent three months immediately available for analysis.",
+      "label": "PCI DSS, PCI DSS v4.0.1, Req. 10.2.2, 10.5.1",
+      "status": "current",
+      "checkedAt": "2026-11-06T19:40:01.148Z",
+      "foundAt": "2026-11-06T19:40:01.148Z"
     },
     {
       "url": "https://www.ca5.uscourts.gov/opinions/pub/23/23-50669-CV0.pdf",
       "quote": "The immutable smart contracts at issue in this appeal are not property because they are not capable of being owned.",
       "label": "Van Loon v. Department of the Treasury, No. 23-50669 (5th Cir. 2024), Opinion, Nov. 26, 2024",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:33.122Z",
-      "foundAt": "2026-11-06T19:27:33.122Z"
+      "checkedAt": "2026-11-06T19:40:02.537Z",
+      "foundAt": "2026-11-06T19:40:02.537Z"
     },
     {
       "url": "https://www.cac.gov.cn/2025-05/23/c_1749711107835487.htm",
       "quote": "互联网平台接入公共服务后，用户选择使用网号、网证登记、核验真实身份信息并通过验证的，互联网平台不得要求用户另行提供明文身份信息，法律、行政法规另有规定或者用户同意提供的除外。",
       "label": "Measures for the National Network Identity Authentication Public Service (MPS Order No. 173), Arts. 2, 7",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:34.916Z",
-      "foundAt": "2026-11-06T19:27:34.916Z"
+      "checkedAt": "2026-11-06T19:40:01.995Z",
+      "foundAt": "2026-11-06T19:40:01.995Z"
     },
     {
       "url": "https://www.cert-in.org.in/PDF/CERT-In_Directions_70B_28.04.2022.pdf",
       "quote": "Virtual Private Network Service (VPN Service) providers, shall be required to register the following accurate information which must be maintained by them for a period of 5 years or longer duration as mandated by the law after any cancellation or withdrawal of the registration",
       "label": "CERT-In Directions No. 20(3)/2022-CERT-In of 28.04.2022 under IT Act 2000 s. 70B(6), Para (v), items a-g; para (iv)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:39.595Z",
-      "foundAt": "2026-11-06T19:27:39.595Z"
+      "checkedAt": "2026-11-06T19:40:06.362Z",
+      "foundAt": "2026-11-06T19:40:06.362Z"
     },
     {
       "url": "https://www.cert-in.org.in/PDF/FAQs_on_CyberSecurityDirections_May2022.pdf",
       "quote": "VPN Service provider refer to an entity that provide “Internet proxy like services” through the use of VPN technologies, standard or proprietary, to general Internet subscribers/users.",
       "label": "CERT-In FAQs on Cyber Security Directions of 28.04.2022 (May 2022), Q34; Q35",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:43.237Z",
-      "foundAt": "2026-11-06T19:27:43.237Z"
+      "checkedAt": "2026-11-06T19:40:10.044Z",
+      "foundAt": "2026-11-06T19:40:10.044Z"
     },
     {
       "url": "https://www.cnil.fr/sites/default/files/atoms/files/blockchain_en.pdf",
       "quote": "when the data recorded on the blockchain is a commitment, a hash generated by a keyed- hash function or a ciphertext obtained through \"state of the art\" algorithms and keys, the data controller can make the data practically inaccessible, and therefore move closer to the effects of data erasure.",
       "label": "CNIL 2018 guidance on key destruction",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:36.303Z",
-      "foundAt": "2026-11-06T19:27:36.303Z"
+      "checkedAt": "2026-11-06T19:40:03.411Z",
+      "foundAt": "2026-11-06T19:40:03.411Z"
     },
     {
       "url": "https://www.consultant.ru/document/cons_doc_LAW_305/030ee6c590df5a57ef7c36c7cc5c6a59e5373ecc/",
       "quote": "При продаже и использовании отдельных видов технически сложных товаров с предварительно установленными программами для электронных вычислительных машин, включая единый магазин приложений, обеспечивается отсутствие следующих условий: 1) приводящих к ограничению возможности приобретения (установки) программ для электронных вычислительных машин с использованием единого магазина приложений;",
       "label": "Law No. 2300-1 Art. 4(4.1)-(4.2), consolidated text via КонсультантПлюс",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:37.229Z",
-      "foundAt": "2026-11-06T19:27:37.229Z"
+      "checkedAt": "2026-11-06T19:40:04.118Z",
+      "foundAt": "2026-11-06T19:40:04.118Z"
     },
     {
       "url": "https://www.consultant.ru/document/cons_doc_LAW_455948/707abba3c19e4abd272abf78857085e101af14ee/",
       "quote": "Оборудование беспроводной связи для бытового использования, персональные электронные вычислительные машины, имеющие сенсорный экран, обладающие двумя и более функциями, с предварительно установленными на них программами для электронных вычислительных машин, имеющие возможность установки таких программ из магазинов приложений для операционных систем, на основе которых функционирует такое оборудование (смартфоны, планшетные компьютеры).",
       "label": "Government Decree No. 1867 of 18.11.2020, device list item 1",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:41.522Z",
-      "foundAt": "2026-11-06T19:27:41.522Z"
+      "checkedAt": "2026-11-06T19:40:04.856Z",
+      "foundAt": "2026-11-06T19:40:04.856Z"
     },
     {
       "url": "https://www.consultant.ru/document/cons_doc_LAW_61798/9ab7abe2b9fe407f507610f7e6e14a951d575585/",
       "quote": "4) обеспечивать конфиденциальность передаваемых электронных сообщений;",
       "label": "Federal Law No. 149-FZ of 27.07.2006 On Information, Information Technologies and Protection of Information, Art. 10.1(4.2)(4), inserted by Federal Law No. 241-FZ of 29.07.2017",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:41.898Z",
-      "foundAt": "2026-11-06T19:27:41.898Z"
+      "checkedAt": "2026-11-06T19:40:05.093Z",
+      "foundAt": "2026-11-06T19:40:05.093Z"
     },
     {
       "url": "https://www.consultant.ru/document/cons_doc_LAW_61798/9ab7abe2b9fe407f507610f7e6e14a951d575585/",
       "quote": "Организатор распространения информации в сети \"Интернет\" обязан при использовании для приема, передачи, доставки и (или) обработки электронных сообщений пользователей сети \"Интернет\" дополнительного кодирования электронных сообщений и (или) при предоставлении пользователям сети \"Интернет\" возможности дополнительного кодирования электронных сообщений представлять в федеральный орган исполнительной власти в области обеспечения безопасности информацию, необходимую для декодирования принимаемых, передаваемых, доставляемых и (или) обрабатываемых электронных сообщений.",
       "label": "149-FZ Art. 10.1, consolidated text via КонсультантПлюс",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:41.898Z",
-      "foundAt": "2026-11-06T19:27:41.898Z"
+      "checkedAt": "2026-11-06T19:40:05.093Z",
+      "foundAt": "2026-11-06T19:40:05.093Z"
     },
     {
       "url": "https://www.ecfr.gov/current/title-17/section-240.17a-4",
       "quote": "An electronic recordkeeping system must: (i)(A) Preserve a record for the duration of its applicable retention period in a manner that maintains a complete time-stamped audit trail that includes: (1) All modifications to and deletions of the record ... or (B) Preserve the records exclusively in a non-rewriteable, non-erasable format;",
       "label": "SEC Rule 17a-4, 17 CFR 240.17a-4(b), (f)(2)(i)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:40.126Z",
-      "foundAt": "2026-11-06T19:27:40.126Z"
+      "checkedAt": "2026-11-06T19:40:04.140Z",
+      "foundAt": "2026-11-06T19:40:04.140Z"
     },
     {
       "url": "https://www.ecfr.gov/current/title-31/subtitle-B/chapter-V/part-560/subpart-B/section-560.215",
       "quote": "Except as otherwise authorized pursuant to this part, an entity that is owned or controlled by a United States person and established or maintained outside the United States is prohibited from knowingly engaging in any transaction, directly or indirectly, with the Government of Iran or any person subject to the jurisdiction of the Government of Iran that would be prohibited pursuant to this part if engaged in by a United States person or in the United States.",
       "label": "Iranian Transactions and Sanctions Regulations, 31 CFR part 560, 31 CFR 560.215(a)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:40.406Z",
-      "foundAt": "2026-11-06T19:27:40.406Z"
+      "checkedAt": "2026-11-06T19:40:04.597Z",
+      "foundAt": "2026-11-06T19:40:04.597Z"
     },
     {
       "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-171/subpart-A/section-171.103",
       "quote": "Information blocking means a practice that except as required by law or covered by an exception set forth in subparts B, C, or D of this part, is likely to interfere with access, exchange, or use of electronic health information",
       "label": "45 CFR part 171, 45 CFR 171.103(a)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:40.770Z",
-      "foundAt": "2026-11-06T19:27:40.770Z"
+      "checkedAt": "2026-11-06T19:40:04.977Z",
+      "foundAt": "2026-11-06T19:40:04.977Z"
     },
     {
       "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-171/subpart-B/section-171.206",
       "quote": "An actor's practice that is implemented to reduce potential exposure to legal action will not be considered information blocking when the practice satisfies the condition in paragraph (a)",
       "label": "45 CFR 171.206 (Protecting Care Access exception)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:41.053Z",
-      "foundAt": "2026-11-06T19:27:41.053Z"
+      "checkedAt": "2026-11-06T19:40:05.294Z",
+      "foundAt": "2026-11-06T19:40:05.294Z"
     },
     {
       "url": "https://www.edpb.europa.eu/system/files/2026-07/edpb_guidelines_202502_blockchain_v2_en.pdf",
       "quote": "The EDPB recalls that encrypted personal data is still personal data and encryption does not remove the need for GDPR compliance. Further, even state-of-the-art encryption perfectly implemented will be overtaken by time if the blockchain is retained indefinitely.",
       "label": "EDPB position on crypto-shredding",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:42.330Z",
-      "foundAt": "2026-11-06T19:27:42.330Z"
+      "checkedAt": "2026-11-06T19:40:06.384Z",
+      "foundAt": "2026-11-06T19:40:06.384Z"
     },
     {
       "url": "https://www.fatf-gafi.org/content/dam/fatf-gafi/recommendations/FATF%20Recommendations%202012.pdf",
-      "quote": "Countries should ensure that originating VASPs obtain and hold required and accurate originator information and required beneficiary information on virtual asset transfers, submit the above information to the beneficiary VASP or financial institution (if any) immediately and securely ... [fn 47:] It is not necessary for this information to be attached directly to the virtual asset transfers.",
+      "quote": "Countries should ensure that originating VASPs obtain and hold required and accurate originator information and required beneficiary information [fn 46] on virtual asset transfers, submit [fn 47] the above information to the beneficiary VASP or financial institution (if any) immediately and securely ... [fn 47:] It is not necessary for this information to be attached directly to the virtual asset transfers.",
       "label": "FATF Travel Rule, FATF Recommendation 16 (renamed 'Payment transparency', June 2025) and INR.15 para 7(b), fn 47",
-      "status": "blocked",
-      "detail": "HTTP 403",
-      "checkedAt": "2026-11-06T19:27:41.980Z"
+      "status": "current",
+      "detail": "read from the Internet Archive capture",
+      "checkedAt": "2026-10-17T14:32:33.000Z",
+      "foundAt": "2026-10-17T14:32:33.000Z"
     },
     {
       "url": "https://www.ftc.gov/system/files/documents/cases/1923172_-_everalbum_decision_final.pdf",
       "quote": "Within ninety (90) days after the issuance of this Order, delete or destroy any Affected Work Product ... “Affected Work Product” means any models or algorithms developed in whole or in part using Biometric Information Respondent collected from Users of the “Ever” mobile application.",
       "label": "FTC deletion orders, In re Everalbum, Inc., FTC No. 192-3172, Decision and Order (May 2021) § III.C; U.S. v. Kurbo, Inc. & WW Int'l (N.D. Cal. 2022), Stipulated Order § D",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:42.222Z",
-      "foundAt": "2026-11-06T19:27:42.222Z"
+      "checkedAt": "2026-11-06T19:40:06.552Z",
+      "foundAt": "2026-11-06T19:40:06.552Z"
     },
     {
       "url": "https://www.gov.cn/zhengce/content/202310/content_6911288.htm",
       "quote": "网络游戏服务提供者应当通过统一的未成年人网络游戏电子身份认证系统等必要手段验证未成年人用户真实身份信息。",
       "label": "Regulations on the Protection of Minors in Cyberspace, Art. 46",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:43.196Z",
-      "foundAt": "2026-11-06T19:27:43.196Z"
+      "checkedAt": "2026-11-06T19:40:07.031Z",
+      "foundAt": "2026-11-06T19:40:07.031Z"
     },
     {
       "url": "https://www.gov.cn/zhengce/zhengceku/2021-09/01/content_5634661.htm",
       "quote": "所有网络游戏必须接入国家新闻出版署网络游戏防沉迷实名验证系统，所有网络游戏用户必须使用真实有效身份信息进行游戏账号注册并登录网络游戏，网络游戏企业不得以任何形式（含游客体验模式）向未实名注册和登录的用户提供游戏服务。",
       "label": "NPPA Notice 国新出发〔2021〕14号, items 1-2",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:43.239Z",
-      "foundAt": "2026-11-06T19:27:43.239Z"
+      "checkedAt": "2026-11-06T19:40:07.075Z",
+      "foundAt": "2026-11-06T19:40:07.075Z"
     },
     {
       "url": "https://www.govinfo.gov/content/pkg/BILLS-119s1582enr/html/BILLS-119s1582enr.htm",
       "quote": "It shall be unlawful for any digital asset service provider to offer, sell, or otherwise make available in the United States a payment stablecoin issued by a foreign payment stablecoin issuer unless the foreign payment stablecoin issuer has the technological capability to comply, and will comply, with the terms of any lawful order and any reciprocal arrangement pursuant to section 18.",
       "label": "GENIUS Act, S. 1582 (119th Cong.), enrolled, § 3(b)(2); § 2(16) (lawful order)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:42.516Z",
-      "foundAt": "2026-11-06T19:27:42.516Z"
+      "checkedAt": "2026-11-06T19:40:06.698Z",
+      "foundAt": "2026-11-06T19:40:06.698Z"
     },
     {
       "url": "https://www.govinfo.gov/content/pkg/BILLS-119s1582enr/html/BILLS-119s1582enr.htm",
       "quote": "technical capabilities, policies, and procedures to block, freeze, and reject specific or impermissible transactions that violate Federal or State laws, rules, or regulations;",
       "label": "GENIUS Act, S. 1582 (119th Cong.), enrolled, § 4(a)(5)(A)(iv)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:42.516Z",
-      "foundAt": "2026-11-06T19:27:42.516Z"
+      "checkedAt": "2026-11-06T19:40:06.698Z",
+      "foundAt": "2026-11-06T19:40:06.698Z"
     },
     {
       "url": "https://www.law.cornell.edu/rules/frcp/rule_37",
       "quote": "If electronically stored information that should have been preserved in the anticipation or conduct of litigation is lost because a party failed to take reasonable steps to preserve it, and it cannot be restored or replaced through additional discovery, the court: (1) upon finding prejudice to another party ... may order measures no greater than necessary to cure the prejudice; or (2) only upon finding that the party acted with the intent to deprive ...",
       "label": "Federal Rules of Civil Procedure, Fed. R. Civ. P. 37(e) (sanctions for lost ESI); preservation duty is common law",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:42.782Z",
-      "foundAt": "2026-11-06T19:27:42.782Z"
+      "checkedAt": "2026-11-06T19:40:06.972Z",
+      "foundAt": "2026-11-06T19:40:06.972Z"
     },
     {
       "url": "https://www.law.cornell.edu/uscode/text/13/141",
       "quote": "Tabulations of population for the areas identified in any plan approved by the Secretary shall be completed by him as expeditiously as possible after the decennial census date and reported to the Governor of the State involved and to the officers or public bodies having responsibility for legislative apportionment or districting of such State,",
       "label": "PL 94-171, 13 U.S.C. § 141(c) (Pub. L. 94-171)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:42.831Z",
-      "foundAt": "2026-11-06T19:27:42.831Z"
+      "checkedAt": "2026-11-06T19:40:07.014Z",
+      "foundAt": "2026-11-06T19:40:07.014Z"
     },
     {
       "url": "https://www.law.cornell.edu/uscode/text/13/9",
       "quote": "(a) Neither the Secretary, nor any other officer or employee of the Department of Commerce or bureau or agency thereof ... may ... (2) make any publication whereby the data furnished by any particular establishment or individual under this title can be identified;",
       "label": "Title 13, 13 U.S.C. § 9(a)(2)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:42.892Z",
-      "foundAt": "2026-11-06T19:27:42.892Z"
+      "checkedAt": "2026-11-06T19:40:07.055Z",
+      "foundAt": "2026-11-06T19:40:07.055Z"
     },
     {
       "url": "https://www.law.cornell.edu/uscode/text/18/2713",
       "quote": "A provider of electronic communication service or remote computing service shall comply with the obligations of this chapter to preserve, backup, or disclose the contents of a wire or electronic communication and any record or other information pertaining to a customer or subscriber within such provider's possession, custody, or control, regardless of whether such communication, record, or other information is located within or outside of the United States.",
       "label": "CLOUD Act, 18 U.S.C. § 2713 (CLOUD Act § 103(a)(1), Pub. L. 115-141), applied through § 2703 warrants",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:42.969Z",
-      "foundAt": "2026-11-06T19:27:42.969Z"
+      "checkedAt": "2026-11-06T19:40:07.094Z",
+      "foundAt": "2026-11-06T19:40:07.094Z"
     },
     {
       "url": "https://www.law.cornell.edu/uscode/text/31/5318",
       "quote": "An assertion that compliance with a subpoena described in clause (i) would conflict with a provision of foreign secrecy or confidentiality law shall not be a sole basis for quashing or modifying the subpoena.",
       "label": "31 U.S.C. § 5318(k)(3), 31 U.S.C. § 5318(k)(3)(A)(i), (iv)(II)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:43.019Z",
-      "foundAt": "2026-11-06T19:27:43.019Z"
+      "checkedAt": "2026-11-06T19:40:07.157Z",
+      "foundAt": "2026-11-06T19:40:07.157Z"
     },
     {
       "url": "https://www.law.cornell.edu/uscode/text/50/1702",
       "quote": "investigate, block during the pendency of an investigation, regulate, direct and compel, nullify, void, prevent or prohibit, any acquisition, holding, withholding, use, transfer, withdrawal, transportation, importation or exportation of, or dealing in, or exercising any right, power, or privilege with respect to, or transactions involving, any property in which any foreign country or a national thereof has any interest by any person, or with respect to any property, subject to the jurisdiction of the United States",
       "label": "International Emergency Economic Powers Act, 50 U.S.C. § 1702, 50 U.S.C. § 1702(a)(1)(B)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:43.062Z",
-      "foundAt": "2026-11-06T19:27:43.062Z"
+      "checkedAt": "2026-11-06T19:40:07.202Z",
+      "foundAt": "2026-11-06T19:40:07.202Z"
     },
     {
       "url": "https://www.legislation.gov.uk/ukpga/2016/25/section/253",
       "quote": "obligations relating to the removal by a relevant operator of electronic protection applied by or on behalf of that operator to any communications or data;",
       "label": "Investigatory Powers Act 2016, s. 253(5)(c)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:43.138Z",
-      "foundAt": "2026-11-06T19:27:43.138Z"
+      "checkedAt": "2026-11-06T19:40:06.836Z",
+      "foundAt": "2026-11-06T19:40:06.836Z"
     },
     {
       "url": "https://www.legislation.gov.uk/ukpga/2016/25/section/257",
       "quote": "Where this subsection applies to a person, the person must not make any relevant changes to telecommunications or postal services, or telecommunication systems, to which obligations imposed by the notice given under section 252 or 253 relate.",
       "label": "Investigatory Powers Act 2016 (as amended 2024), s. 257(3A)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:43.154Z",
-      "foundAt": "2026-11-06T19:27:43.154Z"
+      "checkedAt": "2026-11-06T19:40:06.851Z",
+      "foundAt": "2026-11-06T19:40:06.851Z"
     },
     {
       "url": "https://www.legislation.gov.uk/ukpga/2023/50/section/121",
       "quote": "use accredited technology to identify CSEA content, whether communicated publicly or privately by means of the service, and to swiftly take down that content",
       "label": "Online Safety Act, s.121(2)(a)(iii)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:43.166Z",
-      "foundAt": "2026-11-06T19:27:43.166Z"
+      "checkedAt": "2026-11-06T19:40:06.863Z",
+      "foundAt": "2026-11-06T19:40:06.863Z"
     },
     {
       "url": "https://www.legislation.gov.uk/ukpga/2023/50/section/81",
       "quote": "A duty to ensure, by the use of age verification or age estimation (or both), that children are not normally able to encounter content that is regulated provider pornographic content in relation to the service. (3) The age verification or age estimation must be of such a kind, and used in such a way, that it is highly effective at correctly determining whether or not a particular user is a child.",
       "label": "Age verification mandates, Online Safety Act 2023 (UK), s.81(2)-(3) (Part 5)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:43.180Z",
-      "foundAt": "2026-11-06T19:27:43.180Z"
+      "checkedAt": "2026-11-06T19:40:06.874Z",
+      "foundAt": "2026-11-06T19:40:06.874Z"
     },
     {
       "url": "https://www.meity.gov.in/static/uploads/2024/02/Information-Technology-Intermediary-Guidelines-and-Digital-Media-Ethics-Code-Rules-2021-updated-06.04.2023-.pdf",
       "quote": "Provided also that in complying with an order for identification of the first originator, no significant social media intermediary shall be required to disclose the contents of any electronic message, any other information related to the first originator, or any information related to its other users:",
       "label": "Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021, Rule 4(2), second proviso",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:43.620Z",
-      "foundAt": "2026-11-06T19:27:43.620Z"
+      "checkedAt": "2026-11-06T19:40:07.144Z",
+      "foundAt": "2026-11-06T19:40:07.144Z"
     },
     {
-      "url": "https://www.pcisecuritystandards.org/document_library/",
-      "quote": "10.2.2 Audit logs record the following details for each auditable event: User identification. Type of event. Date and time. Success and failure indication. Origination of event. Identity or name of affected data, system component, resource, or service ... 10.5.1 Retain audit log history for at least 12 months, with at least the most recent three months immediately available for analysis.",
-      "label": "PCI DSS, PCI DSS v4.0.1, Req. 10.2.2, 10.5.1",
-      "status": "blocked",
-      "detail": "download needs licence acceptance",
-      "checkedAt": "2026-11-06T19:27:43.238Z"
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1721915",
+      "quote": "WhatsApp's challenge, at the very last moment, and despite having sufficient time and opportunity available during consultation process and after the rules were enacted, to the Intermediary Guidelines is an unfortunate attempt to prevent the same from coming into effect.",
+      "label": "WhatsApp v Union of India, Delhi HC, 2021",
+      "status": "current",
+      "checkedAt": "2026-11-06T19:40:08.847Z",
+      "foundAt": "2026-11-06T19:40:08.847Z"
     },
     {
       "url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=11244&Mode=0",
       "quote": "All system providers shall ensure that the entire data relating to payment systems operated by them are stored in a system only in India. This data should include the full end-to-end transaction details / information collected / carried / processed as part of the message / payment instruction. For the foreign leg of the transaction, if any, the data can also be stored in the foreign country, if required.",
       "label": "RBI payments data mandate, RBI/2017-18/153 (Storage of Payment System Data), para 2(i)",
       "status": "current",
-      "checkedAt": "2026-11-06T19:27:44.564Z",
-      "foundAt": "2026-11-06T19:27:44.564Z"
+      "checkedAt": "2026-11-06T19:40:08.440Z",
+      "foundAt": "2026-11-06T19:40:08.440Z"
     }
   ]
 }

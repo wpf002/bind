@@ -30,7 +30,7 @@ export const draftRejections = all
 /**
  * Verifications for draft `sources` labels, keyed by exact label. Most reuse the instrument
  * check for the same text; the rest were read from the primary source on 2026-11-01.
- * "WhatsApp v Union of India, Delhi HC, 2021" was read from the court's case-status record on 2026-11-06.
+ * "WhatsApp v Union of India, Delhi HC, 2021" cites the Ministry's press release; the court's case-status record was read on 2026-11-06.
  * The N23-N24 labels were read by claude-fable-5-1 on 2026-11-06.
  */
 const v = (k: string): Verification => {
@@ -46,11 +46,11 @@ const also = (base: Verification, note: string): Verification => ({ ...base, not
 export const draftSourceVerifications: Record<string, Verification> = {
   "WhatsApp v Union of India, Delhi HC, 2021": {
     status: "verified",
-    url: "https://delhihighcourt.nic.in/app/get-case-type-status",
-    publisher: "High Court of Delhi",
-    quote: "W.P.(C) - 7284 / 2021 [PENDING] WHATSAPP LLC VS. UNION OF INDIA",
-    provision: "W.P.(C) 7284/2021",
-    note: "Case-status record read on 2026-11-06. Status pending, Court No. 1, last listed 11/08/2026, next date 17/11/2026. The judgments list for the case is empty. The search form needs a CAPTCHA, which the owner entered; result URLs are session-bound, so the URL is the search page. Filing and notice dates (May 2021, 27 Aug 2021) come from LiveLaw and Bar & Bench.",
+    url: "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1721915",
+    publisher: "Press Information Bureau, Government of India (Ministry of Electronics & IT)",
+    quote: "WhatsApp's challenge, at the very last moment, and despite having sufficient time and opportunity available during consultation process and after the rules were enacted, to the Intermediary Guidelines is an unfortunate attempt to prevent the same from coming into effect.",
+    provision: "MeitY press release of 26 May 2021 answering W.P.(C) 7284/2021",
+    note: "The Ministry's release answers WhatsApp's petition against rule 4(2) and doesn't give the case number. The Delhi High Court's case-status record for W.P.(C) 7284/2021, WHATSAPP LLC VS. UNION OF INDIA, was read on 2026-11-06: pending, Court No. 1, last listed 11/08/2026, next date 17/11/2026, no judgments. That record is at https://delhihighcourt.nic.in/app/get-case-type-status behind a CAPTCHA, which the owner entered, and its result URLs are session-bound, so the cited URL is the release. Filing and notice dates (May 2021, 27 Aug 2021) come from LiveLaw and Bar & Bench.",
     verifiedBy: "claude-fable-5-1", verifiedAt: "2026-11-06",
   },
   "45 CFR 171.206 (Protecting Care Access exception)": {

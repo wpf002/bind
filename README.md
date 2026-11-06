@@ -63,9 +63,9 @@ Run these from `packages/db` with the environment loaded (`set -a && source ../.
 
 | Result | Meaning |
 |---|---|
-| `current` | The quote is at the URL |
+| `current` | The quote is at the URL, or in the Internet Archive's latest capture of a URL that refuses scripts. The check date is then the capture date |
 | `changed` | An earlier run found the quote at the URL and this run didn't |
-| `blocked` | The publisher keeps the text from scripts: an HTTP 401 or 403, or a page listed in `SCRIPT_GATED` (CAPTCHA, licence step) |
+| `blocked` | The publisher refuses scripts (HTTP 401 or 403) and no Internet Archive capture holds the quote |
 | `unreachable` | The fetch failed another way, or the quote has never been found at the URL |
 
 Results are written to the `Citation` rows and to `packages/db/prisma/ledger/source-checks.json`. The seed re-applies that file, so commit it after a run. The script only reports. It never edits a case.

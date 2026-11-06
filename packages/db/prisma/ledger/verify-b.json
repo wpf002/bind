@@ -104,9 +104,9 @@
       "status": "corrected",
       "url": "https://www.fatf-gafi.org/content/dam/fatf-gafi/recommendations/FATF%20Recommendations%202012.pdf",
       "publisher": "FATF (read via Internet Archive copy, 'Updated June 2025')",
-      "quote": "Countries should ensure that originating VASPs obtain and hold required and accurate originator information and required beneficiary information on virtual asset transfers, submit the above information to the beneficiary VASP or financial institution (if any) immediately and securely ... [fn 47:] It is not necessary for this information to be attached directly to the virtual asset transfers.",
+      "quote": "Countries should ensure that originating VASPs obtain and hold required and accurate originator information and required beneficiary information [fn 46] on virtual asset transfers, submit [fn 47] the above information to the beneficiary VASP or financial institution (if any) immediately and securely ... [fn 47:] It is not necessary for this information to be attached directly to the virtual asset transfers.",
       "provision": "FATF Recommendation 16 (renamed 'Payment transparency', June 2025) and INR.15 para 7(b), fn 47",
-      "note": "The Travel Rule binds VASPs and financial institutions only (INR.15 para 7(b)), and footnote 47 says the information need not accompany the transfer. A transfer between two self-hosted wallets has no obliged party, so the rule imposes nothing on it. A VASP sending to a self-hosted wallet collects from its own customer and the '(if any)' covers the missing counterparty. F2 fails the inclusion test as stated; it needs a rewrite around a national rule that does reach unhosted wallets, or a move to rejections. Resolved 2026-11-06 by claude-fable-5-1: F2 is decided 'fails' and its inclusion reasoning now states that the rule binds VASPs only.",
+      "note": "The Travel Rule binds VASPs and financial institutions only (INR.15 para 7(b)), and footnote 47 says the information need not accompany the transfer. A transfer between two self-hosted wallets has no obliged party, so the rule imposes nothing on it. A VASP sending to a self-hosted wallet collects from its own customer and the '(if any)' covers the missing counterparty. F2 fails the inclusion test as stated; it needs a rewrite around a national rule that does reach unhosted wallets, or a move to rejections. Resolved 2026-11-06 by claude-fable-5-1: F2 is decided 'fails' and its inclusion reasoning now states that the rule binds VASPs only. 2026-11-06: fatf-gafi.org refuses scripts (HTTP 403), so the source check reads the Internet Archive's latest capture of this URL. The quote now marks footnote references 46 and 47 where the source has them.",
       "verifiedBy": "claude-opus-5-5",
       "verifiedAt": "2026-10-31"
     },
@@ -152,21 +152,22 @@
     },
     "pci10": {
       "status": "corrected",
-      "url": "https://www.pcisecuritystandards.org/document_library/",
-      "publisher": "PCI Security Standards Council (text read from secondary reproductions)",
+      "url": "https://withpci.pages.dev/requirements/10/10.2/10.2.2",
+      "secondUrl": "https://withpci.pages.dev/requirements/10/10.5/10.5.1",
+      "publisher": "WithPCI (reproduction of PCI DSS v4.0.1; the PCI SSC PDF needs licence acceptance)",
       "quote": "10.2.2 Audit logs record the following details for each auditable event: User identification. Type of event. Date and time. Success and failure indication. Origination of event. Identity or name of affected data, system component, resource, or service ... 10.5.1 Retain audit log history for at least 12 months, with at least the most recent three months immediately available for analysis.",
       "provision": "PCI DSS v4.0.1, Req. 10.2.2, 10.5.1",
-      "note": "Provision is PCI DSS v4.0.1 Req. 10.2.2 and 10.5.1 (v4.0 retired end of 2024). The PCI SSC document library requires accepting a license, so the quote is from secondary reproductions (withpci.pages.dev, ce.prod.cloudaware.com) and needs a check against the official PDF. PCI DSS is a contractual card-brand standard, not law, which supports H2's 'fails' verdict.",
+      "note": "Provision is PCI DSS v4.0.1 Req. 10.2.2 and 10.5.1 (v4.0 retired end of 2024). The PCI SSC document library requires accepting a license, so the quote is from secondary reproductions (withpci.pages.dev, ce.prod.cloudaware.com) and needs a check against the official PDF. 2026-11-06: the URL now points at the WithPCI pages for 10.2.2 and 10.5.1, which a script can read; the official PDF is at https://www.pcisecuritystandards.org/document_library/. PCI DSS is a contractual card-brand standard, not law, which supports H2's 'fails' verdict.",
       "verifiedBy": "claude-opus-5-5",
       "verifiedAt": "2026-10-31"
     },
     "soc2": {
       "status": "corrected",
-      "url": "https://www.aicpa.org/content/dam/aicpa/interestareas/frc/assuranceadvisoryservices/downloadabledocuments/trust-services-criteria.pdf",
-      "publisher": "AICPA (read via Internet Archive copy, 2017 TSC with March 2020 updates)",
-      "quote": "CC7.2 The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events.",
+      "url": "https://web.archive.org/web/20210923033012/https://www.aicpa.org/content/dam/aicpa/interestareas/frc/assuranceadvisoryservices/downloadabledocuments/trust-services-criteria.pdf",
+      "publisher": "AICPA (Internet Archive capture of 2021-09-23, 2017 TSC with March 2020 updates)",
+      "quote": "[CC7.2] The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events.",
       "provision": "AICPA 2017 Trust Services Criteria, CC7.2 (points of focus)",
-      "note": "SOC 2 is an attestation against the Trust Services Criteria, not a mandate. CC7.2 asks for monitoring and its points of focus mention 'logging of unusual system activities', but no criterion requires logging IPs or sets a retention period, and P4.3 requires secure disposal of personal information. SOC 2 should come off H2's mandating side; the AICPA's 2022 revised points of focus weren't checked. Resolved 2026-11-06 by claude-fable-5-1: SOC 2 moved from H2's mandating side to context. H2 is decided 'fails'.",
+      "note": "SOC 2 is an attestation against the Trust Services Criteria, not a mandate. CC7.2 asks for monitoring and its points of focus mention 'logging of unusual system activities', but no criterion requires logging IPs or sets a retention period, and P4.3 requires secure disposal of personal information. SOC 2 should come off H2's mandating side; the AICPA's 2022 revised points of focus weren't checked. Resolved 2026-11-06 by claude-fable-5-1: SOC 2 moved from H2's mandating side to context. H2 is decided 'fails'. 2026-11-06: the AICPA removed this PDF and its current download page needs a sign-in, so the URL is the Internet Archive capture that was read. The criterion number is bracketed in the quote because it sits in a separate table column.",
       "verifiedBy": "claude-opus-5-5",
       "verifiedAt": "2026-10-31"
     }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { QUOTE_NEVER_FOUND, checkQuote, combineSources, countSourceChecks, htmlToText, jsonToText, normaliseSourceText, quoteAppearsIn, quoteSegments } from "./sourceCheck";
+import { ARCHIVE_LACKS_QUOTE, QUOTE_NEVER_FOUND, READ_FROM_ARCHIVE, archiveCaptureOf, checkQuote, combineSources, countSourceChecks, htmlToText, jsonToText, normaliseSourceText, quoteAppearsIn, quoteSegments } from "./sourceCheck";
 
 const ART_17 = "The data subject shall have the right to obtain from the controller the erasure of personal data concerning him or her without undue delay";
 
@@ -126,6 +126,40 @@ describe("combineSources", () => {
 
   it("rejects an empty list", () => {
     expect(() => combineSources([])).toThrow();
+  });
+});
+
+describe("archive captures", () => {
+  const sourceUrl = "https://example.gov/code?section=56.101";
+  const capturedAt = "2026-01-02T19:57:01.000Z";
+  const availability = (closest?: object) => JSON.stringify({ url: sourceUrl, archived_snapshots: closest ? { closest } : {} });
+
+  it("reads the capture time and the raw capture URL from the availability API", () => {
+    const json = availability({ status: "200", available: true, url: "http://web.archive.org/web/20260102195701/x", timestamp: "20260102195701" });
+    expect(archiveCaptureOf(sourceUrl, json)).toEqual({ url: `https://web.archive.org/web/20260102195701id_/${sourceUrl}`, capturedAt });
+  });
+
+  it("has no capture when the archive holds none or holds a failed response", () => {
+    expect(archiveCaptureOf(sourceUrl, availability())).toBeNull();
+    expect(archiveCaptureOf(sourceUrl, availability({ status: "403", available: true, timestamp: "20260102195701" }))).toBeNull();
+  });
+
+  it("throws on a response that isn't the availability API's", () => {
+    expect(() => archiveCaptureOf(sourceUrl, "{}")).toThrow();
+    expect(() => archiveCaptureOf(sourceUrl, "<html>")).toThrow();
+  });
+
+  it("counts a quote found in a capture as current and says where it was read", () => {
+    expect(checkQuote("shall segregate", { ok: true, text: "A business shall segregate records.", capturedAt }, false)).toEqual({ status: "current", detail: READ_FROM_ARCHIVE });
+  });
+
+  it("keeps the source blocked when the capture lacks the quote, even if found before", () => {
+    expect(checkQuote("shall segregate", { ok: true, text: "Just a moment...", capturedAt }, true)).toEqual({ status: "blocked", detail: ARCHIVE_LACKS_QUOTE });
+  });
+
+  it("dates combined sources by the oldest capture", () => {
+    const combined = combineSources([{ ok: true, text: "a", capturedAt: "2026-10-17T14:32:33.000Z" }, { ok: true, text: "b" }, { ok: true, text: "c", capturedAt }]);
+    expect(combined).toEqual({ ok: true, text: "a\nb\nc", capturedAt });
   });
 });
 
