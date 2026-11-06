@@ -20,7 +20,7 @@ export type SourceCheckResult = { status: SourceCheckStatus; detail?: string };
 
 const QUOTE_MARKS = /[‘’‚‛′`´“”„‟″«»"]/g;
 const DASHES = /[‐-―−]/g;
-const INVISIBLE = /[­​-‍⁠﻿]/g;
+const INVISIBLE = /[\u00AD\u200B-\u200D\u2060\uFEFF]/g;
 /**
  * Text in a stored quote that isn't the source's: an omission ("...", "…") or an editorial
  * insertion in square brackets ("[Art. 33(3)(a):]", a translation). Both split the quote.

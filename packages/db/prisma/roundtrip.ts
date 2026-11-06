@@ -105,4 +105,9 @@ async function main() {
   process.exitCode = errors.length ? 1 : 0;
 }
 
-main().finally(() => prisma.$disconnect());
+main()
+  .catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  })
+  .finally(() => prisma.$disconnect());

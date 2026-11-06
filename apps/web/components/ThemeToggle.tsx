@@ -14,7 +14,10 @@ export function ThemeToggle() {
         root.dataset.theme = dark ? "light" : "dark";
         try {
           localStorage.setItem("bind-theme", root.dataset.theme);
-        } catch {}
+        } catch (error) {
+          // Storage can be blocked or full. The theme still applies to this page view.
+          console.warn("Theme preference not saved", error);
+        }
       }}
     >
       <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden>

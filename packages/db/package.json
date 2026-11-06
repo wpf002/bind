@@ -13,7 +13,8 @@
     "roundtrip": "tsx --env-file-if-exists=../../.env prisma/roundtrip.ts",
     "prior-art": "tsx --env-file-if-exists=../../.env prisma/audit.ts",
     "check-sources": "tsx --env-file-if-exists=../../.env prisma/check-sources.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0"
   },
   "dependencies": { "@prisma/client": "^5.22.0", "@bind/shared": "workspace:*", "@bind/core": "workspace:*" },
   "devDependencies": { "prisma": "^5.22.0", "tsx": "^4.19.2", "dotenv": "^16.4.5" }

@@ -6,15 +6,20 @@
     "dev": "next dev -p 3300",
     "build": "next build",
     "start": "next start -p 3300",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@bind/core": "workspace:*",
+    "@bind/db": "workspace:*",
+    "@bind/shared": "workspace:*",
     "next": "15.5.4",
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "@bind/shared": "workspace:*",
-    "@bind/core": "workspace:*",
-    "@bind/db": "workspace:*"
+    "react-dom": "19.1.0"
   },
-  "devDependencies": { "@types/react": "^19.0.1", "@types/react-dom": "^19.0.1" }
+  "devDependencies": {
+    "@next/eslint-plugin-next": "15.5.4",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.1"
+  }
 }

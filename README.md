@@ -42,8 +42,11 @@ pnpm dev
 
 ```bash
 pnpm typecheck
+pnpm lint
 pnpm test
 ```
+
+Lint is ESLint with `typescript-eslint`. The shared rules are in `eslint.config.mjs` at the repo root; each package extends it.
 
 ## Corpus Scripts
 

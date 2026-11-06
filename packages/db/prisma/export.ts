@@ -61,4 +61,9 @@ async function main() {
   console.log(`exported ${cases.length} cases, ${shapes.length} shapes`);
 }
 
-main().finally(() => prisma.$disconnect());
+main()
+  .catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  })
+  .finally(() => prisma.$disconnect());
