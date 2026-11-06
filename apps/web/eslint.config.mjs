@@ -5,7 +5,6 @@ export default [
   ...baseConfig,
   { languageOptions: { parserOptions: { tsconfigRootDir: import.meta.dirname } } },
   {
-    files: ["**/*.ts", "**/*.tsx"],
     plugins: { "@next/next": nextPlugin },
     rules: {
       ...nextPlugin.configs.recommended.rules,

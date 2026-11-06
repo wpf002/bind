@@ -13,12 +13,12 @@
     "@bind/core": "workspace:*",
     "@bind/db": "workspace:*",
     "@bind/shared": "workspace:*",
-    "next": "15.5.4",
+    "next": "15.5.29",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "15.5.4",
+    "@next/eslint-plugin-next": "15.5.29",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1"
   }
