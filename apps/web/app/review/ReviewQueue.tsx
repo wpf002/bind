@@ -10,8 +10,8 @@ import {
   type ReviewQueue as ReviewQueueResponse,
 } from "@bind/shared";
 import { fmtDate, titleCase } from "@/lib/format";
+import { API_URL } from "@/lib/api";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:4300";
 const REQUEST_TIMEOUT_MS = 10_000;
 
 type Queue = ReviewQueueResponse;
@@ -26,7 +26,7 @@ const GATE_MESSAGE: Partial<Record<GateState, string>> = {
 const STATUS_TO_GATE: Record<number, GateState> = { 401: "unauthorized", 503: "disabled" };
 
 function request(token: string, path: string, body?: unknown) {
-  return fetch(`${API}${path}`, {
+  return fetch(`${API_URL}${path}`, {
     method: body ? "POST" : "GET",
     headers: { authorization: `Bearer ${token}`, ...(body ? { "content-type": "application/json" } : {}) },
     body: body ? JSON.stringify(body) : undefined,

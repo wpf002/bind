@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { submissionSchema } from "@bind/shared";
 import { INCLUSION_CRITERIA } from "@bind/core";
+import { API_URL } from "@/lib/api";
 
 type Shape = { slug: string; name: string; ordinal: number };
 type Errors = Partial<Record<string, string[]>>;
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:4300";
 
 function Field(props: {
   name: string;
@@ -78,7 +78,7 @@ export function SubmitForm({ shapes }: { shapes: Shape[] }) {
         setErrors({});
         setState("sending");
         try {
-          const res = await fetch(`${API}/submissions`, {
+          const res = await fetch(`${API_URL}/submissions`, {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify(parsed.data),
