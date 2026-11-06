@@ -21,11 +21,20 @@ Set `DATABASE_URL` in `.env` to a database you own, then create it and load the 
 ```bash
 createdb bind
 set -a && source .env && set +a
-pnpm db:push
+pnpm db:migrate
 pnpm db:seed
 ```
 
-The schema is applied with `prisma db push`. There is no migrations directory.
+## Migrations
+
+The schema lives in `packages/db/prisma/schema.prisma` and reaches the database only through the migrations in `packages/db/prisma/migrations`. `prisma db push` is not used.
+
+| Command | When |
+|---|---|
+| `pnpm db:migrate` | After pulling. Applies pending migrations (`prisma migrate deploy`). Safe on a database with data. |
+| `pnpm db:migrate:dev --name <change>` | After editing `schema.prisma`. Writes a new migration from the diff, applies it, regenerates the client. Commit the new folder. |
+
+`db:migrate:dev` needs a shadow database; it creates one on the same server, so the role in `DATABASE_URL` needs `CREATEDB`. A database created before the migrations directory existed is adopted with `pnpm --filter @bind/db exec prisma migrate resolve --applied 20261106205405_init`.
 
 ## Run
 
@@ -48,7 +57,7 @@ pnpm test
 
 Lint is ESLint with `typescript-eslint`. The shared rules are in `eslint.config.mjs` at the repo root; each package extends it.
 
-Tests: `pnpm test` runs the unit tests in `packages/core` and the route tests in `apps/api`. The route tests write to a separate Postgres database, `bind_test`, on the server named in `DATABASE_URL` (set `TEST_DATABASE_URL` in `.env` to point somewhere else). The setup creates `bind_test` if it is missing, applies the schema with `prisma db push`, truncates every table between tests, and refuses to run against a database with any other name.
+Tests: `pnpm test` runs the unit tests in `packages/core` and the route tests in `apps/api`. The route tests write to a separate Postgres database, `bind_test`, on the server named in `DATABASE_URL` (set `TEST_DATABASE_URL` in `.env` to point somewhere else). The setup creates `bind_test` if it is missing, resets it and applies every migration (`prisma migrate reset`), truncates every table between tests, and refuses to run against a database with any other name.
 
 ## Corpus Scripts
 
