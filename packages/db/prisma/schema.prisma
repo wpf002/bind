@@ -384,13 +384,20 @@ model CaseTransition {
 model Submission {
   id    String @id @default(cuid())
   title String
-  statement String
-  /// Required field. The submission is rejected without an answer.
-  inclusionArgument String
-  legalCitation     String
-  legalUrl          String
-  architecturalProperty String
-  proposedShape     String?
+  /// The system and the architectural choice the submitter was building.
+  building String
+  /// Slug of an ArchitecturalProperty, or `unknown` for rows migrated from the free-text form.
+  property String
+  /// Jurisdiction codes the design runs in.
+  jurisdictions String[]
+  /// The rule that forbids the choice.
+  blockedByCitation String
+  blockedByUrl      String
+  /// The rule that forces the choice.
+  requiredByCitation String
+  requiredByUrl      String
+  /// What the submitter tried or considered and why it fails.
+  workaround String
   submitterName     String
   submitterEmail    String
   submitterAffiliation String?
@@ -401,7 +408,6 @@ model Submission {
 
   @@index([status])
 }
-
 model SubmissionReview {
   id           String   @id @default(cuid())
   submissionId String
