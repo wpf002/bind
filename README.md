@@ -59,17 +59,18 @@ Run these from `packages/db` with the environment loaded (`set -a && source ../.
 
 ### Source Check
 
-`check-sources` records one of three results per citation:
+`check-sources` records one of four results per citation:
 
 | Result | Meaning |
 |---|---|
 | `current` | The quote is at the URL |
 | `changed` | An earlier run found the quote at the URL and this run didn't |
-| `unreachable` | The fetch failed, or the quote has never been found at the URL |
+| `blocked` | The publisher keeps the text from scripts: an HTTP 401 or 403, or a page listed in `SCRIPT_GATED` (CAPTCHA, licence step) |
+| `unreachable` | The fetch failed another way, or the quote has never been found at the URL |
 
 Results are written to the `Citation` rows and to `packages/db/prisma/ledger/source-checks.json`. The seed re-applies that file, so commit it after a run. The script only reports. It never edits a case.
 
-It makes one request per URL with a 30 second timeout and three attempts, and fetches four hosts at a time. EUR-Lex and eCFR pages are read through the publishers' own interfaces for scripts (Cellar and the eCFR renderer API). It's a one-shot command, so schedule it with cron or launchd if you want it periodic.
+It makes one request per URL with a 30 second timeout and three attempts, and fetches four hosts at a time. EUR-Lex, eCFR and Hansard pages are read through the publishers' own interfaces for scripts (Cellar, the eCFR renderer API and the Hansard API). A citation whose quote joins passages from two documents has a `secondUrl`; both are fetched and the quote must be found across them. It's a one-shot command, so schedule it with cron or launchd if you want it periodic.
 
 ## Layout
 

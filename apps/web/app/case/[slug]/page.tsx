@@ -369,6 +369,11 @@ export default async function CasePage({ params }: Props) {
                     {s.quote ? <div className="quote">“{s.quote}”</div> : null}
                     <div className="meta">
                       {s.publisher ? <span className="muted">{s.publisher}</span> : null}
+                      {s.secondUrl ? (
+                        <a className="muted" href={s.secondUrl} target="_blank" rel="noreferrer">
+                          Second Source
+                        </a>
+                      ) : null}
                       {s.verifiedAt ? <span className="mono muted">Checked {fmtDate(s.verifiedAt)}</span> : null}
                       {s.verifiedBy ? <span className="muted">{s.verifiedBy}</span> : null}
                       <SourceCheck status={s.sourceCheck} at={s.sourceCheckedAt} />

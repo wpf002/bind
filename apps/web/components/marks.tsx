@@ -54,6 +54,7 @@ export function Verify({ s }: { s: string }) {
 const SOURCE_CHECK: Record<string, [string, string, string]> = {
   current: ["mono muted", "Current", "Quote found at the source on this date"],
   changed: ["chip chip-accent", "Changed", "Quote no longer at the source on this date"],
+  blocked: ["mono muted", "Blocked", "Source refuses automated reads"],
   unreachable: ["mono muted", "Unreachable", "Source could not be read on this date"],
 };
 

@@ -38,7 +38,7 @@ async function main() {
       c.inclusionReasoning ?? "",
       "",
       "## Sources",
-      ...c.citations.map((s) => `- [${s.verificationStatus}] ${s.label} <${s.url}>`),
+      ...c.citations.map((s) => `- [${s.verificationStatus}] ${s.label} <${s.url}>${s.secondUrl ? ` <${s.secondUrl}>` : ""}`),
       "",
     ].join("\n");
     await writeFile(join(root, "corpus/cases", `${c.slug}.md`), md);

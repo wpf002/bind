@@ -5,11 +5,14 @@ import { z } from "zod";
  * relies on; if it no longer appears in the source text, the provision changed after it was read.
  */
 
-export const SOURCE_CHECK_STATUSES = ["current", "changed", "unreachable"] as const;
+export const SOURCE_CHECK_STATUSES = ["current", "changed", "blocked", "unreachable"] as const;
 export type SourceCheckStatus = (typeof SOURCE_CHECK_STATUSES)[number];
 
-/** What a fetch produced: the source's text, or the reason there isn't one. */
-export type FetchedSource = { ok: true; text: string } | { ok: false; reason: string };
+/**
+ * What a fetch produced: the source's text, or the reason there isn't one. `blocked` marks a
+ * source the publisher keeps from scripts (a bot challenge, a CAPTCHA, a sign-in or a licence step).
+ */
+export type FetchedSource = { ok: true; text: string } | { ok: false; reason: string; blocked?: boolean };
 
 export type SourceCheckResult = { status: SourceCheckStatus; detail?: string };
 
@@ -57,15 +60,30 @@ export function quoteAppearsIn(quote: string, text: string): boolean {
 }
 
 /**
- * A failed fetch says nothing about the text, so it is "unreachable". A missing quote is
+ * A failed fetch says nothing about the text. It is "blocked" when the publisher refuses scripts,
+ * which a person with a browser can still read, and "unreachable" otherwise. A missing quote is
  * "changed" only if this check found it at the same URL before. Without that baseline the page
  * may be a search form or a gate that never showed the text, which is also "unreachable".
  */
 export function checkQuote(quote: string, source: FetchedSource, foundBefore: boolean): SourceCheckResult {
-  if (!source.ok) return { status: "unreachable", detail: source.reason };
+  if (!source.ok) return { status: source.blocked ? "blocked" : "unreachable", detail: source.reason };
   if (!quoteSegments(quote).length) throw new Error("checkQuote needs a non-empty quote");
   if (quoteAppearsIn(quote, source.text)) return { status: "current" };
   return foundBefore ? { status: "changed" } : { status: "unreachable", detail: QUOTE_NEVER_FOUND };
+}
+
+/**
+ * One source out of the documents a quote draws on. A quote that joins passages from two
+ * documents needs both, so the first failure stands for the whole.
+ */
+export function combineSources(sources: FetchedSource[]): FetchedSource {
+  if (!sources.length) throw new Error("combineSources needs at least one source");
+  const texts: string[] = [];
+  for (const source of sources) {
+    if (!source.ok) return source;
+    texts.push(source.text);
+  }
+  return { ok: true, text: texts.join("\n") };
 }
 
 const NAMED_ENTITIES: Record<string, string> = {
@@ -91,10 +109,23 @@ export function htmlToText(html: string): string {
   return decodeEntities(visible);
 }
 
+function collectStrings(value: unknown, into: string[]): void {
+  if (typeof value === "string") into.push(value);
+  else if (Array.isArray(value)) for (const item of value) collectStrings(item, into);
+  else if (value !== null && typeof value === "object") for (const item of Object.values(value)) collectStrings(item, into);
+}
+
+/** Visible text of a JSON document: every string value, with any HTML in it reduced to text. Throws on invalid JSON. */
+export function jsonToText(json: string): string {
+  const strings: string[] = [];
+  collectStrings(z.unknown().parse(JSON.parse(json)), strings);
+  return strings.map(htmlToText).join("\n");
+}
+
 export type SourceCheckCounts = Record<SourceCheckStatus, number>;
 
 export function countSourceChecks(statuses: (SourceCheckStatus | null | undefined)[]): SourceCheckCounts {
-  const counts: SourceCheckCounts = { current: 0, changed: 0, unreachable: 0 };
+  const counts: SourceCheckCounts = { current: 0, changed: 0, blocked: 0, unreachable: 0 };
   for (const status of statuses) if (status) counts[status]++;
   return counts;
 }
@@ -102,6 +133,8 @@ export function countSourceChecks(statuses: (SourceCheckStatus | null | undefine
 /** One check per distinct (url, quote). Citations in several cases that share both share the result. */
 const sourceCheckEntrySchema = z.object({
   url: z.string().url(),
+  /** Second document the quote draws on, fetched with `url`. */
+  secondUrl: z.string().url().optional(),
   quote: z.string().min(1),
   label: z.string(),
   status: z.enum(SOURCE_CHECK_STATUSES),

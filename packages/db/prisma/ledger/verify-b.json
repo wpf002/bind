@@ -112,8 +112,8 @@
     },
     "tradeSecret": {
       "status": "corrected",
-      "url": "https://gdpr-info.eu/recitals/no-63/",
-      "publisher": "gdpr-info.eu (unofficial reproduction of GDPR recitals)",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
+      "publisher": "EUR-Lex",
       "quote": "That right should not adversely affect the rights or freedoms of others, including trade secrets or intellectual property and in particular the copyright protecting the software. However, the result of those considerations should not be a refusal to provide all information to the data subject.",
       "provision": "Directive (EU) 2016/943, Art. 2(1); GDPR Recital 63",
       "note": "Picked Directive (EU) 2016/943 (Art. 2(1) defines trade secret; read from an archived EUR-Lex snapshot) because G3's mandating side is GDPR, and GDPR Recital 63 is where the trade-secret limit on access attaches. Recital 63 bars a full refusal. Commentary on CJEU C-203/22 Dun & Bradstreet Austria (27 Feb 2025) reports the Court held the same and said the algorithm itself isn't owed; if confirmed against the judgment text, the law doesn't ask for the weights and G3's 'the law asks for the logic' needs restating. The judgment text wasn't reached (EUR-Lex and InfoCuria blocked automated fetches).",

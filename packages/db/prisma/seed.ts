@@ -122,6 +122,7 @@ async function main() {
           targetId: row.id,
           label: s.label,
           url: s.v?.url ?? "",
+          secondUrl: s.v?.secondUrl,
           publisher: s.v?.publisher,
           quote: s.v?.quote,
           retrieved: s.v ? new Date(s.v.verifiedAt) : undefined,

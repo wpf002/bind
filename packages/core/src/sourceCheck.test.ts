@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { QUOTE_NEVER_FOUND, checkQuote, countSourceChecks, htmlToText, normaliseSourceText, quoteAppearsIn, quoteSegments } from "./sourceCheck";
+import { QUOTE_NEVER_FOUND, checkQuote, combineSources, countSourceChecks, htmlToText, jsonToText, normaliseSourceText, quoteAppearsIn, quoteSegments } from "./sourceCheck";
 
 const ART_17 = "The data subject shall have the right to obtain from the controller the erasure of personal data concerning him or her without undue delay";
 
@@ -78,6 +78,14 @@ describe("checkQuote", () => {
     expect(checkQuote(ART_17, { ok: false, reason: "HTTP 503" }, true)).toEqual({ status: "unreachable", detail: "HTTP 503" });
   });
 
+  it("is blocked, not unreachable, when the publisher refuses scripts", () => {
+    expect(checkQuote(ART_17, { ok: false, reason: "HTTP 403", blocked: true }, false)).toEqual({ status: "blocked", detail: "HTTP 403" });
+  });
+
+  it("is blocked, not changed, when a source that was read before now refuses scripts", () => {
+    expect(checkQuote(ART_17, { ok: false, reason: "HTTP 403", blocked: true }, true)).toEqual({ status: "blocked", detail: "HTTP 403" });
+  });
+
   it("rejects an empty quote", () => {
     expect(() => checkQuote(" ", { ok: true, text: "anything" }, false)).toThrow();
   });
@@ -101,8 +109,42 @@ describe("htmlToText", () => {
   });
 });
 
+describe("combineSources", () => {
+  const quote = "[Art. 40:] shall store personal information domestically [Art. 37:] shall store it within mainland China";
+
+  it("finds a quote whose passages come from two documents", () => {
+    const first = { ok: true as const, text: "Article 40 handlers shall store personal information domestically." };
+    const second = { ok: true as const, text: "Article 37 operators shall store it within mainland China." };
+    expect(checkQuote(quote, first, false).status).toBe("unreachable");
+    expect(checkQuote(quote, combineSources([first, second]), false)).toEqual({ status: "current" });
+  });
+
+  it("fails as a whole when one document fails", () => {
+    const blocked = { ok: false as const, reason: "HTTP 403", blocked: true };
+    expect(combineSources([{ ok: true, text: "Article 40" }, blocked])).toEqual(blocked);
+  });
+
+  it("rejects an empty list", () => {
+    expect(() => combineSources([])).toThrow();
+  });
+});
+
+describe("jsonToText", () => {
+  it("returns string values at any depth with their HTML reduced to text", () => {
+    const json = JSON.stringify({ Items: [{ Value: "<p>A notice can be issued only where &#8220;technically feasible&#8221;</p>", Id: 7 }], Title: "Online Safety Bill" });
+    const text = jsonToText(json);
+    expect(quoteAppearsIn("A notice can be issued only where \"technically feasible\"", text)).toBe(true);
+    expect(text).toContain("Online Safety Bill");
+    expect(text).not.toContain("<p>");
+  });
+
+  it("throws on invalid JSON", () => {
+    expect(() => jsonToText("<html>")).toThrow();
+  });
+});
+
 describe("countSourceChecks", () => {
   it("counts each status and skips citations never checked", () => {
-    expect(countSourceChecks(["current", "changed", null, "current", "unreachable", undefined])).toEqual({ current: 2, changed: 1, unreachable: 1 });
+    expect(countSourceChecks(["current", "changed", null, "current", "unreachable", "blocked", undefined])).toEqual({ current: 2, changed: 1, blocked: 1, unreachable: 1 });
   });
 });

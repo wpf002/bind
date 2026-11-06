@@ -11,6 +11,8 @@
 export type Verification = {
   status: "verified" | "corrected" | "disputed";
   url: string;
+  /** A second document the quote draws on, when one quote joins passages from two. */
+  secondUrl?: string;
   publisher: string;
   quote: string;
   /** Replaces the provision string when the source's provision was wrong or vague. */

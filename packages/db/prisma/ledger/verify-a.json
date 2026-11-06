@@ -83,6 +83,7 @@
     "schrems2": {
       "status": "corrected",
       "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62018CJ0311",
+      "secondUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
       "publisher": "EUR-Lex",
       "quote": "[C-311/18, operative part 3:] unless there is a valid European Commission adequacy decision, the competent supervisory authority is required to suspend or prohibit a transfer of data to a third country pursuant to standard data protection clauses ... [GDPR Art. 48:] Any judgment of a court or tribunal and any decision of an administrative authority of a third country requiring a controller or processor to transfer or disclose personal data may only be recognised or enforceable in any manner if based on an international agreement",
       "provision": "C-311/18 (Schrems II); GDPR Arts. 46, 48",
@@ -163,6 +164,7 @@
     "cnPipl": {
       "status": "corrected",
       "url": "https://digichina.stanford.edu/work/translation-personal-information-protection-law-of-the-peoples-republic-of-china-effective-nov-1-2021/",
+      "secondUrl": "https://digichina.stanford.edu/work/translation-cybersecurity-law-of-the-peoples-republic-of-china-effective-june-1-2017/",
       "publisher": "DigiChina, Stanford (translation of PIPL and CSL)",
       "quote": "[PIPL Art. 40:] Critical information infrastructure operators and personal information handlers handling personal information reaching quantities provided by the State cybersecurity and informatization department shall store personal information collected and produced within the borders of the People's Republic of China domestically. [CSL Art. 37:] Critical information infrastructure operators that gather or produce personal information or important data during operations within the mainland territory of the People's Republic of China, shall store it within mainland China.",
       "provision": "PIPL Art. 40; CSL Art. 37",

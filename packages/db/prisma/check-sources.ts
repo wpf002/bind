@@ -1,6 +1,6 @@
 import { execFile } from "node:child_process";
 import { writeFile } from "node:fs/promises";
-import { checkQuote, countSourceChecks, htmlToText, sourceCheckKey, type FetchedSource, type SourceCheckEntry, type SourceCheckLedger } from "@bind/core";
+import { checkQuote, combineSources, countSourceChecks, htmlToText, jsonToText, sourceCheckKey, type FetchedSource, type SourceCheckEntry, type SourceCheckLedger } from "@bind/core";
 import { prisma } from "../src/client";
 import { SOURCE_CHECK_LEDGER_PATH, readSourceChecks } from "./source-checks";
 
@@ -11,6 +11,7 @@ import { SOURCE_CHECK_LEDGER_PATH, readSourceChecks } from "./source-checks";
  *
  * "changed" means the quote was found at the URL on an earlier run and is gone now. A quote that
  * has never been found is "unreachable": the page may be a search form or a licence gate.
+ * "blocked" means the publisher keeps the text from scripts: an HTTP 401 or 403, or a URL in SCRIPT_GATED.
  * It only reports. A "changed" result needs someone to reread the provision; nothing here edits a case.
  */
 
@@ -22,6 +23,7 @@ const HOST_CONCURRENCY = 4;
 const MAX_BODY_BYTES = 40 * 1024 * 1024;
 const PDF_TO_TEXT_TIMEOUT_MS = 60_000;
 const PDF_MAGIC = "%PDF";
+const JSON_CONTENT_TYPE = /^application\/(?:[\w.-]+\+)?json\b/i;
 const USER_AGENT = "bind-source-check/1.0 (citation currency check)";
 const CHECKED_STATUSES = ["verified", "corrected"] as const;
 
@@ -38,6 +40,24 @@ const ECFR_SECTION_PATH = /^\/current\/title-(\d+)\/(?:.*\/)?section-([\w.-]+)$/
 const ecfrApiUrl = (title: string, section: string) =>
   `https://${ECFR_HOST}/api/renderer/v1/content/enhanced/current/title-${title}?part=${section.split(".")[0]}&section=${section}`;
 
+/** Hansard's reader pages answer scripts with a bot challenge. Parliament's Hansard API serves the same debate as JSON. */
+const HANSARD_HOST = "hansard.parliament.uk";
+const HANSARD_DEBATE_PATH = /\/debates\/([0-9A-F]{8}(?:-[0-9A-F]{4}){3}-[0-9A-F]{12})\//i;
+const hansardApiUrl = (debateId: string) => `https://hansard-api.parliament.uk/debates/debate/${debateId}.json`;
+const JSON_HEADERS = { Accept: "application/json" };
+
+/**
+ * Cited pages whose text a script can't reach even though the page itself loads. Each was read
+ * by a person. They aren't fetched; the reason is recorded as the check's detail.
+ */
+const SCRIPT_GATED: Record<string, string> = {
+  "https://delhihighcourt.nic.in/app/get-case-type-status": "case-status search needs a CAPTCHA",
+  "https://www.pcisecuritystandards.org/document_library/": "download needs licence acceptance",
+};
+
+/** Statuses a server uses to refuse the client, as opposed to a missing page or a fault. */
+const REFUSED_STATUSES = [401, 403];
+
 const DEFAULT_HEADERS = { Accept: "text/html,application/xhtml+xml,application/pdf;q=0.9,*/*;q=0.5" };
 
 type Request = { url: string; headers: Record<string, string> };
@@ -52,6 +72,10 @@ function requestFor(citationUrl: string): Request {
   if (parsed.host === ECFR_HOST) {
     const section = parsed.pathname.match(ECFR_SECTION_PATH);
     if (section) return { url: ecfrApiUrl(section[1]!, section[2]!), headers: DEFAULT_HEADERS };
+  }
+  if (parsed.host === HANSARD_HOST) {
+    const debateId = parsed.pathname.match(HANSARD_DEBATE_PATH)?.[1];
+    if (debateId) return { url: hansardApiUrl(debateId), headers: JSON_HEADERS };
   }
   return { url: citationUrl, headers: DEFAULT_HEADERS };
 }
@@ -92,7 +116,12 @@ async function bodyToText(contentType: string, body: Buffer): Promise<FetchedSou
   } catch {
     return { ok: false, reason: `unsupported charset in ${contentType}` };
   }
-  return { ok: true, text: htmlToText(decoder.decode(body)) };
+  if (!JSON_CONTENT_TYPE.test(contentType)) return { ok: true, text: htmlToText(decoder.decode(body)) };
+  try {
+    return { ok: true, text: jsonToText(decoder.decode(body)) };
+  } catch {
+    return { ok: false, reason: "invalid JSON body" };
+  }
 }
 
 async function fetchOnce(request: Request): Promise<FetchedSource & { retry?: boolean }> {
@@ -111,7 +140,7 @@ async function fetchOnce(request: Request): Promise<FetchedSource & { retry?: bo
   // Only a plain 200 counts. A 202 is how a bot challenge answers, and the challenge page isn't the source.
   if (response.status !== 200) {
     await response.body?.cancel();
-    return { ok: false, reason: `HTTP ${response.status}`, retry: retryable(response.status) };
+    return { ok: false, reason: `HTTP ${response.status}`, blocked: REFUSED_STATUSES.includes(response.status), retry: retryable(response.status) };
   }
   // A redirect to another site is a block or consent page, not the cited document.
   if (siteOf(response.url) !== siteOf(request.url)) {
@@ -129,6 +158,8 @@ async function fetchOnce(request: Request): Promise<FetchedSource & { retry?: bo
 }
 
 async function fetchSource(citationUrl: string): Promise<FetchedSource> {
+  const gate = SCRIPT_GATED[citationUrl];
+  if (gate) return { ok: false, reason: gate, blocked: true };
   const request = requestFor(citationUrl);
   let last: FetchedSource = { ok: false, reason: "not attempted" };
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -138,6 +169,14 @@ async function fetchSource(citationUrl: string): Promise<FetchedSource> {
     if (attempt < MAX_ATTEMPTS) await sleep(BACKOFF_BASE_MS * 2 ** (attempt - 1));
   }
   return last;
+}
+
+/** One fetch per URL per run. A second document is often one that other citations cite directly. */
+const fetched = new Map<string, Promise<FetchedSource>>();
+function fetchSourceOnce(citationUrl: string): Promise<FetchedSource> {
+  const pending = fetched.get(citationUrl) ?? fetchSource(citationUrl);
+  fetched.set(citationUrl, pending);
+  return pending;
 }
 
 /** Runs `work` over `items` with at most `limit` in flight. */
@@ -150,7 +189,7 @@ async function inPool<T>(items: T[], limit: number, work: (item: T) => Promise<v
   );
 }
 
-type Target = { url: string; quote: string; label: string };
+type Target = { url: string; secondUrl?: string; quote: string; label: string };
 
 async function loadTargets() {
   const citations = await prisma.citation.findMany({
@@ -161,7 +200,7 @@ async function loadTargets() {
   let skipped = 0;
   for (const c of citations) {
     if (!c.url || !c.quote?.trim()) skipped++;
-    else if (!targets.has(sourceCheckKey(c.url, c.quote))) targets.set(sourceCheckKey(c.url, c.quote), { url: c.url, quote: c.quote, label: c.label });
+    else if (!targets.has(sourceCheckKey(c.url, c.quote))) targets.set(sourceCheckKey(c.url, c.quote), { url: c.url, secondUrl: c.secondUrl ?? undefined, quote: c.quote, label: c.label });
   }
   return { targets: [...targets.values()], citations: citations.length, skipped };
 }
@@ -184,9 +223,10 @@ async function main() {
 
   await inPool(byHost(targets), HOST_CONCURRENCY, async (urlGroups) => {
     for (const group of urlGroups) {
-      const source = await fetchSource(group[0]!.url);
+      const first = await fetchSourceOnce(group[0]!.url);
       const checkedAt = new Date().toISOString();
       for (const target of group) {
+        const source = target.secondUrl ? combineSources([first, await fetchSourceOnce(target.secondUrl)]) : first;
         const foundAt = previous.get(sourceCheckKey(target.url, target.quote))?.foundAt;
         const result = checkQuote(target.quote, source, foundAt !== undefined);
         checks.push({ ...target, ...result, checkedAt, foundAt: result.status === "current" ? checkedAt : foundAt });
@@ -205,7 +245,7 @@ async function main() {
   await writeFile(SOURCE_CHECK_LEDGER_PATH, JSON.stringify(ledger, null, 2) + "\n");
 
   const counts = countSourceChecks(checks.map((check) => check.status));
-  console.log(`checked ${checks.length} quotes from ${citations} citations (${skipped} skipped, no url or quote): ${counts.current} current, ${counts.changed} changed, ${counts.unreachable} unreachable`);
+  console.log(`checked ${checks.length} quotes from ${citations} citations (${skipped} skipped, no url or quote): ${counts.current} current, ${counts.changed} changed, ${counts.blocked} blocked, ${counts.unreachable} unreachable`);
   for (const check of checks) {
     if (check.status !== "current") console.log(`${check.status}: ${check.label} <${check.url}>${check.detail ? ` (${check.detail})` : ""}`);
   }

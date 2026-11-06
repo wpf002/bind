@@ -48,6 +48,8 @@ enum VerificationStatus {
 enum SourceCheck {
   current
   changed
+  /// The publisher keeps the text from scripts: a bot challenge, CAPTCHA, sign-in or licence step.
+  blocked
   unreachable
 }
 
@@ -334,6 +336,8 @@ model Citation {
 
   label     String
   url       String
+  /// A second document the quote draws on. Set when one quote joins passages from two documents.
+  secondUrl String?
   /// EUR-Lex, eCFR, CourtListener, official gazette, standards body.
   publisher String?
   /// The exact passage relied on. Empty means nobody has read it yet.
