@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { IBM_Plex_Mono, IBM_Plex_Sans, Newsreader } from "next/font/google";
-import { listCases, listProperties, listShapes, previewDrafts, stats } from "@bind/db";
+import { currentRelease, listCases, listProperties, listShapes, previewDrafts, stats } from "@bind/db";
 import { Nav } from "@/components/Nav";
 import { ThemeToggle, themeScript } from "@/components/ThemeToggle";
 import { CommandPalette, type PalItem } from "@/components/CommandPalette";
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [s, cases, shapes, properties] = await Promise.all([stats(), listCases(), listShapes(), listProperties()]);
+  const [s, cases, shapes, properties, release] = await Promise.all([stats(), listCases(), listShapes(), listProperties(), currentRelease()]);
   const items: PalItem[] = [
     ...cases.map((c) => ({
       href: `/case/${c.slug}`,
@@ -92,7 +92,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <div className="wrap foot-row">
             <span>Bind · Every case human-written and verified against a primary source.</span>
             <span>
-              <Link href="/method">Method</Link> · <Link href="/export">BibTeX</Link> · <Link href="/rejections">Rejection Log</Link>
+              <Link href="/export">Corpus {release.version}</Link> · <Link href="/method">Method</Link> · <Link href="/export">BibTeX</Link> ·{" "}
+              <Link href="/rejections">Rejection Log</Link>
             </span>
           </div>
         </footer>

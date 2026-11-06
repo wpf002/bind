@@ -8,6 +8,7 @@ import { fmtDate } from "@/lib/format";
 export const metadata = { title: "Changes" };
 
 const KIND_CHIP: Record<ChangeKind, string> = {
+  corpus_released: "chip-accent",
   case_published: "chip-accent",
   case_resolved: "chip-ok",
   case_transition: "chip-plain",
@@ -53,7 +54,7 @@ export default async function Changes() {
                   <Link className="row-link" href={e.url} aria-label={e.title} />
                   <div className="row-id">
                     <span className="id">{fmtDate(e.occurredAt)}</span>
-                    <span className="ref">{e.url.replace("/case/", "")}</span>
+                    <span className="ref">{e.url.replace(/^\/(case\/)?/, "")}</span>
                   </div>
                 </td>
                 <td className="c-case">

@@ -1,4 +1,4 @@
-import { bibtexKey, caseTableTeX, caseToBibTeX, shapeTableTeX, sourceToBibTeX } from "@bind/core";
+import { bibtexKey, caseTableTeX, caseToBibTeX, shapeTableTeX, sourceToBibTeX, texCorpusComment } from "@bind/core";
 import { CORPUS_JSON_FILENAME, corpusExport, corpusExportText, listCases, shapeTableInput } from "@bind/db";
 import { CopyButton, DownloadButton } from "@/components/CopyButton";
 import { API_URL } from "@/lib/api";
@@ -15,19 +15,24 @@ const kilobytes = (text: string) => `${Math.round(Buffer.byteLength(text, "utf8"
 
 export default async function Export() {
   const [cases, shapeInput, corpus] = await Promise.all([listCases(), shapeTableInput(), corpusExport()]);
-  const bib = cases
-    .flatMap((c) => [caseToBibTeX(c), ...c.citations.map((s, i) => sourceToBibTeX(s, `${bibtexKey(c.slug)}:src${i + 1}`))])
-    .join("\n\n");
-  const shapeTex = shapeTableTeX(...shapeInput);
-  const caseTex = caseTableTeX(
-    cases.map((c) => ({
-      slug: c.slug,
-      corpusRef: c.corpusRef,
-      title: c.title,
-      shape: c.shapes[0]?.shape.name ?? "",
-      resolvability: c.resolvability,
-    }))
-  );
+  const header = texCorpusComment(corpus.corpus.version);
+  const bib =
+    header +
+    cases
+      .flatMap((c) => [caseToBibTeX(c), ...c.citations.map((s, i) => sourceToBibTeX(s, `${bibtexKey(c.slug)}:src${i + 1}`))])
+      .join("\n\n");
+  const shapeTex = header + shapeTableTeX(...shapeInput);
+  const caseTex =
+    header +
+    caseTableTeX(
+      cases.map((c) => ({
+        slug: c.slug,
+        corpusRef: c.corpusRef,
+        title: c.title,
+        shape: c.shapes[0]?.shape.name ?? "",
+        resolvability: c.resolvability,
+      }))
+    );
   const json = corpusExportText(corpus);
 
   const blocks = [
@@ -45,6 +50,10 @@ export default async function Export() {
             API
           </a>
           <div className="page-stats">
+            <div className="page-stat">
+              <b>{corpus.corpus.version}</b>
+              <span>Corpus</span>
+            </div>
             <div className="page-stat">
               <b>{cases.length}</b>
               <span>Published Cases</span>
