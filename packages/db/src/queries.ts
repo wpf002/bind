@@ -1,5 +1,5 @@
 import type { CaseQuery, Resolution, Resolvability } from "@bind/shared";
-import { groupByPrimaryShape, summariseProperty } from "@bind/core";
+import { FLAGGED_SOURCE_STATUSES, changeEvents, groupByPrimaryShape, summariseProperty } from "@bind/core";
 import { prisma } from "./client";
 
 /** Read layer shared by the API and the web app. Published cases only unless asked. */
@@ -301,4 +301,37 @@ export async function listTransitions() {
     orderBy: { occurredAt: "desc" },
     include: { case: { select: { slug: true, title: true, corpusRef: true } } },
   });
+}
+
+/**
+ * What changed in the published corpus, newest first: each case's publish date and transitions,
+ * and every citation whose last source check failed. The check's result on the Citation row is the
+ * ledger entry check-sources wrote (and the seed re-applies), so no file is read here.
+ */
+export async function listChanges() {
+  const [cases, citations] = await Promise.all([
+    prisma.case.findMany({
+      where: { status: "published" },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        statement: true,
+        status: true,
+        publishedAt: true,
+        transitions: { select: { fromState: true, toState: true, trigger: true, occurredAt: true } },
+      },
+    }),
+    prisma.citation.findMany({
+      where: { targetType: "case", sourceCheck: { in: [...FLAGGED_SOURCE_STATUSES] }, sourceCheckedAt: { not: null } },
+      select: { targetId: true, url: true, label: true, sourceCheck: true, sourceCheckedAt: true },
+    }),
+  ]);
+  const byId = new Map(cases.map((c) => [c.id, c]));
+  const sourceChecks = citations.flatMap((c) => {
+    const cited = byId.get(c.targetId);
+    if (!cited || !c.sourceCheck || !c.sourceCheckedAt) return [];
+    return [{ url: c.url, label: c.label, status: c.sourceCheck, checkedAt: c.sourceCheckedAt, case: cited }];
+  });
+  return changeEvents({ cases, sourceChecks });
 }
