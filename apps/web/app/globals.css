@@ -452,12 +452,13 @@ a.jur:hover { border-color: var(--accent); }
 .field .meter.ok { color: var(--ok); }
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
 .field-label { font: 500 var(--t14)/1.2 var(--font-text); display: flex; justify-content: space-between; gap: var(--s3); }
-.jur-picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--s2); }
+.jur-picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s2); }
 .jur-pick { display: flex; align-items: center; gap: var(--s2); padding: var(--s2) var(--s3); border: 1px solid var(--rule); border-radius: var(--r); background: var(--surface); cursor: pointer; font-size: var(--t14); color: var(--ink-2); min-width: 0; }
 .jur-pick span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .jur-pick input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; flex: none; }
 .jur-pick:has(input:checked) { border-color: var(--ink); color: var(--ink); }
 .jur-row { display: flex; flex-wrap: wrap; gap: var(--s1); }
+@media (max-width: 480px) { .jur-picks { grid-template-columns: 1fr; } }
 .checks { display: grid; border: 1px solid var(--rule); border-radius: var(--r); background: var(--surface); }
 .check { display: grid; grid-template-columns: 20px 1fr; gap: var(--s3); padding: var(--s3) var(--s4); border-bottom: 1px solid var(--rule); cursor: pointer; font-size: var(--t14); align-items: start; }
 .check:last-child { border-bottom: 0; }
