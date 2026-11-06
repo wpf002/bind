@@ -2,9 +2,10 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { caseTableTeX, caseToBibTeX, shapeTableTeX, sourceToBibTeX, bibtexKey } from "@bind/core";
 import { listCases, listShapes, shapeTableInput } from "../src/queries";
+import { CORPUS_JSON_FILENAME, corpusExport, corpusExportText } from "../src/export";
 import { prisma } from "../src/client";
 
-/** Writes the corpus back to markdown and generates the paper's tables. Published cases only. */
+/** Writes the corpus back to markdown and JSON and generates the paper's tables. Published cases only. */
 const root = join(import.meta.dirname, "../../..");
 
 async function main() {
@@ -43,6 +44,8 @@ async function main() {
     ].join("\n");
     await writeFile(join(root, "corpus/cases", `${c.slug}.md`), md);
   }
+
+  await writeFile(join(root, "corpus", CORPUS_JSON_FILENAME), corpusExportText(await corpusExport()));
 
   await mkdir(join(root, "docs/paper"), { recursive: true });
   await writeFile(

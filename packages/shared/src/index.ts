@@ -130,3 +130,69 @@ export const reviewQueueSchema = z.object({
   ),
 });
 export type ReviewQueue = z.infer<typeof reviewQueueSchema>;
+
+/** Enum values the JSON export carries. Each mirrors a Prisma enum of the same name. */
+export const INSTRUMENT_ROLE = ["mandating", "conflicting", "context"] as const;
+export const LEGAL_STANDING = ["untested", "endorsed_by_regulator", "rejected_by_regulator", "litigated_unresolved", "academic_only"] as const;
+export const SOURCE_CHECK = ["current", "changed", "blocked", "unreachable"] as const;
+
+/** Accepts a Date when serialising and an ISO string when reading the export back. */
+export const isoDate = z.coerce.date();
+
+export const exportCaseSchema = z.object({
+  slug: z.string(),
+  corpusRef: z.string(),
+  title: z.string(),
+  statement: z.string(),
+  analysis: z.string().nullable(),
+  inclusionReasoning: z.string().nullable(),
+  resolvability: z.enum(RESOLVABILITY),
+  resolution: z.enum(RESOLUTION),
+  resolvedAt: isoDate.nullable(),
+  resolvedBy: z.string().nullable(),
+  status: z.enum(CASE_STATUS),
+  publishedAt: isoDate.nullable(),
+  firstSeenAt: isoDate.nullable(),
+  jurisdictions: z.array(z.string()),
+  properties: z.array(z.object({ slug: z.string(), name: z.string(), note: z.string().nullable() })),
+  shapes: z.array(z.object({ slug: z.string(), name: z.string(), ordinal: z.number().int(), isPrimary: z.boolean(), rationale: z.string().nullable() })),
+  instruments: z.array(
+    z.object({
+      role: z.enum(INSTRUMENT_ROLE),
+      note: z.string().nullable(),
+      regime: z.string(),
+      instrument: z.string(),
+      shortName: z.string(),
+      provision: z.string(),
+      mandate: z.string(),
+      jurisdiction: z.string(),
+      sourceUrl: z.string(),
+    })
+  ),
+  citations: z.array(
+    z.object({
+      label: z.string(),
+      url: z.string(),
+      secondUrl: z.string().nullable(),
+      publisher: z.string().nullable(),
+      quote: z.string().nullable(),
+      retrieved: isoDate.nullable(),
+      verificationStatus: z.enum(VERIFICATION),
+      sourceCheck: z.enum(SOURCE_CHECK).nullable(),
+      sourceCheckedAt: isoDate.nullable(),
+    })
+  ),
+  paperingOvers: z.array(z.object({ technique: z.string(), description: z.string(), standing: z.enum(LEGAL_STANDING), residual: z.string() })),
+  transitions: z.array(
+    z.object({ fromState: z.string(), toState: z.string(), trigger: z.string(), triggerUrl: z.string().nullable(), occurredAt: isoDate })
+  ),
+});
+export type ExportCase = z.infer<typeof exportCaseSchema>;
+
+/** The whole published corpus as one document: GET /export/json and corpus/bind-corpus.json. */
+export const corpusExportSchema = z.object({
+  generatedAt: isoDate,
+  corpus: z.object({ cases: z.number().int(), shapes: z.number().int(), properties: z.number().int() }),
+  cases: z.array(exportCaseSchema),
+});
+export type CorpusExport = z.infer<typeof corpusExportSchema>;
