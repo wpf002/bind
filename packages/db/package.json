@@ -11,6 +11,7 @@
     "seed": "tsx prisma/seed.ts",
     "export": "tsx prisma/export.ts",
     "roundtrip": "tsx --env-file-if-exists=../../.env prisma/roundtrip.ts",
+    "release": "tsx --env-file-if-exists=../../.env prisma/release.ts",
     "prior-art": "tsx --env-file-if-exists=../../.env prisma/audit.ts",
     "check-sources": "tsx --env-file-if-exists=../../.env prisma/check-sources.ts",
     "typecheck": "tsc --noEmit",

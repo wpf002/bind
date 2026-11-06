@@ -4,13 +4,14 @@ import { isResolvedState } from "./resolutions.js";
 /**
  * What changed in the published corpus, as one list of dated events. The Changes page and the
  * Atom feed both read it. Everything comes from data already stored: `Case.publishedAt`, the
- * case's transitions, and the source-check result the ledger wrote to each citation.
+ * case's transitions, the source-check result the ledger wrote to each citation, and the releases ledger.
  */
 
-export const CHANGE_KINDS = ["case_published", "case_resolved", "case_transition", "source_changed"] as const;
+export const CHANGE_KINDS = ["corpus_released", "case_published", "case_resolved", "case_transition", "source_changed"] as const;
 export type ChangeKind = (typeof CHANGE_KINDS)[number];
 
 export const CHANGE_KIND_LABEL: Record<ChangeKind, string> = {
+  corpus_released: "Released",
   case_published: "Published",
   case_resolved: "Resolved",
   case_transition: "Transition",
@@ -35,9 +36,12 @@ export type ChangeEvent = {
   occurredAt: string;
   title: string;
   summary: string;
-  /** Site-relative path of the case the event is about. */
+  /** Site-relative path of the case the event is about, or /export for a release. */
   url: string;
 };
+
+/** One entry of the releases ledger. */
+export type ChangeRelease = { version: string; releasedAt: Date | string; cases: number; note?: string };
 
 type CaseStatus = string;
 
@@ -60,9 +64,11 @@ export type ChangeSourceCheck = {
   case: { slug: string; title: string; status: CaseStatus };
 };
 
-export type ChangeInput = { cases: ChangeCase[]; sourceChecks: ChangeSourceCheck[] };
+export type ChangeInput = { cases: ChangeCase[]; sourceChecks: ChangeSourceCheck[]; releases: ChangeRelease[] };
 
 const PUBLISHED: CaseStatus = "published";
+/** Where a release event points: the page that serves every export of that version. */
+const EXPORT_PATH = "/export";
 
 const iso = (date: Date | string) => new Date(date).toISOString();
 const casePath = (slug: string) => `/case/${slug}`;
@@ -106,10 +112,26 @@ function sourceEvent(s: ChangeSourceCheck): ChangeEvent[] {
   ];
 }
 
+function releaseEvent(r: ChangeRelease): ChangeEvent {
+  return {
+    id: `corpus_released:${r.version}`,
+    kind: "corpus_released",
+    occurredAt: iso(r.releasedAt),
+    title: `Released: Corpus ${r.version}`,
+    summary: `${r.cases} published cases.${r.note ? ` ${r.note}` : ""}`,
+    url: EXPORT_PATH,
+  };
+}
+
 /** Every change to the published corpus, newest first. Held cases and their sources contribute nothing. */
 export function changeEvents(input: ChangeInput): ChangeEvent[] {
   const published = input.cases.filter((c) => c.status === PUBLISHED);
-  const events = [...published.flatMap(publishEvent), ...published.flatMap(transitionEvents), ...input.sourceChecks.flatMap(sourceEvent)];
+  const events = [
+    ...input.releases.map(releaseEvent),
+    ...published.flatMap(publishEvent),
+    ...published.flatMap(transitionEvents),
+    ...input.sourceChecks.flatMap(sourceEvent),
+  ];
   return events.sort((a, b) => b.occurredAt.localeCompare(a.occurredAt) || a.id.localeCompare(b.id));
 }
 
@@ -129,6 +151,8 @@ export type AtomFeedOptions = {
   title: string;
   /** `updated` when there are no events. */
   generatedAt: Date;
+  /** The corpus version, carried as the feed's `generator` version. */
+  version: string;
 };
 
 /** Atom 1.0 (RFC 4287): one entry per event, `updated` set to the newest event. */
@@ -157,6 +181,7 @@ export function atomFeed(events: ChangeEvent[], options: AtomFeedOptions): strin
     `  <link rel="self" type="${ATOM_TYPE}" href="${escapeXml(options.feedUrl)}"/>`,
     `  <link rel="alternate" type="text/html" href="${escapeXml(resolve("/changes"))}"/>`,
     "  <author><name>Bind</name></author>",
+    `  <generator version="${escapeXml(options.version)}">Bind corpus</generator>`,
     ...entries,
     "</feed>",
     "",

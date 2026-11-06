@@ -123,3 +123,6 @@ function escapeTex(s: string) {
     .replace(/–/g, "--")
     .replace(/—/g, "---");
 }
+
+/** First line of every BibTeX and LaTeX export: both treat `%` as a comment, so the version travels with the file. */
+export const texCorpusComment = (version: string) => `% Bind corpus ${version}\n`;

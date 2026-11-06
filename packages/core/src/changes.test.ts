@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { atomFeed, changeEvents, type ChangeCase, type ChangeInput, type ChangeSourceCheck } from "./changes";
+import { atomFeed, changeEvents, type ChangeCase, type ChangeInput, type ChangeRelease, type ChangeSourceCheck } from "./changes";
 import { resolvedState } from "./resolutions";
 import { checkQuote, sourceCheckLedgerSchema, type SourceCheckEntry } from "./sourceCheck";
 
@@ -34,18 +34,21 @@ const flagged: ChangeSourceCheck = {
   case: citing,
 };
 
-const input: ChangeInput = { cases: [published, draft], sourceChecks: [flagged, { ...flagged, label: "Current one", status: "current" }] };
+const release: ChangeRelease = { version: "2025.12", releasedAt: "2025-12-01T00:00:00.000Z", cases: 1, note: "First release." };
+
+const input: ChangeInput = { cases: [published, draft], sourceChecks: [flagged, { ...flagged, label: "Current one", status: "current" }], releases: [release] };
 
 describe("changeEvents", () => {
   const events = changeEvents(input);
 
   it("orders newest first", () => {
-    expect(events.map((e) => e.kind)).toEqual(["source_changed", "case_resolved", "case_published", "case_transition"]);
+    expect(events.map((e) => e.kind)).toEqual(["corpus_released", "source_changed", "case_resolved", "case_published", "case_transition"]);
     expect(events.map((e) => e.occurredAt)).toEqual([...events.map((e) => e.occurredAt)].sort().reverse());
   });
 
   it("gives every event a stable id built from kind, slug and date", () => {
     expect(events.map((e) => e.id)).toEqual([
+      "corpus_released:2025.12",
       "source_changed:bind-0001:2025-11-02T06:00:00.000Z:gdpr-art-17-1",
       "case_resolved:bind-0001:2025-09-15T00:00:00.000Z:resolved_legislative",
       "case_published:bind-0001:2025-06-01T09:00:00.000Z",
@@ -54,19 +57,31 @@ describe("changeEvents", () => {
     expect(changeEvents(input)).toEqual(events);
   });
 
+  it("reports a release as one event dated by the ledger, linking to the exports", () => {
+    expect(events[0]).toEqual({
+      id: "corpus_released:2025.12",
+      kind: "corpus_released",
+      occurredAt: "2025-12-01T00:00:00.000Z",
+      title: "Released: Corpus 2025.12",
+      summary: "1 published cases. First release.",
+      url: "/export",
+    });
+    expect(changeEvents({ cases: [], sourceChecks: [], releases: [{ version: "2026.01", releasedAt: new Date("2026-01-09"), cases: 40 }] })[0]?.summary).toBe("40 published cases.");
+  });
+
   it("leaves held cases out, including their publish date, transitions and sources", () => {
-    expect(events.every((e) => e.url === "/case/bind-0001")).toBe(true);
-    const heldSource = changeEvents({ cases: [draft], sourceChecks: [{ ...flagged, case: { ...citing, slug: draft.slug, status: "draft" } }] });
+    expect(events.filter((e) => e.kind !== "corpus_released").every((e) => e.url === "/case/bind-0001")).toBe(true);
+    const heldSource = changeEvents({ cases: [draft], sourceChecks: [{ ...flagged, case: { ...citing, slug: draft.slug, status: "draft" } }], releases: [] });
     expect(heldSource).toEqual([]);
   });
 
   it("reports only sources whose check failed", () => {
     expect(events.filter((e) => e.kind === "source_changed")).toHaveLength(1);
-    expect(events[0]).toMatchObject({ title: "Source changed: GDPR Art. 17(1)", summary: expect.stringContaining("no longer at its source") });
+    expect(events[1]).toMatchObject({ title: "Source changed: GDPR Art. 17(1)", summary: expect.stringContaining("no longer at its source") });
   });
 
   it("skips a case that was never published", () => {
-    expect(changeEvents({ cases: [{ ...published, publishedAt: null }], sourceChecks: [] }).map((e) => e.kind)).toEqual(["case_resolved", "case_transition"]);
+    expect(changeEvents({ cases: [{ ...published, publishedAt: null }], sourceChecks: [], releases: [] }).map((e) => e.kind)).toEqual(["case_resolved", "case_transition"]);
   });
 });
 
@@ -81,7 +96,7 @@ describe("a quote that left its source", () => {
   it("is written as changed", () => expect(ledger.checks[0]?.status).toBe("changed"));
 
   it("surfaces as one source_changed event dated by the check", () => {
-    const events = changeEvents({ cases: [published], sourceChecks: ledger.checks.map((c) => ({ ...c, case: citing })) });
+    const events = changeEvents({ cases: [published], sourceChecks: ledger.checks.map((c) => ({ ...c, case: citing })), releases: [] });
     expect(events.filter((e) => e.kind === "source_changed")).toEqual([
       expect.objectContaining({ id: `source_changed:bind-0001:${checkedAt}:gdpr-art-17-1`, occurredAt: checkedAt, url: "/case/bind-0001" }),
     ]);
@@ -89,12 +104,12 @@ describe("a quote that left its source", () => {
 
   it("does not surface while the quote is still found", () => {
     const current: SourceCheckEntry = { ...target, ...checkQuote(target.quote, { ok: true, text: `… ${target.quote} …` }, true), checkedAt, foundAt: checkedAt };
-    expect(changeEvents({ cases: [published], sourceChecks: [{ ...current, case: citing }] }).filter((e) => e.kind === "source_changed")).toEqual([]);
+    expect(changeEvents({ cases: [published], sourceChecks: [{ ...current, case: citing }], releases: [] }).filter((e) => e.kind === "source_changed")).toEqual([]);
   });
 });
 
 describe("atomFeed", () => {
-  const options = { siteUrl: "https://bind.example", feedUrl: "https://api.bind.example/changes.atom", title: "Bind Changes", generatedAt: new Date("2025-12-01") };
+  const options = { siteUrl: "https://bind.example", feedUrl: "https://api.bind.example/changes.atom", title: "Bind Changes", generatedAt: new Date("2025-12-01"), version: "2025.12" };
   const events = changeEvents(input);
   const xml = atomFeed(events, options);
 
@@ -106,10 +121,15 @@ describe("atomFeed", () => {
     expect(xml).toContain('<link rel="self" type="application/atom+xml" href="https://api.bind.example/changes.atom"/>');
   });
 
+  it("names the corpus version in the generator", () => {
+    expect(xml).toContain('<generator version="2025.12">Bind corpus</generator>');
+  });
+
   it("writes one entry per event with an absolute link and a URN id", () => {
     expect(xml.match(/<entry>/g)).toHaveLength(events.length);
     expect(xml).toContain(`<id>urn:bind:change:${events[0]?.id}</id>`);
     expect(xml).toContain('<link rel="alternate" type="text/html" href="https://bind.example/case/bind-0001"/>');
+    expect(xml).toContain('<link rel="alternate" type="text/html" href="https://bind.example/export"/>');
   });
 
   it("escapes markup in text", () => {

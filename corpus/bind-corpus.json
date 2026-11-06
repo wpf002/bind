@@ -1,6 +1,7 @@
 {
-  "generatedAt": "2026-11-06T23:30:15.262Z",
+  "generatedAt": "2026-11-06T23:49:16.934Z",
   "corpus": {
+    "version": "2026.11",
     "cases": 40,
     "shapes": 6,
     "properties": 10

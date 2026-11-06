@@ -2,6 +2,7 @@ import type { CaseQuery, Resolution, Resolvability } from "@bind/shared";
 import { FLAGGED_SOURCE_STATUSES, changeEvents, groupByPrimaryShape, instrumentSlug, provisionAnchor, summariseProperty } from "@bind/core";
 import { INSTRUMENT_ROLE } from "@bind/shared";
 import { prisma } from "./client";
+import { RELEASES_LEDGER_PATH, readReleases } from "./releases";
 
 /** Read layer shared by the API and the web app. Published cases only unless asked. */
 
@@ -420,12 +421,13 @@ export async function listTransitions() {
 }
 
 /**
- * What changed in the published corpus, newest first: each case's publish date and transitions,
- * and every citation whose last source check failed. The check's result on the Citation row is the
- * ledger entry check-sources wrote (and the seed re-applies), so no file is read here.
+ * What changed in the published corpus, newest first: each release in the releases ledger, each
+ * case's publish date and transitions, and every citation whose last source check failed. The
+ * check's result on the Citation row is the ledger entry check-sources wrote (and the seed
+ * re-applies), so the releases ledger is the only file read here. Tests point it at a fixture.
  */
-export async function listChanges() {
-  const [cases, citations] = await Promise.all([
+export async function listChanges(options: { releasesPath?: string } = {}) {
+  const [cases, citations, ledger] = await Promise.all([
     prisma.case.findMany({
       where: { status: "published" },
       select: {
@@ -442,6 +444,7 @@ export async function listChanges() {
       where: { targetType: "case", sourceCheck: { in: [...FLAGGED_SOURCE_STATUSES] }, sourceCheckedAt: { not: null } },
       select: { targetId: true, url: true, label: true, sourceCheck: true, sourceCheckedAt: true },
     }),
+    readReleases(options.releasesPath ?? RELEASES_LEDGER_PATH),
   ]);
   const byId = new Map(cases.map((c) => [c.id, c]));
   const sourceChecks = citations.flatMap((c) => {
@@ -449,5 +452,5 @@ export async function listChanges() {
     if (!cited || !c.sourceCheck || !c.sourceCheckedAt) return [];
     return [{ url: c.url, label: c.label, status: c.sourceCheck, checkedAt: c.sourceCheckedAt, case: cited }];
   });
-  return changeEvents({ cases, sourceChecks });
+  return changeEvents({ cases, sourceChecks, releases: ledger.releases });
 }

@@ -162,6 +162,26 @@ export const reviewQueueSchema = z.object({
 });
 export type ReviewQueue = z.infer<typeof reviewQueueSchema>;
 
+/**
+ * A corpus version: the year and month of the release, with `.2`, `.3`… when a month has
+ * more than one (`2026.11`, `2026.11.2`). Integrators pin it; every export carries it.
+ */
+export const RELEASE_VERSION = /^\d{4}\.(0[1-9]|1[0-2])(\.[2-9]\d*)?$/;
+
+export const releaseSchema = z.object({
+  version: z.string().regex(RELEASE_VERSION, "A version is YYYY.MM, with .2, .3… for a second release in the month."),
+  /** ISO 8601, UTC. */
+  releasedAt: z.string().datetime(),
+  /** Published cases at the release. */
+  cases: z.number().int().nonnegative(),
+  note: z.string().optional(),
+});
+export type Release = z.infer<typeof releaseSchema>;
+
+/** packages/db/prisma/ledger/releases.json. The last entry is the current version. */
+export const releasesLedgerSchema = z.object({ releases: z.array(releaseSchema).min(1) });
+export type ReleasesLedger = z.infer<typeof releasesLedgerSchema>;
+
 /** Enum values the JSON export carries. Each mirrors a Prisma enum of the same name. */
 export const INSTRUMENT_ROLE = ["mandating", "conflicting", "context"] as const;
 export const LEGAL_STANDING = ["untested", "endorsed_by_regulator", "rejected_by_regulator", "litigated_unresolved", "academic_only"] as const;
@@ -227,27 +247,13 @@ export type ExportCase = z.infer<typeof exportCaseSchema>;
 /** The whole published corpus as one document: GET /export/json and corpus/bind-corpus.json. */
 export const corpusExportSchema = z.object({
   generatedAt: isoDate,
-  corpus: z.object({ cases: z.number().int(), shapes: z.number().int(), properties: z.number().int() }),
+  corpus: z.object({
+    /** The corpus version at generation, from the releases ledger. */
+    version: z.string().regex(RELEASE_VERSION),
+    cases: z.number().int(),
+    shapes: z.number().int(),
+    properties: z.number().int(),
+  }),
   cases: z.array(exportCaseSchema),
 });
 export type CorpusExport = z.infer<typeof corpusExportSchema>;
-
-/**
- * A corpus version: the year and month of the release, with `.2`, `.3`… when a month has
- * more than one (`2026.11`, `2026.11.2`). Integrators pin it; every export carries it.
- */
-export const RELEASE_VERSION = /^\d{4}\.(0[1-9]|1[0-2])(\.[2-9]\d*)?$/;
-
-export const releaseSchema = z.object({
-  version: z.string().regex(RELEASE_VERSION, "A version is YYYY.MM, with .2, .3… for a second release in the month."),
-  /** ISO 8601, UTC. */
-  releasedAt: z.string().datetime(),
-  /** Published cases at the release. */
-  cases: z.number().int().nonnegative(),
-  note: z.string().optional(),
-});
-export type Release = z.infer<typeof releaseSchema>;
-
-/** packages/db/prisma/ledger/releases.json. The last entry is the current version. */
-export const releasesLedgerSchema = z.object({ releases: z.array(releaseSchema).min(1) });
-export type ReleasesLedger = z.infer<typeof releasesLedgerSchema>;

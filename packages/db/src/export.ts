@@ -1,7 +1,8 @@
-import type { CorpusExport, ExportCase } from "@bind/shared";
+import type { CorpusExport, ExportCase, Release } from "@bind/shared";
 import { corpusExportSchema } from "@bind/shared";
 import { instrumentSlug } from "@bind/core";
 import { listCases, listProperties, listShapes, type CaseRow } from "./queries";
+import { RELEASES_LEDGER_PATH, currentRelease } from "./releases";
 
 /** The published corpus as one JSON document. GET /export/json and `pnpm export` both call this. */
 
@@ -52,12 +53,24 @@ function toExportCase(c: CaseRow): ExportCase {
   };
 }
 
+export type CorpusExportOptions = {
+  generatedAt?: Date;
+  /** The release to stamp; read from the ledger at `releasesPath` when not given. */
+  release?: Release;
+  releasesPath?: string;
+};
+
 /** Every published case with its properties, shapes, instruments, citations, workarounds and transitions. */
-export async function corpusExport(generatedAt = new Date()): Promise<CorpusExport> {
-  const [cases, shapes, properties] = await Promise.all([listCases({ limit: 200 }), listShapes(), listProperties()]);
+export async function corpusExport(options: CorpusExportOptions = {}): Promise<CorpusExport> {
+  const [cases, shapes, properties, release] = await Promise.all([
+    listCases({ limit: 200 }),
+    listShapes(),
+    listProperties(),
+    options.release ?? currentRelease(options.releasesPath ?? RELEASES_LEDGER_PATH),
+  ]);
   return corpusExportSchema.parse({
-    generatedAt,
-    corpus: { cases: cases.length, shapes: shapes.length, properties: properties.length },
+    generatedAt: options.generatedAt ?? new Date(),
+    corpus: { version: release.version, cases: cases.length, shapes: shapes.length, properties: properties.length },
     cases: cases.map(toExportCase),
   });
 }
