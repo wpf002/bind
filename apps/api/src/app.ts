@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { caseQuerySchema, corpusExportSchema, submissionSchema } from "@bind/shared";
 import {
+  atomFeed,
   caseTableTeX,
   caseToBibTeX,
   checkQuerySchema,
@@ -26,6 +27,7 @@ import {
   getProperty,
   getShape,
   listCases,
+  listChanges,
   listCheckCases,
   listJurisdictions,
   listProperties,
@@ -42,6 +44,7 @@ import {
   badRequestSchema,
   caseDetailSchema,
   caseListSchema,
+  changeListSchema,
   checkResponseSchema,
   healthSchema,
   jurisdictionListSchema,
@@ -70,6 +73,10 @@ const EXPORT_LIMIT = 200;
 /** A static corpus changes on publish, not per request. One hour keeps mirrors fresh without hammering the DB. */
 const EXPORT_CACHE_CONTROL = "public, max-age=3600";
 
+/** Where the web app's pages live. Feed entries link there. */
+const DEFAULT_SITE_URL = "http://localhost:3300";
+const CHANGES_FEED_TITLE = "Bind Changes";
+const ATOM_TYPE = "application/atom+xml";
 const BIBTEX_TYPE = "application/x-bibtex";
 const LATEX_TYPE = "application/x-tex";
 const JSON_TYPE = "application/json";
@@ -103,8 +110,9 @@ function transformSchema({ schema, url }: { schema: FastifySchema; url: string }
 }
 
 /** Builds the API without binding a port. The entry file listens; tests call `inject`. */
-export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: string }) {
+export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: string; siteUrl?: string }) {
   const app = Fastify({ logger: { level: options.logLevel ?? "info" } });
+  const siteUrl = options.siteUrl ?? DEFAULT_SITE_URL;
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
 
@@ -249,6 +257,21 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
     async () => listTransitions()
   );
   api.get("/stats", { schema: { summary: "Corpus counts", response: { 200: statsSchema } } }, async () => stats());
+
+  api.get(
+    "/changes",
+    { schema: { summary: "What changed in the published corpus, newest first", response: { 200: changeListSchema } } },
+    async () => (await listChanges()).map((event) => ({ ...event, url: new URL(event.url, siteUrl).toString() }))
+  );
+  api.get(
+    "/changes.atom",
+    { schema: { summary: "The changes as an Atom 1.0 feed", produces: [ATOM_TYPE], response: { 200: z.string() } } },
+    async (req, reply) => {
+      const feedUrl = `${req.protocol}://${req.host}/changes.atom`;
+      const body = atomFeed(await listChanges(), { siteUrl, feedUrl, title: CHANGES_FEED_TITLE, generatedAt: new Date() });
+      return reply.type(utf8(ATOM_TYPE)).header("cache-control", EXPORT_CACHE_CONTROL).send(body);
+    }
+  );
 
   app.post("/submissions", { schema: { hide: true } }, async (req, reply) => {
     const parsed = submissionSchema.safeParse(req.body);

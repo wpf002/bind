@@ -5,7 +5,7 @@ import { buildApp } from "./app";
 // Fails at startup if REVIEWERS is set but malformed.
 const reviewers = process.env.REVIEWERS ? parseReviewers(process.env.REVIEWERS) : [];
 
-const app = await buildApp({ reviewers });
+const app = await buildApp({ reviewers, siteUrl: process.env.SITE_URL });
 
 const port = Number(process.env.API_PORT ?? 4300);
 app.listen({ port, host: "127.0.0.1" }).catch((e) => {

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CHANGE_KINDS } from "@bind/core";
 import {
   CASE_STATUS,
   INSTRUMENT_ROLE,
@@ -270,6 +271,17 @@ export const rejectionListSchema = z.array(
 export const transitionListSchema = z.array(
   transitionSchema.extend({ case: z.object({ slug: z.string(), title: z.string(), corpusRef: z.string() }) })
 );
+
+export const changeSchema = z.object({
+  id: z.string(),
+  kind: z.enum(CHANGE_KINDS),
+  occurredAt: z.string().datetime(),
+  title: z.string(),
+  summary: z.string(),
+  url: z.string().url(),
+});
+
+export const changeListSchema = z.array(changeSchema);
 
 export const statsSchema = z.object({
   total: count,
