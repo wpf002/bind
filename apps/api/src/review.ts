@@ -34,7 +34,7 @@ export function registerReviewRoutes(app: FastifyInstance, reviewers: Reviewer[]
     return reviewer.name;
   }
 
-  app.get("/review/queue", async (req, reply) => {
+  app.get("/review/queue", { schema: { hide: true } }, async (req, reply) => {
     const reviewer = authenticate(req, reply);
     if (!reviewer) return reply;
     const rows = await prisma.submission.findMany({
@@ -65,7 +65,7 @@ export function registerReviewRoutes(app: FastifyInstance, reviewers: Reviewer[]
     return { reviewer, required: REVIEWS_REQUIRED, submissions };
   });
 
-  app.post<{ Params: { id: string } }>("/review/submissions/:id/reviews", async (req, reply) => {
+  app.post<{ Params: { id: string } }>("/review/submissions/:id/reviews", { schema: { hide: true } }, async (req, reply) => {
     const reviewer = authenticate(req, reply);
     if (!reviewer) return reply;
     const parsed = reviewSchema.safeParse(req.body);
