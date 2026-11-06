@@ -231,3 +231,23 @@ export const corpusExportSchema = z.object({
   cases: z.array(exportCaseSchema),
 });
 export type CorpusExport = z.infer<typeof corpusExportSchema>;
+
+/**
+ * A corpus version: the year and month of the release, with `.2`, `.3`… when a month has
+ * more than one (`2026.11`, `2026.11.2`). Integrators pin it; every export carries it.
+ */
+export const RELEASE_VERSION = /^\d{4}\.(0[1-9]|1[0-2])(\.[2-9]\d*)?$/;
+
+export const releaseSchema = z.object({
+  version: z.string().regex(RELEASE_VERSION, "A version is YYYY.MM, with .2, .3… for a second release in the month."),
+  /** ISO 8601, UTC. */
+  releasedAt: z.string().datetime(),
+  /** Published cases at the release. */
+  cases: z.number().int().nonnegative(),
+  note: z.string().optional(),
+});
+export type Release = z.infer<typeof releaseSchema>;
+
+/** packages/db/prisma/ledger/releases.json. The last entry is the current version. */
+export const releasesLedgerSchema = z.object({ releases: z.array(releaseSchema).min(1) });
+export type ReleasesLedger = z.infer<typeof releasesLedgerSchema>;

@@ -9,3 +9,4 @@ export * from "./properties.js";
 export * from "./check.js";
 export * from "./changes.js";
 export * from "./instruments.js";
+export * from "./releases.js";

@@ -1,0 +1,10 @@
+{
+  "releases": [
+    {
+      "version": "2026.11",
+      "releasedAt": "2026-11-06T00:00:00.000Z",
+      "cases": 40,
+      "note": "First release: the 40-case corpus, every citation verified against its source."
+    }
+  ]
+}
