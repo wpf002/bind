@@ -23,24 +23,13 @@ made for engineers.
 | API and JSON export: OpenAPI at /openapi.json from the route schemas, GET /export/json, JSON on the Export page | 2ff3608, 8408858, 6ea008f, 7484b8b |
 | Changes feed: publishes, transitions and failed source checks as events, GET /changes, Atom at /changes.atom, Changes page | a5d5559, 7755bb3, c598d4b, d573dc1 |
 | Submit for engineers: building, property, jurisdictions, the required-by and blocked-by rules with sources, workaround; accept opens a draft case with the property linked | 055555c, d85a34e, f739cfa, 82953f3, e379a4f |
+| Instruments: a slug per provision, Instruments index by jurisdiction, one page per instrument with its provisions and cases by role, GET /instruments and GET /instruments/:slug, case page links | eb96962, 7213e39, ef4809a, 0148243 |
 
 ## Next
 
 In order. Each item ships on its own.
 
-### 1. Instruments
-
-Engineers know the rule by name before they know the shape: GDPR Art. 17,
-the CLOUD Act, DORA. Give every legal instrument in the corpus a page: regime,
-provision, mandate, in-force date, and the cases where it mandates, conflicts
-or is context. An Instruments index grouped by jurisdiction, `GET /instruments`
-and `GET /instruments/:slug` in the OpenAPI document, and the case page's
-instrument names link to them.
-
-Done when: every instrument reached from a published case has a page, the
-index lists them all, and the API routes return the same cases the pages show.
-
-### 2. Corpus versions
+### 1. Corpus versions
 
 Integrators pin what they read. Stamp the corpus with a version (`2026.11`,
 bumped by one command that also writes a `corpus_released` change event) and
@@ -52,7 +41,7 @@ costs nothing until there is one.
 Done when: every export names the same version, a bump shows in the Changes
 feed, and a repeated export request with the ETag returns 304.
 
-### 3. Design note
+### 2. Design note
 
 The Check result has to leave the site and land in a design review. Add
 `GET /check.md` and a Copy Note button on the Check page that produce a
