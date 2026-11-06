@@ -7,6 +7,7 @@ const ITEMS = [
   ["/check", "Check"],
   ["/", "Cases"],
   ["/shapes", "Shapes"],
+  ["/instruments", "Instruments"],
   ["/matrix", "Matrix"],
   ["/resolutions", "Resolutions"],
   ["/changes", "Changes"],

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { INCLUSION_CRITERIA, caseToBibTeX, splitAnalysis, suggestedCitation } from "@bind/core";
+import { INCLUSION_CRITERIA, caseToBibTeX, instrumentHref, splitAnalysis, suggestedCitation } from "@bind/core";
 import { getCase, previewDrafts, type CaseDetail } from "@bind/db";
 import { CopyButton } from "@/components/CopyButton";
 import { Jur, Res, ShapeTag, SourceCheck, Tip, Verify } from "@/components/marks";
@@ -35,7 +35,9 @@ function Provision({ i }: { i: Inst }) {
       <div className="provision-name">
         <Jur code={x.jurisdiction.code} link />
         <h3>
-          {x.shortName} {x.provision}
+          <Link href={instrumentHref(x)}>
+            {x.shortName} {x.provision}
+          </Link>
         </h3>
       </div>
       <div className="provision-instr">{x.instrument}</div>
@@ -149,9 +151,9 @@ export default async function CasePage({ params }: Props) {
                 <dt>{titleCase(i.role)}</dt>
                 <dd className="brief-item brief-inst">
                   <Jur code={i.instrument.jurisdiction.code} />
-                  <a href="#contradiction">
+                  <Link href={instrumentHref(i.instrument)}>
                     {i.instrument.shortName} {i.instrument.provision}
-                  </a>
+                  </Link>
                 </dd>
               </div>
             ))}
