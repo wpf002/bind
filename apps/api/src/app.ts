@@ -4,7 +4,7 @@ import swagger from "@fastify/swagger";
 import { hasZodFastifySchemaValidationErrors, serializerCompiler, validatorCompiler, type ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { caseQuerySchema, corpusExportSchema, submissionSchema } from "@bind/shared";
+import { buildSubmissionSchema, caseQuerySchema, corpusExportSchema } from "@bind/shared";
 import {
   atomFeed,
   caseTableTeX,
@@ -40,6 +40,7 @@ import {
 } from "@bind/db";
 import { containsNulByte } from "./nulBytes";
 import { registerReviewRoutes } from "./review";
+import { toSubmissionRow } from "./submissions";
 import {
   badRequestSchema,
   caseDetailSchema,
@@ -274,9 +275,14 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
   );
 
   app.post("/submissions", { schema: { hide: true } }, async (req, reply) => {
-    const parsed = submissionSchema.safeParse(req.body);
+    const [properties, jurisdictions] = await Promise.all([
+      prisma.architecturalProperty.findMany({ select: { slug: true } }),
+      prisma.jurisdiction.findMany({ select: { code: true } }),
+    ]);
+    const schema = buildSubmissionSchema({ properties: properties.map((p) => p.slug), jurisdictions: jurisdictions.map((j) => j.code) });
+    const parsed = schema.safeParse(req.body);
     if (!parsed.success) return reply.code(422).send({ error: parsed.error.flatten() });
-    const s = await prisma.submission.create({ data: parsed.data, select: { id: true, status: true, submittedAt: true } });
+    const s = await prisma.submission.create({ data: toSubmissionRow(parsed.data), select: { id: true, status: true, submittedAt: true } });
     return reply.code(201).send(s);
   });
 

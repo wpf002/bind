@@ -1,6 +1,6 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { prisma } from "@bind/db";
-import { bearer, buildTestApp, createReviewers, validSubmission } from "./fixtures";
+import { bearer, buildTestApp, createReviewers, PROPERTY_SLUG, seedCorpus, submissionRow, validSubmission } from "./fixtures";
 
 const [ada, grace] = createReviewers();
 const NOTES = "Fails criterion two: the audit rule allows redaction by tombstone.";
@@ -23,7 +23,13 @@ afterAll(async () => {
   await disabled.close();
 });
 
-const createSubmission = () => prisma.submission.create({ data: validSubmission });
+// seedCorpus holds the property an accepted submission links its draft case to. It also seeds one
+// rejection of its own, so the assertions below look only at rejections that came from a submission.
+beforeEach(() => seedCorpus());
+
+const intakeRejections = () => prisma.rejection.findMany({ where: { slug: { startsWith: "sub-" } } });
+
+const createSubmission = () => prisma.submission.create({ data: submissionRow });
 
 const queue = (headers: Record<string, string>) => app.inject({ method: "GET", url: "/review/queue", headers });
 
@@ -41,14 +47,14 @@ const REJECTED_CREDENTIALS: [string, Record<string, string>][] = [
 
 async function expectNothingWritten(submissionId: string) {
   expect(await prisma.submissionReview.count()).toBe(0);
-  expect(await prisma.rejection.count()).toBe(0);
+  expect(await intakeRejections()).toEqual([]);
   expect((await prisma.submission.findUniqueOrThrow({ where: { id: submissionId } })).status).toBe("pending");
 }
 
 describe("GET /review/queue", () => {
   it("lists open submissions for the reviewer, without the submitter's email", async () => {
     const open = await createSubmission();
-    await prisma.submission.create({ data: { ...validSubmission, status: "accepted" } });
+    await prisma.submission.create({ data: { ...submissionRow, status: "accepted" } });
 
     const res = await queue(bearer(ada.token));
     expect(res.statusCode).toBe(200);
@@ -56,7 +62,18 @@ describe("GET /review/queue", () => {
     expect(body.reviewer).toBe("ada");
     expect(body.required).toBe(2);
     expect(body.submissions.map((s) => s.id)).toEqual([open.id]);
-    expect(body.submissions[0]).toMatchObject({ title: validSubmission.title, reviewCount: 0, mine: null, others: [] });
+    expect(body.submissions[0]).toMatchObject({
+      title: validSubmission.title,
+      building: validSubmission.building,
+      property: validSubmission.property,
+      jurisdictions: validSubmission.jurisdictions,
+      requiredBy: validSubmission.requiredBy,
+      blockedBy: validSubmission.blockedBy,
+      workaround: validSubmission.workaround,
+      reviewCount: 0,
+      mine: null,
+      others: [],
+    });
     expect(res.body).not.toContain(validSubmission.submitterEmail);
   });
 
@@ -100,13 +117,44 @@ describe("POST /review/submissions/:id/reviews", () => {
     expect((await prisma.submission.findUniqueOrThrow({ where: { id: submission.id } })).status).toBe("in_review");
   });
 
-  it("accepts the submission on the second accept", async () => {
+  it("accepts the submission on the second accept and opens a draft case carrying the property", async () => {
     const submission = await createSubmission();
     await review(submission.id, bearer(ada.token), { recommendation: "accept", notes: NOTES });
     const res = await review(submission.id, bearer(grace.token), { recommendation: "accept", notes: NOTES });
     expect(res.json()).toEqual({ status: "accepted", reviewCount: 2 });
     expect((await prisma.submission.findUniqueOrThrow({ where: { id: submission.id } })).status).toBe("accepted");
-    expect(await prisma.rejection.count()).toBe(0);
+    expect(await intakeRejections()).toEqual([]);
+
+    const draft = await prisma.case.findUniqueOrThrow({
+      where: { corpusRef: `SUB-${submission.id.slice(-10)}` },
+      include: { properties: { include: { property: { select: { slug: true } } } } },
+    });
+    expect(draft).toMatchObject({
+      slug: "bind-0003",
+      title: validSubmission.title,
+      status: "draft",
+      inclusionVerdict: "undecided",
+      inclusionReasoning: validSubmission.workaround,
+      contributor: validSubmission.submitterName,
+    });
+    expect(draft.statement).toBe(
+      `${validSubmission.building} ${validSubmission.requiredBy.citation} requires it and ${validSubmission.blockedBy.citation} forbids it.`,
+    );
+    expect(draft.properties.map((p) => p.property.slug)).toEqual([PROPERTY_SLUG]);
+  });
+
+  it("opens the draft case without a property when the submission carries the migrated-row sentinel", async () => {
+    const submission = await prisma.submission.create({ data: { ...submissionRow, property: "unknown" } });
+    await review(submission.id, bearer(ada.token), { recommendation: "accept", notes: NOTES });
+    await review(submission.id, bearer(grace.token), { recommendation: "accept", notes: NOTES });
+    const draft = await prisma.case.findUniqueOrThrow({ where: { corpusRef: `SUB-${submission.id.slice(-10)}` }, include: { properties: true } });
+    expect(draft.properties).toEqual([]);
+  });
+
+  it("opens no draft case while the submission is still in review", async () => {
+    const submission = await createSubmission();
+    await review(submission.id, bearer(ada.token), { recommendation: "accept", notes: NOTES });
+    expect(await prisma.case.count({ where: { status: "draft", corpusRef: { startsWith: "SUB-" } } })).toBe(0);
   });
 
   it("rejects the submission on the second reject and writes the rejection log entry", async () => {
@@ -123,12 +171,12 @@ describe("POST /review/submissions/:id/reviews", () => {
     expect(res.json()).toEqual({ status: "rejected", reviewCount: 2 });
 
     expect((await prisma.submission.findUniqueOrThrow({ where: { id: submission.id } })).status).toBe("rejected");
-    const rejections = await prisma.rejection.findMany();
+    const rejections = await intakeRejections();
     expect(rejections).toHaveLength(1);
     expect(rejections[0]).toMatchObject({
       slug: `sub-${submission.id.slice(-10)}`,
       title: validSubmission.title,
-      claim: validSubmission.statement,
+      claim: validSubmission.building,
       reason: "resolved_by_known_technique",
       reasoning: `${first}\n\n${second}`,
       submittedBy: validSubmission.submitterName,
@@ -194,12 +242,12 @@ describe("POST /review/submissions/:id/reviews", () => {
   });
 
   it("answers 409 once the submission is decided and writes nothing", async () => {
-    const decided = await prisma.submission.create({ data: { ...validSubmission, status: "accepted" } });
+    const decided = await prisma.submission.create({ data: { ...submissionRow, status: "accepted" } });
     const res = await review(decided.id, bearer(ada.token), { recommendation: "reject", notes: NOTES, rejectionReason: "out_of_scope" });
     expect(res.statusCode).toBe(409);
     expect(res.json()).toEqual({ error: "already_decided" });
     expect(await prisma.submissionReview.count()).toBe(0);
-    expect(await prisma.rejection.count()).toBe(0);
+    expect(await intakeRejections()).toEqual([]);
     expect((await prisma.submission.findUniqueOrThrow({ where: { id: decided.id } })).status).toBe("accepted");
   });
 });

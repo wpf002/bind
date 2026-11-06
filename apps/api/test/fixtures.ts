@@ -3,6 +3,7 @@ import type { Reviewer } from "@bind/core";
 import { prisma } from "@bind/db";
 import type { SubmissionInput } from "@bind/shared";
 import { buildApp } from "../src/app";
+import { toSubmissionRow } from "../src/submissions";
 
 const TOKEN_BYTES = 24;
 
@@ -21,17 +22,19 @@ export const bearer = (token: string) => ({ authorization: `Bearer ${token}` });
 
 export const validSubmission: SubmissionInput = {
   title: "Erasure against an append-only audit log",
-  statement: "The regulation orders deletion on request while the audit rule orders every record kept unaltered.",
-  inclusionArgument:
-    "Deleting the record breaks the hash chain the audit rule relies on, and keeping it breaks the erasure order. No budget changes that.",
-  legalCitation: "Regulation (EU) 2016/679, Art. 17(1)",
-  legalUrl: "https://eur-lex.europa.eu/eli/reg/2016/679/oj",
-  architecturalProperty: "append-only integrity",
-  proposedShape: "immutability-vs-erasure",
+  building: "A hash-chained audit log for a payments ledger, where no record is ever rewritten or removed.",
+  property: "append-only-integrity",
+  jurisdictions: ["EU"],
+  requiredBy: { citation: "Regulation (EU) 2016/679, Art. 17(1)", url: "https://eur-lex.europa.eu/eli/reg/2016/679/oj" },
+  blockedBy: { citation: "Directive 2014/65/EU, Art. 25(5)", url: "https://eur-lex.europa.eu/eli/dir/2014/65/oj" },
+  workaround: "Tombstoning the record keeps the chain but leaves the ciphertext, which the erasure order still covers. Crypto-shredding fails the audit rule.",
   submitterName: "Test Submitter",
   submitterEmail: "submitter@example.com",
   submitterAffiliation: "Example University",
 };
+
+/** The same submission as the row the table stores. */
+export const submissionRow = toSubmissionRow(validSubmission);
 
 export const PUBLISHED_SLUG = "bind-0001";
 export const DRAFT_SLUG = "bind-0002";

@@ -1,6 +1,6 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { prisma } from "@bind/db";
-import { buildTestApp, validSubmission } from "./fixtures";
+import { buildTestApp, seedCorpus, submissionRow, validSubmission } from "./fixtures";
 
 let app: Awaited<ReturnType<typeof buildTestApp>>;
 
@@ -8,6 +8,8 @@ beforeAll(async () => {
   app = await buildTestApp();
 });
 afterAll(() => app.close());
+// The property and jurisdiction a submission names are checked against the corpus.
+beforeEach(() => seedCorpus());
 
 const post = (payload: unknown) => app.inject({ method: "POST", url: "/submissions", payload: payload as object });
 
@@ -20,7 +22,7 @@ describe("POST /submissions", () => {
 
     const rows = await prisma.submission.findMany();
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toMatchObject({ ...validSubmission, id: body.id, status: "pending" });
+    expect(rows[0]).toMatchObject({ ...submissionRow, id: body.id, status: "pending" });
   });
 
   it("ignores a status and id sent by the client", async () => {
@@ -33,21 +35,45 @@ describe("POST /submissions", () => {
 
   it.each([
     ["an empty object", {}],
-    ["a missing inclusion argument", { ...validSubmission, inclusionArgument: undefined }],
     ["a short title", { ...validSubmission, title: "Short" }],
     ["a title over the limit", { ...validSubmission, title: "x".repeat(161) }],
-    ["a short statement", { ...validSubmission, statement: "Too short." }],
+    ["a missing building", { ...validSubmission, building: undefined }],
+    ["a short building", { ...validSubmission, building: "A ledger." }],
+    ["a building made of spaces", { ...validSubmission, building: " ".repeat(40) }],
+    ["a missing property", { ...validSubmission, property: undefined }],
+    ["a property made of spaces", { ...validSubmission, property: " " }],
+    ["an unknown property", { ...validSubmission, property: "warp-drive" }],
+    ["the migrated-row property sentinel", { ...validSubmission, property: "unknown" }],
+    ["missing jurisdictions", { ...validSubmission, jurisdictions: undefined }],
+    ["no jurisdictions", { ...validSubmission, jurisdictions: [] }],
+    ["a jurisdiction made of spaces", { ...validSubmission, jurisdictions: [" "] }],
+    ["an unknown jurisdiction", { ...validSubmission, jurisdictions: ["EU", "XX"] }],
+    ["jurisdictions as a string", { ...validSubmission, jurisdictions: "EU" }],
+    ["a missing required-by rule", { ...validSubmission, requiredBy: undefined }],
+    ["a required-by citation made of spaces", { ...validSubmission, requiredBy: { ...validSubmission.requiredBy, citation: " ".repeat(6) } }],
+    ["a required-by URL that isn't a URL", { ...validSubmission, requiredBy: { ...validSubmission.requiredBy, url: "eur-lex" } }],
+    ["a required-by URL that isn't http or https", { ...validSubmission, requiredBy: { ...validSubmission.requiredBy, url: "ftp://example.com/act.pdf" } }],
+    ["a missing blocked-by rule", { ...validSubmission, blockedBy: undefined }],
+    ["a blocked-by citation made of spaces", { ...validSubmission, blockedBy: { ...validSubmission.blockedBy, citation: " ".repeat(6) } }],
+    ["a blocked-by URL that isn't a URL", { ...validSubmission, blockedBy: { ...validSubmission.blockedBy, url: "eur-lex" } }],
+    ["a javascript: blocked-by URL", { ...validSubmission, blockedBy: { ...validSubmission.blockedBy, url: "javascript:alert(document.cookie)" } }],
+    ["a missing workaround", { ...validSubmission, workaround: undefined }],
+    ["a short workaround", { ...validSubmission, workaround: "Tombstones." }],
+    ["a workaround made of spaces", { ...validSubmission, workaround: " ".repeat(40) }],
     ["an invalid email", { ...validSubmission, submitterEmail: "not-an-email" }],
-    ["a legal URL that isn't a URL", { ...validSubmission, legalUrl: "eur-lex" }],
     ["a number where a string belongs", { ...validSubmission, submitterName: 42 }],
     ["an array", [validSubmission]],
-    ["a javascript: legal URL", { ...validSubmission, legalUrl: "javascript:alert(document.cookie)" }],
-    ["a legal URL that isn't http or https", { ...validSubmission, legalUrl: "ftp://example.com/act.pdf" }],
-    ["fields made of spaces", { ...validSubmission, title: " ".repeat(8), statement: " ".repeat(40), inclusionArgument: " ".repeat(80) }],
+    ["fields made of spaces", { ...validSubmission, title: " ".repeat(8), building: " ".repeat(40), workaround: " ".repeat(40) }],
   ])("rejects %s with 422 and writes nothing", async (_label, payload) => {
     const res = await post(payload);
     expect(res.statusCode).toBe(422);
     expect(await prisma.submission.count()).toBe(0);
+  });
+
+  it("stores each jurisdiction once", async () => {
+    const res = await post({ ...validSubmission, jurisdictions: ["EU", "EU"] });
+    expect(res.statusCode).toBe(201);
+    expect((await prisma.submission.findFirstOrThrow()).jurisdictions).toEqual(["EU"]);
   });
 
   it("rejects a NUL byte with a 4xx and writes nothing", async () => {
