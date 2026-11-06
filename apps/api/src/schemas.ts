@@ -11,6 +11,7 @@ import {
   SOURCE_CHECK,
   VERIFICATION,
   isoDate,
+  releaseSchema,
 } from "@bind/shared";
 
 /**
@@ -38,6 +39,9 @@ export const badRequestSchema = z.object({
 });
 
 export const healthSchema = z.object({ ok: z.literal(true) });
+
+/** GET /version: the releases ledger's last entry. */
+export const versionSchema = releaseSchema.pick({ version: true, releasedAt: true, cases: true });
 
 const shapeBriefSchema = z.object({ slug: z.string(), name: z.string(), ordinal: count });
 

@@ -1,4 +1,5 @@
 import { randomBytes } from "node:crypto";
+import { join } from "node:path";
 import type { Reviewer } from "@bind/core";
 import { prisma } from "@bind/db";
 import type { SubmissionInput } from "@bind/shared";
@@ -16,7 +17,11 @@ export function createReviewers(): [Reviewer, Reviewer] {
   ];
 }
 
-export const buildTestApp = (reviewers: Reviewer[] = []) => buildApp({ reviewers, logLevel: "silent" });
+/** A one-entry releases ledger, so tests don't depend on the real one. */
+export const RELEASES_FIXTURE_PATH = join(import.meta.dirname, "releases.fixture.json");
+export const FIXTURE_RELEASE = { version: "2025.12", releasedAt: "2025-12-01T00:00:00.000Z", cases: 1 };
+
+export const buildTestApp = (reviewers: Reviewer[] = [], releasesPath = RELEASES_FIXTURE_PATH) => buildApp({ reviewers, logLevel: "silent", releasesPath });
 
 export const bearer = (token: string) => ({ authorization: `Bearer ${token}` });
 

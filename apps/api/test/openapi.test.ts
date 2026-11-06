@@ -1,9 +1,9 @@
 import { Validator } from "@seriousme/openapi-schema-validator";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { PUBLISHED_SLUG, buildTestApp, seedCorpus } from "./fixtures";
-import { caseDetailSchema, caseListSchema, shapeListSchema, statsSchema } from "../src/schemas";
+import { FIXTURE_RELEASE, PUBLISHED_SLUG, buildTestApp, seedCorpus } from "./fixtures";
+import { caseDetailSchema, caseListSchema, shapeListSchema, statsSchema, versionSchema } from "../src/schemas";
 
-type OpenApiDocument = { openapi: string; paths: Record<string, Record<string, unknown>> };
+type OpenApiDocument = { openapi: string; info: { version: string }; paths: Record<string, Record<string, unknown>> };
 
 let app: Awaited<ReturnType<typeof buildTestApp>>;
 
@@ -26,6 +26,11 @@ describe("GET /openapi.json", () => {
     const result = await new Validator().validate(doc);
     expect(result.errors).toBeUndefined();
     expect(result.valid).toBe(true);
+  });
+
+  it("is versioned by the corpus", async () => {
+    const doc = (await get("/openapi.json")).json<OpenApiDocument>();
+    expect(doc.info.version).toBe(FIXTURE_RELEASE.version);
   });
 
   it("lists every registered GET route and nothing that writes", async () => {
@@ -70,6 +75,12 @@ describe("responses match their declared schemas", () => {
 
   it("GET /stats", async () => {
     expect(statsSchema.strict().safeParse((await get("/stats")).json()).success).toBe(true);
+  });
+
+  it("GET /version", async () => {
+    const res = await get("/version");
+    expect(res.statusCode).toBe(200);
+    expect(versionSchema.strict().parse(res.json())).toEqual(FIXTURE_RELEASE);
   });
 
   it("answers a bad query with the documented 400 body", async () => {

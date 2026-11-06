@@ -54,6 +54,7 @@ function toExportCase(c: CaseRow): ExportCase {
 }
 
 export type CorpusExportOptions = {
+  /** Defaults to the release date, so the document and its ETag are stable until the corpus or its version changes. */
   generatedAt?: Date;
   /** The release to stamp; read from the ledger at `releasesPath` when not given. */
   release?: Release;
@@ -69,7 +70,7 @@ export async function corpusExport(options: CorpusExportOptions = {}): Promise<C
     options.release ?? currentRelease(options.releasesPath ?? RELEASES_LEDGER_PATH),
   ]);
   return corpusExportSchema.parse({
-    generatedAt: options.generatedAt ?? new Date(),
+    generatedAt: options.generatedAt ?? new Date(release.releasedAt),
     corpus: { version: release.version, cases: cases.length, shapes: shapes.length, properties: properties.length },
     cases: cases.map(toExportCase),
   });

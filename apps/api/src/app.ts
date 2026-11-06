@@ -5,6 +5,7 @@ import { hasZodFastifySchemaValidationErrors, serializerCompiler, validatorCompi
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { buildSubmissionSchema, caseQuerySchema, corpusExportSchema } from "@bind/shared";
+import { etagOnSend } from "./etag";
 import {
   atomFeed,
   caseTableTeX,
@@ -16,12 +17,15 @@ import {
   sourceToBibTeX,
   bibtexKey,
   suggestedCitation,
+  texCorpusComment,
   type Reviewer,
 } from "@bind/core";
 import {
   CORPUS_JSON_FILENAME,
+  RELEASES_LEDGER_PATH,
   corpusExport,
   corpusExportText,
+  currentRelease,
   prisma,
   getCase,
   getInstrument,
@@ -64,6 +68,7 @@ import {
   slugParamsSchema,
   statsSchema,
   transitionListSchema,
+  versionSchema,
 } from "./schemas";
 
 declare module "fastify" {
@@ -73,7 +78,6 @@ declare module "fastify" {
   }
 }
 
-const API_VERSION = "1.0.0";
 const EXPORT_LIMIT = 200;
 /** A static corpus changes on publish, not per request. One hour keeps mirrors fresh without hammering the DB. */
 const EXPORT_CACHE_CONTROL = "public, max-age=3600";
@@ -114,12 +118,26 @@ function transformSchema({ schema, url }: { schema: FastifySchema; url: string }
   };
 }
 
+export type AppOptions = {
+  reviewers: Reviewer[];
+  logLevel?: string;
+  siteUrl?: string;
+  /** The releases ledger to read the corpus version from. Tests point it at a fixture. */
+  releasesPath?: string;
+};
+
+/** Routes that send an ETag and answer If-None-Match with 304. */
+const CACHED = { etag: true } as const;
+
 /** Builds the API without binding a port. The entry file listens; tests call `inject`. */
-export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: string; siteUrl?: string }) {
+export async function buildApp(options: AppOptions) {
   const app = Fastify({ logger: { level: options.logLevel ?? "info" } });
   const siteUrl = options.siteUrl ?? DEFAULT_SITE_URL;
+  const releasesPath = options.releasesPath ?? RELEASES_LEDGER_PATH;
+  const release = () => currentRelease(releasesPath);
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
+  app.addHook("onSend", etagOnSend);
 
   const readRoutes: string[] = [];
   app.decorate("readRoutes", readRoutes);
@@ -129,13 +147,14 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
   });
 
   await app.register(cors, { origin: true });
+  // info.version is the corpus version: the API ships with the corpus and has no release cadence of its own.
   await app.register(swagger, {
     openapi: {
       openapi: "3.1.0",
       info: {
         title: "Bind API",
-        version: API_VERSION,
-        description: "Read access to the Bind corpus: published cases, their shapes, properties, instruments and sources.",
+        version: (await release()).version,
+        description: "Read access to the Bind corpus: published cases, their shapes, properties, instruments and sources. The version is the corpus version.",
       },
     },
     transform: transformSchema,
@@ -157,6 +176,11 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
   const api = app.withTypeProvider<ZodTypeProvider>();
 
   api.get("/health", { schema: { summary: "Liveness check", response: { 200: healthSchema } } }, async () => ({ ok: true as const }));
+
+  api.get("/version", { config: CACHED, schema: { summary: "The current corpus version", response: { 200: versionSchema } } }, async () => {
+    const { version, releasedAt, cases } = await release();
+    return { version, releasedAt, cases };
+  });
 
   api.get(
     "/cases",
@@ -287,15 +311,16 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
 
   api.get(
     "/changes",
-    { schema: { summary: "What changed in the published corpus, newest first", response: { 200: changeListSchema } } },
-    async () => (await listChanges()).map((event) => ({ ...event, url: new URL(event.url, siteUrl).toString() }))
+    { config: CACHED, schema: { summary: "What changed in the published corpus, newest first", response: { 200: changeListSchema } } },
+    async () => (await listChanges({ releasesPath })).map((event) => ({ ...event, url: new URL(event.url, siteUrl).toString() }))
   );
   api.get(
     "/changes.atom",
-    { schema: { summary: "The changes as an Atom 1.0 feed", produces: [ATOM_TYPE], response: { 200: z.string() } } },
+    { config: CACHED, schema: { summary: "The changes as an Atom 1.0 feed", produces: [ATOM_TYPE], response: { 200: z.string() } } },
     async (req, reply) => {
       const feedUrl = `${req.protocol}://${req.host}/changes.atom`;
-      const body = atomFeed(await listChanges(), { siteUrl, feedUrl, title: CHANGES_FEED_TITLE, generatedAt: new Date() });
+      const [events, { version }] = await Promise.all([listChanges({ releasesPath }), release()]);
+      const body = atomFeed(events, { siteUrl, feedUrl, title: CHANGES_FEED_TITLE, generatedAt: new Date(), version });
       return reply.type(utf8(ATOM_TYPE)).header("cache-control", EXPORT_CACHE_CONTROL).send(body);
     }
   );
@@ -316,19 +341,24 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
 
   api.get(
     "/export/bibtex",
-    { schema: { summary: "Every published case and its sources as BibTeX", produces: [BIBTEX_TYPE], response: { 200: z.string() } } },
+    { config: CACHED, schema: { summary: "Every published case and its sources as BibTeX", produces: [BIBTEX_TYPE], response: { 200: z.string() } } },
     async (_req, reply) => {
-      const cases = await listCases({ limit: EXPORT_LIMIT });
+      const [cases, { version }] = await Promise.all([listCases({ limit: EXPORT_LIMIT }), release()]);
       const body = cases
         .flatMap((c) => [caseToBibTeX(c), ...c.citations.map((s, i) => sourceToBibTeX(s, `${bibtexKey(c.slug)}:src${i + 1}`))])
         .join("\n\n");
-      return reply.type(utf8(BIBTEX_TYPE)).header("content-disposition", 'inline; filename="bind.bib"').send(body + "\n");
+      return reply
+        .type(utf8(BIBTEX_TYPE))
+        .header("content-disposition", 'inline; filename="bind.bib"')
+        .header("cache-control", EXPORT_CACHE_CONTROL)
+        .send(texCorpusComment(version) + body + "\n");
     }
   );
 
   api.get(
     "/export/latex",
     {
+      config: CACHED,
       schema: {
         summary: "The paper's shape or case table as LaTeX",
         querystring: latexQuerySchema,
@@ -337,6 +367,7 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
       },
     },
     async (req, reply) => {
+      const { version } = await release();
       const tex =
         req.query.table === "cases"
           ? caseTableTeX(
@@ -349,17 +380,17 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
               }))
             )
           : shapeTableTeX(...(await shapeTableInput()));
-      return reply.type(utf8(LATEX_TYPE)).send(tex + "\n");
+      return reply.type(utf8(LATEX_TYPE)).header("cache-control", EXPORT_CACHE_CONTROL).send(texCorpusComment(version) + tex + "\n");
     }
   );
 
   // Registered on the untyped instance: the body goes out as text, which the typed reply wouldn't accept.
   app.get(
     "/export/json",
-    { schema: { summary: "The whole published corpus as one JSON document", response: { 200: corpusExportSchema } } },
+    { config: CACHED, schema: { summary: "The whole published corpus as one JSON document", response: { 200: corpusExportSchema } } },
     async (_req, reply) => {
       // Sent as text so the bytes match the committed corpus/bind-corpus.json byte for byte.
-      const body = corpusExportText(await corpusExport());
+      const body = corpusExportText(await corpusExport({ releasesPath }));
       return reply
         .type(utf8(JSON_TYPE))
         .header("content-disposition", `attachment; filename="${CORPUS_JSON_FILENAME}"`)
@@ -368,7 +399,14 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
     }
   );
 
-  api.get("/openapi.json", { schema: { summary: "This document", response: { 200: openApiDocumentSchema } } }, async () => ({ ...app.swagger() }));
+  api.get(
+    "/openapi.json",
+    { config: CACHED, schema: { summary: "This document, versioned by the corpus", response: { 200: openApiDocumentSchema } } },
+    async () => {
+      const document = app.swagger();
+      return { ...document, info: { ...document.info, version: (await release()).version } };
+    }
+  );
 
   return app;
 }

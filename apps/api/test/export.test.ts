@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { corpusExport, corpusExportText } from "@bind/db";
 import { corpusExportSchema } from "@bind/shared";
-import { DRAFT_SLUG, PUBLISHED_SLUG, buildTestApp, seedCorpus, seedSecondCorner } from "./fixtures";
+import { DRAFT_SLUG, FIXTURE_RELEASE, PUBLISHED_SLUG, RELEASES_FIXTURE_PATH, buildTestApp, seedCorpus, seedSecondCorner } from "./fixtures";
 
 let app: Awaited<ReturnType<typeof buildTestApp>>;
 
@@ -30,7 +30,7 @@ describe("GET /export/json", () => {
     const slugs = body.cases.map((c) => c.slug);
     expect(slugs).toContain(PUBLISHED_SLUG);
     expect(slugs).not.toContain(DRAFT_SLUG);
-    expect(body.corpus).toEqual({ cases: slugs.length, shapes: 2, properties: 2 });
+    expect(body.corpus).toEqual({ version: FIXTURE_RELEASE.version, cases: slugs.length, shapes: 2, properties: 2 });
 
     const published = body.cases.find((c) => c.slug === PUBLISHED_SLUG);
     expect(published).toMatchObject({ corpusRef: "A1", resolvability: expect.any(String), jurisdictions: ["EU"] });
@@ -45,6 +45,6 @@ describe("GET /export/json", () => {
   it("is the export script's document byte for byte", async () => {
     const res = await get("/export/json");
     const { generatedAt } = res.json<{ generatedAt: string }>();
-    expect(res.body).toBe(corpusExportText(await corpusExport(new Date(generatedAt))));
+    expect(res.body).toBe(corpusExportText(await corpusExport({ generatedAt: new Date(generatedAt), releasesPath: RELEASES_FIXTURE_PATH })));
   });
 });
