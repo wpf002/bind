@@ -1,4 +1,5 @@
-import type { CaseQuery } from "@bind/shared";
+import type { CaseQuery, Resolution, Resolvability } from "@bind/shared";
+import { groupByPrimaryShape, summariseProperty } from "@bind/core";
 import { prisma } from "./client";
 
 /** Read layer shared by the API and the web app. Published cases only unless asked. */
@@ -154,6 +155,61 @@ export async function getShape(slug: string) {
   if (!shape) return null;
   const cases = await listCases({ shape: slug }, { includeDrafts: true });
   return { ...shape, cases };
+}
+
+const propertyCaseInclude = {
+  shapes: { where: { supersededAt: null }, include: { shape: true }, orderBy: { isPrimary: "desc" } },
+  instruments: { include: { instrument: { include: { jurisdiction: true } } } },
+} as const;
+
+type PropertyCaseRow = {
+  slug: string;
+  title: string;
+  statement: string;
+  corpusRef: string | null;
+  sortKey: number;
+  status: string;
+  resolvability: Resolvability;
+  resolution: Resolution;
+  shapes: { shape: { slug: string; name: string; ordinal: number } }[];
+  instruments: { instrument: { jurisdiction: { code: string } } }[];
+};
+
+/** Flattens a case row to the shape the core property aggregation reads. */
+function toPropertyCase<T extends PropertyCaseRow>(c: T) {
+  return {
+    ...c,
+    shapes: c.shapes.map(({ shape }) => ({ slug: shape.slug, name: shape.name, ordinal: shape.ordinal })),
+    jurisdictions: [...new Set(c.instruments.map((i) => i.instrument.jurisdiction.code))].sort(),
+  };
+}
+
+/** Every architectural property with its published cases rolled up. Drafts only with includeDrafts. */
+export async function listProperties(opts: { includeDrafts?: boolean } = {}) {
+  const status = (opts.includeDrafts ?? previewDrafts) ? undefined : ("published" as const);
+  const rows = await prisma.architecturalProperty.findMany({
+    orderBy: { name: "asc" },
+    include: { cases: { where: { case: { status } }, include: { case: { include: propertyCaseInclude } } } },
+  });
+  return rows.map(({ cases, ...p }) => {
+    const flat = cases.map(({ case: c, note }) => ({ ...toPropertyCase(c), note })).sort((a, b) => a.sortKey - b.sortKey);
+    return { ...p, ...summariseProperty(flat), caseRows: flat };
+  });
+}
+
+export type PropertyRow = Awaited<ReturnType<typeof listProperties>>[number];
+
+/** One property with its cases grouped by primary shape. Null when the slug is unknown. */
+export async function getProperty(slug: string, opts: { includeDrafts?: boolean } = {}) {
+  const status = (opts.includeDrafts ?? previewDrafts) ? undefined : ("published" as const);
+  const p = await prisma.architecturalProperty.findUnique({
+    where: { slug },
+    include: { cases: { where: { case: { status } }, include: { case: { include: propertyCaseInclude } } } },
+  });
+  if (!p) return null;
+  const { cases, ...rest } = p;
+  const flat = cases.map(({ case: c, note }) => ({ ...toPropertyCase(c), note })).sort((a, b) => a.sortKey - b.sortKey);
+  return { ...rest, ...summariseProperty(flat), groups: groupByPrimaryShape(flat) };
 }
 
 export async function listJurisdictions() {
