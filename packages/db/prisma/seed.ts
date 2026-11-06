@@ -5,6 +5,7 @@ import { CORPUS_AUTHOR, audits, cases as corpusCases, instruments as corpusInstr
 import { draftCases, draftInstruments, draftRejections, draftSourceVerifications, draftVerifications } from "./drafts";
 import { instrumentVerifications, sourceVerifications, type Verification } from "./verifications";
 import { readSourceChecks } from "./source-checks";
+import { caseProperties, properties } from "./properties";
 const sv: Record<string, Verification> = { ...sourceVerifications, ...draftSourceVerifications };
 
 // Corpus cases are the source author's own text. Model-drafted cases carry no contributor and cite as the registry.
@@ -47,6 +48,9 @@ async function main() {
   const shape = new Map<string, string>();
   for (const s of shapes) shape.set(s.slug, (await prisma.shape.create({ data: s })).id);
 
+  const property = new Map<string, string>();
+  for (const p of properties) property.set(p.slug, (await prisma.architecturalProperty.create({ data: p })).id);
+
   for (const a of audits) {
     const { shape: slug, ...rest } = a;
     await prisma.adversarialAudit.create({ data: { ...rest, priorArt: rest.priorArt ?? undefined, shapeId: shape.get(slug)! } });
@@ -58,13 +62,15 @@ async function main() {
   for (const [i, c] of cases.entries()) {
     const slug = slugOf(i);
     const seenAt = new Date(base + i * 3 * 86_400_000);
-    const propertyId = c.property
-      ? (
-          await prisma.architecturalProperty.create({
-            data: { slug: `${c.ref.toLowerCase()}-property`, name: c.property.name, threatModel: c.property.text, defeatNote: c.property.defeat ?? "", exemplars: [] },
-          })
-        ).id
-      : null;
+    // Every case enters the registry through at least one property. The case's own statement rides on the primary link.
+    const slugs = caseProperties[c.ref];
+    if (!slugs?.length) throw new Error(`${c.ref}: no architectural property in properties.ts`);
+    const propertyNote = c.property ? [c.property.text, c.property.defeat].filter(Boolean).join(" ") : undefined;
+    const propertyLinks = slugs.map((p, n) => {
+      const propertyId = property.get(p);
+      if (!propertyId) throw new Error(`${c.ref}: unknown property "${p}"`);
+      return { propertyId, note: n === 0 ? propertyNote : undefined };
+    });
 
     const cites = [
       ...c.instruments.map((x) => {
@@ -108,7 +114,7 @@ async function main() {
           ],
         },
         instruments: { create: c.instruments.map((x) => ({ instrumentId: inst.get(x.key)!, role: x.role, note: x.note })) },
-        properties: propertyId ? { create: [{ propertyId }] } : undefined,
+        properties: { create: propertyLinks },
         paperingOvers: { create: c.paperingOvers ?? [] },
         transitions: { create: (c.transitions ?? []).map((t) => ({ fromState: t.from, toState: t.to, trigger: t.trigger, triggerUrl: t.url, occurredAt: new Date(t.at) })) },
       },

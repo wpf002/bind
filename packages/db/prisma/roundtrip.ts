@@ -57,10 +57,10 @@ type DbCase = Awaited<ReturnType<typeof listCases>>[number];
 
 /** Renders one case in the source's bullet format. Written to corpus/roundtrip.md for human diffing. */
 function render(c: DbCase) {
-  const prop = c.properties[0]?.property;
+  const prop = c.properties.find((p) => p.note)?.note;
   const out = [`### ${c.corpusRef}. ${c.title}`];
   out.push(`- **Legal:** ${c.instruments.map((i) => `${i.instrument.shortName} ${i.instrument.provision}${i.note ? ` (${i.note})` : ""}`).join("; ")}`);
-  if (prop) out.push(`- **Architectural:** ${prop.threatModel}${prop.defeatNote ? ` ${prop.defeatNote}` : ""}`);
+  if (prop) out.push(`- **Architectural:** ${prop}`);
   out.push(`- **Incompatibility:** ${c.statement}`);
   if (c.paperingOvers.length)
     out.push(`- **Current papering-over:** ${c.paperingOvers.map((p) => `${p.technique}: ${p.description}${p.residual ? ` ${p.residual}` : ""}`).join(" ")}`);
