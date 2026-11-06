@@ -187,6 +187,9 @@ export async function listRejections() {
   return prisma.rejection.findMany({ orderBy: { decidedAt: "desc" } });
 }
 
+/** Cases the taxonomy needed before publishing. The gate grows with the corpus once met. */
+const PUBLICATION_GATE = 40;
+
 export async function stats() {
   const [total, published, byRes, byResolution, unverified, changedSources, rejections, shapes, transitions] = await Promise.all([
     prisma.case.count(),
@@ -204,7 +207,7 @@ export async function stats() {
     total,
     published,
     held: total - published,
-    gate: 40,
+    gate: Math.max(PUBLICATION_GATE, total),
     shapes,
     rejections,
     unverifiedCitations: unverified,

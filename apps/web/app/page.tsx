@@ -7,6 +7,9 @@ import { pad, resLabel, withParam } from "@/lib/format";
 
 type Params = { shape?: string; jurisdiction?: string; resolvability?: string; q?: string; sort?: string };
 
+/** Labels under the gate ticks, every this many cases. */
+const TICK_SCALE_STEP = 10;
+
 const SORT_COLUMNS: { sort: CaseSort; label: string; className?: string }[] = [
   { sort: "id", label: "ID", className: "col-id" },
   { sort: "title", label: "Case" },
@@ -40,6 +43,7 @@ export default async function Index({ searchParams }: { searchParams: Promise<Pa
   );
   const shapeName = (slug: string) => shapes.find((x) => x.slug === slug)?.name ?? slug;
   const ticks = Array.from({ length: s.gate }, (_, i) => (i < s.published ? "on" : i < s.total ? "held" : ""));
+  const tickScale = Array.from({ length: Math.floor(s.gate / TICK_SCALE_STEP) + 1 }, (_, i) => i * TICK_SCALE_STEP);
   const dist = RESOLVABILITY.map((r) => [r, s.byResolvability[r] ?? 0] as const);
   const resolvedOther = s.resolvedBy.legislative + s.resolvedBy.judicial + s.resolvedBy.abandonment;
 
@@ -118,17 +122,15 @@ export default async function Index({ searchParams }: { searchParams: Promise<Pa
                   <span className="muted"> · {s.held} held</span>
                 </b>
               </div>
-              <div className="ticks" role="img" aria-label={`${s.published} of ${s.gate} published, ${s.held} held`}>
+              <div className="ticks" role="img" aria-label={`${s.published} of ${s.gate} published, ${s.held} held`} style={{ gridTemplateColumns: `repeat(${s.gate}, 1fr)` }}>
                 {ticks.map((t, i) => (
                   <span key={i} className={t ? `tick tick-${t}` : "tick"} />
                 ))}
               </div>
               <div className="tick-scale">
-                <span>0</span>
-                <span>10</span>
-                <span>20</span>
-                <span>30</span>
-                <span>40</span>
+                {tickScale.map((n) => (
+                  <span key={n}>{n}</span>
+                ))}
               </div>
             </div>
             <div>
