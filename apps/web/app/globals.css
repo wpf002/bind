@@ -317,7 +317,7 @@ a.jur:hover { border-color: var(--accent); }
 
 /* ── Page heads ─────────────────────────────────── */
 .page { padding-block: var(--s6) var(--s9); }
-.page-head { display: flex; justify-content: space-between; align-items: end; gap: var(--s5); padding-bottom: var(--s5); border-bottom: 1px solid var(--rule-strong); margin-bottom: var(--s6); flex-wrap: wrap; }
+.page-head { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--s5); padding-bottom: var(--s5); border-bottom: 1px solid var(--rule-strong); margin-bottom: var(--s6); flex-wrap: wrap; }
 .page-title { font: 400 var(--t48)/1 var(--font-display); letter-spacing: -0.02em; }
 .page-stats { display: flex; gap: var(--s6); }
 .page-stat { display: grid; gap: var(--s1); text-align: right; }
