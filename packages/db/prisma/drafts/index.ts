@@ -29,8 +29,7 @@ export const draftRejections = all
 /**
  * Verifications for draft `sources` labels, keyed by exact label. Most reuse the instrument
  * check for the same text; the rest were read from the primary source on 2026-11-01.
- * "WhatsApp v Union of India, Delhi HC, 2021" is left out on purpose (rechecked 2026-11-03): the petition has no
- * judgment and the court record wasn't reachable, so it seeds as unverified.
+ * "WhatsApp v Union of India, Delhi HC, 2021" was read from the court's case-status record on 2026-11-06.
  */
 const v = (k: string): Verification => {
   const x = draftVerifications[k];
@@ -43,6 +42,15 @@ const eurlex = (celex: string) => `https://eur-lex.europa.eu/legal-content/EN/TX
 const also = (base: Verification, note: string): Verification => ({ ...base, note: `${base.note} ${note}`, verifiedAt: AT });
 
 export const draftSourceVerifications: Record<string, Verification> = {
+  "WhatsApp v Union of India, Delhi HC, 2021": {
+    status: "verified",
+    url: "https://delhihighcourt.nic.in/app/get-case-type-status",
+    publisher: "High Court of Delhi",
+    quote: "W.P.(C) - 7284 / 2021 [PENDING] WHATSAPP LLC VS. UNION OF INDIA",
+    provision: "W.P.(C) 7284/2021",
+    note: "Case-status record read on 2026-11-06. Status pending, Court No. 1, last listed 11/08/2026, next date 17/11/2026. The judgments list for the case is empty. The search form needs a CAPTCHA, which the owner entered; result URLs are session-bound, so the URL is the search page. Filing and notice dates (May 2021, 27 Aug 2021) come from LiveLaw and Bar & Bench.",
+    verifiedBy: "claude-fable-5-1", verifiedAt: "2026-11-06",
+  },
   "45 CFR 171.206 (Protecting Care Access exception)": {
     status: "verified",
     url: "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-171/subpart-B/section-171.206",
