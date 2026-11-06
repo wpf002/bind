@@ -73,6 +73,7 @@ const jurisdictionSchema = z.object({ id: z.string(), code: z.string(), name: z.
 
 const instrumentSchema = z.object({
   id: z.string(),
+  slug: z.string(),
   regime: z.string(),
   instrument: z.string(),
   shortName: z.string(),

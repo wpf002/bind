@@ -191,6 +191,10 @@ export const exportCaseSchema = z.object({
     z.object({
       role: z.enum(INSTRUMENT_ROLE),
       note: z.string().nullable(),
+      /** The provision row's slug (`gdpr17`). */
+      slug: z.string(),
+      /** The instrument page's slug (`gdpr`): /instruments/{instrumentSlug}. */
+      instrumentSlug: z.string(),
       regime: z.string(),
       instrument: z.string(),
       shortName: z.string(),

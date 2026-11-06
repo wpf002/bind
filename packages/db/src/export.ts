@@ -1,5 +1,6 @@
 import type { CorpusExport, ExportCase } from "@bind/shared";
 import { corpusExportSchema } from "@bind/shared";
+import { instrumentSlug } from "@bind/core";
 import { listCases, listProperties, listShapes, type CaseRow } from "./queries";
 
 /** The published corpus as one JSON document. GET /export/json and `pnpm export` both call this. */
@@ -25,6 +26,8 @@ function toExportCase(c: CaseRow): ExportCase {
     instruments: c.instruments.map((i) => ({
       role: i.role,
       note: i.note,
+      slug: i.instrument.slug,
+      instrumentSlug: instrumentSlug(i.instrument.shortName),
       regime: i.instrument.regime,
       instrument: i.instrument.instrument,
       shortName: i.instrument.shortName,

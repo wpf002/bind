@@ -221,6 +221,9 @@ model Case {
 model LegalInstrument {
   id String @id @default(cuid())
 
+  /// The provision's key in the seed (`gdpr17`). The instrument page groups rows by shortName; see @bind/core instrumentSlug.
+  slug String @unique
+
   /// The broad regime: "EU data protection", "US lawful access".
   regime       String
   /// The instrument itself: "Regulation (EU) 2016/679".

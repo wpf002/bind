@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T22:57:49.156Z",
+  "generatedAt": "2026-11-06T23:30:15.262Z",
   "corpus": {
     "cases": 40,
     "shapes": 6,
@@ -43,6 +43,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "gdpr17",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -153,6 +155,8 @@
         {
           "role": "mandating",
           "note": "Art. 17(3)(b) exempts only Union or Member State legal obligations.",
+          "slug": "gdpr17",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -164,6 +168,8 @@
         {
           "role": "conflicting",
           "note": "Retention on WORM or an audit-trail system that can re-create deleted records. Either forbids erasure within the period.",
+          "slug": "sec17a4",
+          "instrumentSlug": "sec",
           "regime": "US broker-dealer recordkeeping",
           "instrument": "SEC Rule 17a-4",
           "shortName": "SEC",
@@ -175,6 +181,8 @@
         {
           "role": "context",
           "note": "§ 1798.105(d)(8) exempts records kept for a legal obligation, so the CCPA yields to 17a-4.",
+          "slug": "ccpa",
+          "instrumentSlug": "ccpa",
           "regime": "US state privacy",
           "instrument": "California Consumer Privacy Act",
           "shortName": "CCPA",
@@ -186,6 +194,8 @@
         {
           "role": "context",
           "note": "Litigation hold. GDPR Art. 17(3)(e) exempts data needed for legal claims.",
+          "slug": "frcp37e",
+          "instrumentSlug": "frcp",
           "regime": "US civil procedure",
           "instrument": "Federal Rules of Civil Procedure",
           "shortName": "FRCP",
@@ -294,6 +304,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "gdpr17",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -357,6 +369,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "gdpr17",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -368,6 +382,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "ftc",
+          "instrumentSlug": "ftc",
           "regime": "US consumer protection",
           "instrument": "FTC deletion orders",
           "shortName": "FTC",
@@ -449,6 +465,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "gdpr48",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -460,6 +478,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "cloudact",
+          "instrumentSlug": "cloud-act",
           "regime": "US lawful access",
           "instrument": "CLOUD Act",
           "shortName": "CLOUD Act",
@@ -471,6 +491,8 @@
         {
           "role": "context",
           "note": "Requires essentially equivalent protection for transfers. Doesn't forbid them outright.",
+          "slug": "schrems2",
+          "instrumentSlug": "schrems-ii",
           "regime": "EU data protection",
           "instrument": "Schrems II",
           "shortName": "Schrems II",
@@ -562,6 +584,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "eidas",
+          "instrumentSlug": "eidas-2-0",
           "regime": "EU digital identity",
           "instrument": "eIDAS 2.0",
           "shortName": "eIDAS 2.0",
@@ -626,6 +650,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "ru242",
+          "instrumentSlug": "242-fz",
           "regime": "Data localization",
           "instrument": "Federal Law 242-FZ",
           "shortName": "242-FZ",
@@ -637,6 +663,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "cnPipl",
+          "instrumentSlug": "pipl-csl",
           "regime": "Data localization",
           "instrument": "PIPL / CSL",
           "shortName": "PIPL/CSL",
@@ -648,6 +676,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "inRbi",
+          "instrumentSlug": "rbi",
           "regime": "Data localization",
           "instrument": "RBI payments data mandate",
           "shortName": "RBI",
@@ -739,6 +769,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "gdpr33",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -801,6 +833,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "osa121",
+          "instrumentSlug": "uk-osa",
           "regime": "UK online safety",
           "instrument": "Online Safety Act",
           "shortName": "UK OSA",
@@ -879,6 +913,8 @@
         {
           "role": "mandating",
           "note": "No binding instrument. The closest text is a non-binding Commission Recommendation.",
+          "slug": "publicHealth",
+          "instrumentSlug": "public-health",
           "regime": "Public health",
           "instrument": "Public health authorities",
           "shortName": "Public Health",
@@ -942,6 +978,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "euR2r",
+          "instrumentSlug": "eu-r2r",
           "regime": "Right to repair",
           "instrument": "Directive (EU) 2024/1799",
           "shortName": "EU R2R",
@@ -953,6 +991,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "usR2r",
+          "instrumentSlug": "us-states",
           "regime": "Right to repair",
           "instrument": "US state right-to-repair statutes",
           "shortName": "US States",
@@ -1026,6 +1066,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "dma64",
+          "instrumentSlug": "dma",
           "regime": "EU platform regulation",
           "instrument": "Digital Markets Act",
           "shortName": "DMA",
@@ -1088,6 +1130,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "dma7",
+          "instrumentSlug": "dma",
           "regime": "EU platform regulation",
           "instrument": "Digital Markets Act",
           "shortName": "DMA",
@@ -1150,6 +1194,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "a11yInterop",
+          "instrumentSlug": "a11y-interop",
           "regime": "Accessibility",
           "instrument": "Accessibility and interoperability obligations",
           "shortName": "A11y/Interop",
@@ -1213,6 +1259,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "ageVerif",
+          "instrumentSlug": "age-verification",
           "regime": "Online safety",
           "instrument": "Age verification mandates",
           "shortName": "Age Verification",
@@ -1224,6 +1272,8 @@
         {
           "role": "conflicting",
           "note": null,
+          "slug": "gdpr5c",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -1297,6 +1347,8 @@
         {
           "role": "mandating",
           "note": "Binds VASPs and financial institutions only (INR.15 para 7(b)).",
+          "slug": "fatf",
+          "instrumentSlug": "fatf",
           "regime": "AML",
           "instrument": "FATF Travel Rule",
           "shortName": "FATF",
@@ -1359,6 +1411,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "gdprAnon",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -1421,6 +1475,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "gdpr16",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -1432,6 +1488,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "schufa",
+          "instrumentSlug": "cjeu",
           "regime": "EU case law",
           "instrument": "SCHUFA (C-634/21)",
           "shortName": "CJEU",
@@ -1443,6 +1501,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "nowak",
+          "instrumentSlug": "cjeu",
           "regime": "EU case law",
           "instrument": "Nowak",
           "shortName": "CJEU",
@@ -1528,6 +1588,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "gdpr15",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -1539,6 +1601,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "gdpr22",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -1550,6 +1614,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "tradeSecret",
+          "instrumentSlug": "trade-secret",
           "regime": "Trade secret",
           "instrument": "Trade secret protection",
           "shortName": "Trade Secret",
@@ -1645,6 +1711,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "title13",
+          "instrumentSlug": "title-13",
           "regime": "US census",
           "instrument": "Title 13",
           "shortName": "Title 13",
@@ -1656,6 +1724,8 @@
         {
           "role": "mandating",
           "note": "Block-level tabulations and a deadline. No accuracy standard.",
+          "slug": "pl94171",
+          "instrumentSlug": "pl-94-171",
           "regime": "US census",
           "instrument": "PL 94-171",
           "shortName": "PL 94-171",
@@ -1667,6 +1737,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "alabama",
+          "instrumentSlug": "alabama-v-commerce",
           "regime": "US case law",
           "instrument": "Alabama v. Commerce",
           "shortName": "Alabama v. Commerce",
@@ -1767,6 +1839,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "aiAct105",
+          "instrumentSlug": "ai-act",
           "regime": "EU AI regulation",
           "instrument": "AI Act",
           "shortName": "AI Act",
@@ -1778,6 +1852,8 @@
         {
           "role": "conflicting",
           "note": null,
+          "slug": "gdpr9",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -1859,6 +1935,8 @@
         {
           "role": "mandating",
           "note": "National statutes, e.g. the German TKG provisions struck in SpaceNet (C-793/19).",
+          "slug": "euRetention",
+          "instrumentSlug": "eu-retention",
           "regime": "EU telecom retention",
           "instrument": "Member-state data retention regimes",
           "shortName": "EU Retention",
@@ -1870,6 +1948,8 @@
         {
           "role": "conflicting",
           "note": null,
+          "slug": "eprivacy15",
+          "instrumentSlug": "eprivacy",
           "regime": "EU telecom privacy",
           "instrument": "Directive 2002/58/EC (ePrivacy)",
           "shortName": "ePrivacy",
@@ -1881,6 +1961,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "cjeuRetention",
+          "instrumentSlug": "cjeu",
           "regime": "EU case law",
           "instrument": "Digital Rights Ireland, Tele2, La Quadrature",
           "shortName": "CJEU",
@@ -1967,6 +2049,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "pci10",
+          "instrumentSlug": "pci-dss",
           "regime": "Payment security",
           "instrument": "PCI DSS",
           "shortName": "PCI DSS",
@@ -1978,6 +2062,8 @@
         {
           "role": "context",
           "note": "An attestation against the Trust Services Criteria. No criterion requires logging IPs.",
+          "slug": "soc2",
+          "instrumentSlug": "soc-2",
           "regime": "Audit",
           "instrument": "SOC 2",
           "shortName": "SOC 2",
@@ -1989,6 +2075,8 @@
         {
           "role": "conflicting",
           "note": null,
+          "slug": "gdpr17",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -2073,6 +2161,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "frcp37e",
+          "instrumentSlug": "frcp",
           "regime": "US civil procedure",
           "instrument": "Federal Rules of Civil Procedure",
           "shortName": "FRCP",
@@ -2147,6 +2237,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "na_ieepa1702",
+          "instrumentSlug": "ieepa-1702",
           "regime": "US sanctions",
           "instrument": "International Emergency Economic Powers Act, 50 U.S.C. § 1702",
           "shortName": "IEEPA § 1702",
@@ -2158,6 +2250,8 @@
         {
           "role": "conflicting",
           "note": "Holds immutable contracts are not property under IEEPA.",
+          "slug": "na_vanLoon",
+          "instrumentSlug": "van-loon",
           "regime": "US case law",
           "instrument": "Van Loon v. Department of the Treasury, No. 23-50669 (5th Cir. 2024)",
           "shortName": "Van Loon",
@@ -2169,6 +2263,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "na_tornadoDelist",
+          "instrumentSlug": "tornado-cash-delisting",
           "regime": "US sanctions",
           "instrument": "US Treasury press release sb0057, Tornado Cash delisting (Mar. 21, 2025)",
           "shortName": "Tornado Cash delisting",
@@ -2180,6 +2276,8 @@
         {
           "role": "context",
           "note": "Legislative response for stablecoins: freeze capability is mandatory.",
+          "slug": "na_genius4a5",
+          "instrumentSlug": "genius-4-a-5",
           "regime": "US payment stablecoins",
           "instrument": "GENIUS Act, S. 1582 (119th Cong.), enrolled",
           "shortName": "GENIUS § 4(a)(5)",
@@ -2304,6 +2402,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "na_ofac560215",
+          "instrumentSlug": "31-cfr-560-215",
           "regime": "US sanctions",
           "instrument": "Iranian Transactions and Sanctions Regulations, 31 CFR part 560",
           "shortName": "31 CFR 560.215",
@@ -2315,6 +2415,8 @@
         {
           "role": "conflicting",
           "note": null,
+          "slug": "na_blocking5",
+          "instrumentSlug": "blocking-statute-art-5",
           "regime": "EU Blocking Statute",
           "instrument": "Council Regulation (EC) No 2271/96, with Annex as replaced by Delegated Regulation (EU) 2018/1100",
           "shortName": "Blocking Statute Art. 5",
@@ -2326,6 +2428,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "na_bankMelli",
+          "instrumentSlug": "bank-melli",
           "regime": "EU case law",
           "instrument": "CJEU C-124/20 Bank Melli Iran v Telekom Deutschland (Grand Chamber, 2021)",
           "shortName": "Bank Melli",
@@ -2429,6 +2533,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "na_bsa5318k3",
+          "instrumentSlug": "bsa-foreign-bank-subpoena",
           "regime": "US Bank Secrecy Act",
           "instrument": "31 U.S.C. § 5318(k)(3)",
           "shortName": "BSA foreign bank subpoena",
@@ -2440,6 +2546,8 @@
         {
           "role": "conflicting",
           "note": null,
+          "slug": "na_cnDsl36",
+          "instrumentSlug": "dsl-art-36",
           "regime": "China Data Security Law",
           "instrument": "Data Security Law of the People's Republic of China (2021)",
           "shortName": "DSL Art. 36",
@@ -2520,6 +2628,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "na_micaRec22",
+          "instrumentSlug": "mica-recital-22",
           "regime": "MiCA",
           "instrument": "Regulation (EU) 2023/1114 on markets in crypto-assets",
           "shortName": "MiCA recital 22",
@@ -2531,6 +2641,8 @@
         {
           "role": "context",
           "note": "Defers the DeFi question to a Commission report.",
+          "slug": "na_mica142",
+          "instrumentSlug": "mica-art-142",
           "regime": "MiCA",
           "instrument": "Regulation (EU) 2023/1114 on markets in crypto-assets",
           "shortName": "MiCA Art. 142",
@@ -2618,6 +2730,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "na_calCiv56101c",
+          "instrumentSlug": "civ-code-56-101-c",
           "regime": "California CMIA",
           "instrument": "California Civil Code § 56.101 (as amended by AB 352 and AB 3281)",
           "shortName": "Civ. Code § 56.101(c)",
@@ -2629,6 +2743,8 @@
         {
           "role": "context",
           "note": "Defers to state law, so federal conflict is limited.",
+          "slug": "na_onc171103",
+          "instrumentSlug": "45-cfr-171-103",
           "regime": "ONC information blocking",
           "instrument": "45 CFR part 171",
           "shortName": "45 CFR 171.103",
@@ -2732,6 +2848,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "na_gsr6_4",
+          "instrumentSlug": "gsr-art-6-4",
           "regime": "EU General Safety Regulation",
           "instrument": "Regulation (EU) 2019/2144 on type-approval requirements for motor vehicles (General Safety Regulation)",
           "shortName": "GSR Art. 6(4)",
@@ -2743,6 +2861,8 @@
         {
           "role": "conflicting",
           "note": null,
+          "slug": "na_gsr6_5",
+          "instrumentSlug": "gsr-art-6-5",
           "regime": "EU General Safety Regulation",
           "instrument": "Regulation (EU) 2019/2144 on type-approval requirements for motor vehicles (General Safety Regulation)",
           "shortName": "GSR Art. 6(5)",
@@ -2754,6 +2874,8 @@
         {
           "role": "context",
           "note": "Concedes EDR data is personal data.",
+          "slug": "na_gsrRec14",
+          "instrumentSlug": "gsr-recital-14",
           "regime": "EU General Safety Regulation",
           "instrument": "Regulation (EU) 2019/2144 on type-approval requirements for motor vehicles (General Safety Regulation)",
           "shortName": "GSR recital 14",
@@ -2765,6 +2887,8 @@
         {
           "role": "context",
           "note": "Anonymisation standard the 'anonymised' label is measured against.",
+          "slug": "gdprAnon",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -2875,6 +2999,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "na_genius3b2",
+          "instrumentSlug": "genius-3-b-2",
           "regime": "US payment stablecoins",
           "instrument": "GENIUS Act, S. 1582 (119th Cong.), enrolled",
           "shortName": "GENIUS § 3(b)(2)",
@@ -2886,6 +3012,8 @@
         {
           "role": "conflicting",
           "note": null,
+          "slug": "na_mica49",
+          "instrumentSlug": "mica-art-49",
           "regime": "MiCA",
           "instrument": "Regulation (EU) 2023/1114 on markets in crypto-assets",
           "shortName": "MiCA Art. 49",
@@ -2897,6 +3025,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "na_genius4a5",
+          "instrumentSlug": "genius-4-a-5",
           "regime": "US payment stablecoins",
           "instrument": "GENIUS Act, S. 1582 (119th Cong.), enrolled",
           "shortName": "GENIUS § 4(a)(5)",
@@ -2908,6 +3038,8 @@
         {
           "role": "context",
           "note": "Applies when the order rests on an Annex-listed law.",
+          "slug": "na_blocking5",
+          "instrumentSlug": "blocking-statute-art-5",
           "regime": "EU Blocking Statute",
           "instrument": "Council Regulation (EC) No 2271/96, with Annex as replaced by Delegated Regulation (EU) 2018/1100",
           "shortName": "Blocking Statute Art. 5",
@@ -3017,6 +3149,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "nb_ipa253",
+          "instrumentSlug": "ipa-2016",
           "regime": "UK investigatory powers",
           "instrument": "Investigatory Powers Act 2016",
           "shortName": "IPA 2016",
@@ -3028,6 +3162,8 @@
         {
           "role": "mandating",
           "note": "Change freeze during review.",
+          "slug": "nb_ipa257",
+          "instrumentSlug": "ipa-2016",
           "regime": "UK investigatory powers",
           "instrument": "Investigatory Powers Act 2016 (as amended 2024)",
           "shortName": "IPA 2016",
@@ -3148,6 +3284,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "nb_inItRules42",
+          "instrumentSlug": "it-rules-2021",
           "regime": "Indian intermediary regulation",
           "instrument": "Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021",
           "shortName": "IT Rules 2021",
@@ -3245,6 +3383,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "nb_dma67",
+          "instrumentSlug": "dma",
           "regime": "EU competition / platform regulation",
           "instrument": "Digital Markets Act, Regulation (EU) 2022/1925",
           "shortName": "DMA",
@@ -3256,6 +3396,8 @@
         {
           "role": "mandating",
           "note": "Paras 107, 408-419.",
+          "slug": "nb_dmaSpec100203",
+          "instrumentSlug": "dma-100203",
           "regime": "EU competition / platform regulation",
           "instrument": "Commission Decision C(2025) 3000 final, Case DMA.100203 (Apple, connected devices)",
           "shortName": "DMA.100203",
@@ -3267,6 +3409,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "nb_gdpr5f",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -3398,6 +3542,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "nb_dsa24",
+          "instrumentSlug": "dsa",
           "regime": "EU platform regulation",
           "instrument": "Digital Services Act, Regulation (EU) 2022/2065",
           "shortName": "DSA",
@@ -3409,6 +3555,8 @@
         {
           "role": "conflicting",
           "note": null,
+          "slug": "gdpr5c",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -3520,6 +3668,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "nb_dsa263",
+          "instrumentSlug": "dsa",
           "regime": "EU platform regulation",
           "instrument": "Digital Services Act, Regulation (EU) 2022/2065",
           "shortName": "DSA",
@@ -3531,6 +3681,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "nb_cjeuMetaBka",
+          "instrumentSlug": "c-252-21",
           "regime": "EU data protection",
           "instrument": "CJEU, Case C-252/21 Meta Platforms v Bundeskartellamt",
           "shortName": "C-252/21",
@@ -3542,6 +3694,8 @@
         {
           "role": "context",
           "note": null,
+          "slug": "nb_cjeuOT",
+          "instrumentSlug": "c-184-20",
           "regime": "EU data protection",
           "instrument": "CJEU, Case C-184/20 OT v Vyriausioji tarnybinės etikos komisija",
           "shortName": "C-184/20",
@@ -3553,6 +3707,8 @@
         {
           "role": "conflicting",
           "note": null,
+          "slug": "gdpr9",
+          "instrumentSlug": "gdpr",
           "regime": "EU data protection",
           "instrument": "General Data Protection Regulation",
           "shortName": "GDPR",
@@ -3690,6 +3846,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "nb_ru1014_1",
+          "instrumentSlug": "149-fz",
           "regime": "Russian information law",
           "instrument": "Federal Law No. 149-FZ of 27.07.2006 On Information, Information Technologies and Protection of Information",
           "shortName": "149-FZ",
@@ -3701,6 +3859,8 @@
         {
           "role": "conflicting",
           "note": "Same article, confidentiality duty for messengers.",
+          "slug": "nb_ru1014_2",
+          "instrumentSlug": "149-fz",
           "regime": "Russian information law",
           "instrument": "Federal Law No. 149-FZ of 27.07.2006 On Information, Information Technologies and Protection of Information",
           "shortName": "149-FZ",
@@ -3798,6 +3958,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "nb_certin2022v",
+          "instrumentSlug": "cert-in-directions",
           "regime": "Indian cybersecurity regulation",
           "instrument": "CERT-In Directions No. 20(3)/2022-CERT-In of 28.04.2022 under IT Act 2000 s. 70B(6)",
           "shortName": "CERT-In Directions",
@@ -3809,6 +3971,8 @@
         {
           "role": "context",
           "note": "Scopes para (v) to consumer proxy-like VPNs; allows offshore storage.",
+          "slug": "nb_certinFaq",
+          "instrumentSlug": "cert-in-faq",
           "regime": "Indian cybersecurity regulation",
           "instrument": "CERT-In FAQs on Cyber Security Directions of 28.04.2022 (May 2022)",
           "shortName": "CERT-In FAQ",
@@ -3930,6 +4094,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "nb_cnNppa2021",
+          "instrumentSlug": "nppa-notice-2021",
           "regime": "Chinese online game regulation",
           "instrument": "NPPA Notice on Further Strict Management to Prevent Minors' Addiction to Online Games, 国新出发〔2021〕14号",
           "shortName": "NPPA Notice 2021",
@@ -3941,6 +4107,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "nb_cnMinors46",
+          "instrumentSlug": "order-766",
           "regime": "Chinese minors protection law",
           "instrument": "Regulations on the Protection of Minors in Cyberspace, State Council Order No. 766",
           "shortName": "Order 766",
@@ -3952,6 +4120,8 @@
         {
           "role": "conflicting",
           "note": "Art. 13(1)(3) supplies the statutory-obligation basis, so Art. 6 doesn't override the mandate.",
+          "slug": "nb_cnPipl6",
+          "instrumentSlug": "pipl",
           "regime": "Chinese data protection",
           "instrument": "Personal Information Protection Law of the PRC",
           "shortName": "PIPL",
@@ -4093,6 +4263,8 @@
         {
           "role": "mandating",
           "note": null,
+          "slug": "nb_ruZpp42",
+          "instrumentSlug": "consumer-rights-law",
           "regime": "Russian consumer protection law",
           "instrument": "Law of the Russian Federation No. 2300-1 of 07.02.1992 On Protection of Consumer Rights",
           "shortName": "Consumer Rights Law",
@@ -4104,6 +4276,8 @@
         {
           "role": "mandating",
           "note": "Makes non-compliance a defect of the goods. In force 1 September 2025.",
+          "slug": "nb_ru194fz",
+          "instrumentSlug": "194-fz",
           "regime": "Russian consumer protection law",
           "instrument": "Federal Law No. 194-FZ of 07.07.2025 amending the Law On Protection of Consumer Rights",
           "shortName": "194-FZ",

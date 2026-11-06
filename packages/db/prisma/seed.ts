@@ -40,7 +40,7 @@ async function main() {
     const { jurisdiction, ...rest } = i;
     const v = iv[key];
     const row = await prisma.legalInstrument.create({
-      data: { ...rest, provision: v?.provision ?? rest.provision, sourceUrl: v?.url ?? "", jurisdictionId: jur.get(jurisdiction)! },
+      data: { ...rest, slug: key, provision: v?.provision ?? rest.provision, sourceUrl: v?.url ?? "", jurisdictionId: jur.get(jurisdiction)! },
     });
     inst.set(key, row.id);
   }
