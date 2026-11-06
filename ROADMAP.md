@@ -21,22 +21,13 @@ made for engineers.
 | Case page for the engineer: properties, jurisdictions, instruments, workarounds and outcome above the fold | ed1b740 |
 | Design check: Check page, GET /check, matcher in core, Matrix consistency test | fb80122, a664141, 95ef3d6, a88be0c |
 | API and JSON export: OpenAPI at /openapi.json from the route schemas, GET /export/json, JSON on the Export page | 2ff3608, 8408858, 6ea008f, 7484b8b |
+| Changes feed: publishes, transitions and failed source checks as events, GET /changes, Atom at /changes.atom, Changes page | a5d5559, 7755bb3, c598d4b, d573dc1 |
 
 ## Next
 
 In order. Each item ships on its own.
 
-### 1. Changes feed
-
-Expose what changed: new cases, resolutions, and citations the source check
-flagged. An Atom feed and a Changes page, both from the ledger and transition
-data already stored.
-
-Done when: a feed reader shows an entry for each event since the corpus was
-published, newest first, and the source check adds an entry when a quote
-changes.
-
-### 2. Submit for engineers
+### 1. Submit for engineers
 
 Refocus the Submit form on the conflict an engineer hit: what they were
 building, which rule blocked it, which rule required it. Review stays as is.
