@@ -212,6 +212,19 @@ export async function getProperty(slug: string, opts: { includeDrafts?: boolean 
   return { ...rest, ...summariseProperty(flat), groups: groupByPrimaryShape(flat) };
 }
 
+/** Every published case with the slugs the design check matches on. Drafts only with includeDrafts. */
+export async function listCheckCases(opts: { includeDrafts?: boolean } = {}) {
+  const status = (opts.includeDrafts ?? previewDrafts) ? undefined : ("published" as const);
+  const rows = await prisma.case.findMany({
+    where: { status },
+    orderBy: { sortKey: "asc" },
+    include: { ...propertyCaseInclude, properties: { include: { property: { select: { slug: true } } } } },
+  });
+  return rows.map(({ properties, ...c }) => ({ ...toPropertyCase(c), properties: properties.map((x) => x.property.slug).sort() }));
+}
+
+export type CheckCaseRow = Awaited<ReturnType<typeof listCheckCases>>[number];
+
 export async function listJurisdictions() {
   const rows = await prisma.jurisdiction.findMany({
     orderBy: { code: "asc" },

@@ -121,3 +121,80 @@ export async function seedCorpus() {
   });
   return { published, draft, shape, property };
 }
+
+export const SECOND_SLUG = "bind-0003";
+export const THIRD_SLUG = "bind-0004";
+export const SECOND_SHAPE_SLUG = "custody-vs-access";
+export const SECOND_PROPERTY_SLUG = "key-custody";
+
+/**
+ * A second corner of the corpus for the design check: a US jurisdiction, a second shape and property,
+ * a US-only case under both, and an EU case under the second property with the second shape primary.
+ * Call after seedCorpus.
+ */
+export async function seedSecondCorner() {
+  const us = await prisma.jurisdiction.create({ data: { code: "US", name: "United States", level: "national" } });
+  const eu = await prisma.jurisdiction.findUniqueOrThrow({ where: { code: "EU" } });
+  const usInstrument = await prisma.legalInstrument.create({
+    data: {
+      regime: "US lawful access",
+      instrument: "18 U.S.C. § 2518",
+      shortName: "Wiretap Act",
+      provision: "§ 2518(4)",
+      mandate: "Furnish technical assistance to intercept.",
+      jurisdictionId: us.id,
+      sourceUrl: "https://www.law.cornell.edu/uscode/text/18/2518",
+    },
+  });
+  const euInstrument = await prisma.legalInstrument.findFirstOrThrow({ where: { jurisdictionId: eu.id } });
+  const firstShape = await prisma.shape.findUniqueOrThrow({ where: { slug: SHAPE_SLUG } });
+  const shape = await prisma.shape.create({
+    data: {
+      slug: SECOND_SHAPE_SLUG,
+      ordinal: 2,
+      name: "Custody vs Access",
+      family: "architectural",
+      definition: "An access mandate meets a system that holds no key.",
+      boundaryCriteria: "Systems that escrow a key are out.",
+    },
+  });
+  const property = await prisma.architecturalProperty.create({
+    data: {
+      slug: SECOND_PROPERTY_SLUG,
+      name: "Key Custody",
+      threatModel: "The operator never holds a key that decrypts user content.",
+      defeatNote: "An operator key makes the operator a target.",
+      exemplars: ["End-to-end messengers"],
+    },
+  });
+  await prisma.case.create({
+    data: {
+      slug: SECOND_SLUG,
+      corpusRef: "B1",
+      title: "Intercept order against an operator with no key",
+      statement: "Assistance is ordered and the operator holds no key.",
+      status: "published",
+      sortKey: 3,
+      resolvability: "unresolvable",
+      shapes: { create: { shapeId: shape.id } },
+      instruments: { create: { instrumentId: usInstrument.id } },
+      properties: { create: { propertyId: property.id } },
+    },
+  });
+  await prisma.case.create({
+    data: {
+      slug: THIRD_SLUG,
+      corpusRef: "B2",
+      title: "Erasure order against a keyless operator",
+      statement: "Erasure is ordered and the operator cannot read what it must erase.",
+      status: "published",
+      sortKey: 4,
+      resolvability: "resolvable_costly",
+      resolution: "engineering",
+      resolvedAt: new Date("2025-02-01"),
+      shapes: { create: [{ shapeId: shape.id, isPrimary: true }, { shapeId: firstShape.id, isPrimary: false }] },
+      instruments: { create: { instrumentId: euInstrument.id } },
+      properties: { create: { propertyId: property.id } },
+    },
+  });
+}

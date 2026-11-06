@@ -1,6 +1,18 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { TEST_DATABASE_NAME, assertTestDatabase } from "./database";
-import { DRAFT_SLUG, PROPERTY_SLUG, PUBLISHED_SLUG, SHAPE_SLUG, buildTestApp, seedCorpus } from "./fixtures";
+import {
+  DRAFT_SLUG,
+  PROPERTY_SLUG,
+  PUBLISHED_SLUG,
+  SECOND_PROPERTY_SLUG,
+  SECOND_SHAPE_SLUG,
+  SECOND_SLUG,
+  SHAPE_SLUG,
+  THIRD_SLUG,
+  buildTestApp,
+  seedCorpus,
+  seedSecondCorner,
+} from "./fixtures";
 
 type CaseList = { count: number; cases: { slug: string; citations: { label: string }[]; jurisdictions: string[] }[] };
 
@@ -234,5 +246,75 @@ describe("GET /export/latex", () => {
     expect(res.body).toContain("\\label{tab:corpus}");
     expect(res.body).toContain("A1 & Erasure on a public ledger");
     expect(res.body).not.toContain("Held draft");
+  });
+});
+
+type CheckBody = {
+  selection: { properties: string[]; jurisdictions: string[] };
+  count: number;
+  shapes: { shape: { slug: string } | null; cases: { slug: string; resolution: string }[] }[];
+};
+type MatrixCase = { slug: string; jurisdictions: string[]; shapes: { shape: { slug: string } }[]; properties: { property: { slug: string } }[] };
+
+describe("GET /check", () => {
+  beforeEach(seedSecondCorner);
+
+  const slugsUnder = (body: CheckBody, shape: string) => body.shapes.find((g) => g.shape?.slug === shape)?.cases.map((c) => c.slug) ?? [];
+
+  it("lists every shape with its published cases when nothing is picked", async () => {
+    const res = await get("/check");
+    expect(res.statusCode).toBe(200);
+    const body = res.json<CheckBody>();
+    expect(body.selection).toEqual({ properties: [], jurisdictions: [] });
+    expect(body.count).toBe(3);
+    expect(body.shapes.map((g) => g.shape?.slug)).toEqual([SHAPE_SLUG, SECOND_SHAPE_SLUG]);
+    expect(slugsUnder(body, SHAPE_SLUG)).toEqual([PUBLISHED_SLUG]);
+    expect(slugsUnder(body, SECOND_SHAPE_SLUG)).toEqual([SECOND_SLUG, THIRD_SLUG]);
+    expect(body.shapes.flatMap((g) => g.cases.map((c) => c.slug))).not.toContain(DRAFT_SLUG);
+  });
+
+  it("carries the resolution for the chip", async () => {
+    const body = (await get("/check")).json<CheckBody>();
+    expect(body.shapes.flatMap((g) => g.cases).find((c) => c.slug === THIRD_SLUG)?.resolution).toBe("engineering");
+  });
+
+  it("matches the Matrix cell for every property and jurisdiction pair", async () => {
+    const all = (await get("/cases")).json<{ cases: MatrixCase[] }>().cases;
+    const shapes = [SHAPE_SLUG, SECOND_SHAPE_SLUG];
+    for (const p of [undefined, PROPERTY_SLUG, SECOND_PROPERTY_SLUG]) {
+      for (const j of [undefined, "EU", "US"]) {
+        const qs = new URLSearchParams();
+        if (p) qs.set("p", p);
+        if (j) qs.set("j", j);
+        const res = await get(`/check?${qs}`);
+        expect(res.statusCode).toBe(200);
+        const body = res.json<CheckBody>();
+        for (const shape of shapes) {
+          const cell = all
+            .filter((c) => c.shapes[0]?.shape.slug === shape)
+            .filter((c) => !j || c.jurisdictions.includes(j))
+            .filter((c) => !p || c.properties.some((x) => x.property.slug === p))
+            .map((c) => c.slug);
+          expect(slugsUnder(body, shape), `${p ?? "any"} × ${j ?? "any"} under ${shape}`).toEqual(cell);
+        }
+        expect(body.count).toBe(body.shapes.reduce((n, g) => n + g.cases.length, 0));
+      }
+    }
+  });
+
+  it("returns no shapes when nothing matches", async () => {
+    const body = (await get(`/check?p=${PROPERTY_SLUG}&j=US`)).json<CheckBody>();
+    expect(body).toEqual({ selection: { properties: [PROPERTY_SLUG], jurisdictions: ["US"] }, count: 0, shapes: [] });
+  });
+
+  it("ignores unknown values and keeps corpus order", async () => {
+    const body = (await get(`/check?p=nope,${SECOND_PROPERTY_SLUG},${PROPERTY_SLUG}&j=zz,us,eu`)).json<CheckBody>();
+    expect(body.selection).toEqual({ properties: [PROPERTY_SLUG, SECOND_PROPERTY_SLUG], jurisdictions: ["EU", "US"] });
+  });
+
+  it("answers a NUL byte in the query with a 4xx", async () => {
+    const res = await get("/check?p=%00");
+    expect(res.statusCode).toBeGreaterThanOrEqual(400);
+    expect(res.statusCode).toBeLessThan(500);
   });
 });

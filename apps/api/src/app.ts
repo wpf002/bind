@@ -1,13 +1,25 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { caseQuerySchema, submissionSchema } from "@bind/shared";
-import { caseTableTeX, caseToBibTeX, shapeTableTeX, sourceToBibTeX, bibtexKey, suggestedCitation, type Reviewer } from "@bind/core";
+import {
+  caseTableTeX,
+  caseToBibTeX,
+  checkQuerySchema,
+  resolveCheckSelection,
+  runCheck,
+  shapeTableTeX,
+  sourceToBibTeX,
+  bibtexKey,
+  suggestedCitation,
+  type Reviewer,
+} from "@bind/core";
 import {
   prisma,
   getCase,
   getProperty,
   getShape,
   listCases,
+  listCheckCases,
   listJurisdictions,
   listProperties,
   listRejections,
@@ -63,6 +75,15 @@ export async function buildApp(options: { reviewers: Reviewer[]; logLevel?: stri
     const p = await getProperty(req.params.slug);
     if (!p) return reply.code(404).send({ error: "not_found" });
     return p;
+  });
+
+  app.get("/check", async (req, reply) => {
+    const q = checkQuerySchema.safeParse(req.query);
+    if (!q.success) return reply.code(400).send({ error: q.error.flatten() });
+    const [cases, properties, jurisdictions] = await Promise.all([listCheckCases(), listProperties(), listJurisdictions()]);
+    const selection = resolveCheckSelection(q.data, { properties: properties.map((p) => p.slug), jurisdictions: jurisdictions.map((j) => j.code) });
+    const shapes = runCheck(cases, selection);
+    return { selection, count: shapes.reduce((n, g) => n + g.cases.length, 0), shapes };
   });
 
   app.get("/jurisdictions", async () => listJurisdictions());
