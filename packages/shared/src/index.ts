@@ -41,18 +41,25 @@ export const caseQuerySchema = z.object({
 });
 export type CaseQuery = z.infer<typeof caseQuerySchema>;
 
+/// The review page renders the source URL as a link, so schemes like javascript: are refused.
+const HTTP_URL = /^https?:\/\//i;
+
 /// The inclusion test as a form. Every field is required because the test is the gate.
 export const submissionSchema = z.object({
-  title: z.string().min(8).max(160),
-  statement: z.string().min(40, "State both mandates and why they cannot both hold."),
+  title: z.string().trim().min(8).max(160),
+  statement: z.string().trim().min(40, "State both mandates and why they cannot both hold."),
   inclusionArgument: z
     .string()
+    .trim()
     .min(80, "Explain why a competent engineer with unlimited budget still fails."),
-  legalCitation: z.string().min(4),
-  legalUrl: z.string().url("Primary sources only: EUR-Lex, eCFR, CourtListener, official gazettes."),
-  architecturalProperty: z.string().min(8),
+  legalCitation: z.string().trim().min(4),
+  legalUrl: z
+    .string()
+    .url("Primary sources only: EUR-Lex, eCFR, CourtListener, official gazettes.")
+    .regex(HTTP_URL, "The source URL starts with http:// or https://."),
+  architecturalProperty: z.string().trim().min(8),
   proposedShape: z.string().optional(),
-  submitterName: z.string().min(2),
+  submitterName: z.string().trim().min(2),
   submitterEmail: z.string().email(),
   submitterAffiliation: z.string().optional(),
 });
@@ -84,7 +91,7 @@ export const RECOMMENDATION_LABEL: Record<Recommendation, string> = {
 export const reviewSchema = z
   .object({
     recommendation: z.enum(RECOMMENDATION),
-    notes: z.string().min(40, "Say which criterion decided it and why."),
+    notes: z.string().trim().min(40, "Say which criterion decided it and why."),
     rejectionReason: z.enum(REJECTION_REASON).optional(),
   })
   .refine((r) => r.recommendation !== "reject" || r.rejectionReason !== undefined, {

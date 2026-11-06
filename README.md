@@ -48,6 +48,8 @@ pnpm test
 
 Lint is ESLint with `typescript-eslint`. The shared rules are in `eslint.config.mjs` at the repo root; each package extends it.
 
+Tests: `pnpm test` runs the unit tests in `packages/core` and the route tests in `apps/api`. The route tests write to a separate Postgres database, `bind_test`, on the server named in `DATABASE_URL` (set `TEST_DATABASE_URL` in `.env` to point somewhere else). The setup creates `bind_test` if it is missing, applies the schema with `prisma db push`, truncates every table between tests, and refuses to run against a database with any other name.
+
 ## Corpus Scripts
 
 Run these from `packages/db` with the environment loaded (`set -a && source ../../.env && set +a`).
@@ -80,7 +82,7 @@ It makes one request per URL with a 30 second timeout and three attempts, and fe
 | Path | Contents |
 |---|---|
 | `apps/web` | Next.js site |
-| `apps/api` | Fastify API over the same read layer |
+| `apps/api` | Fastify API over the same read layer, and its route tests |
 | `packages/core` | Pure logic and its unit tests |
 | `packages/db` | Prisma schema, read queries, seed and corpus scripts |
 | `packages/shared` | Request schemas shared by the API and the web app |
