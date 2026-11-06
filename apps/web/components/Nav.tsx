@@ -9,6 +9,7 @@ const ITEMS = [
   ["/shapes", "Shapes"],
   ["/matrix", "Matrix"],
   ["/resolutions", "Resolutions"],
+  ["/changes", "Changes"],
   ["/rejections", "Rejections"],
   ["/method", "Method"],
   ["/export", "Export"],

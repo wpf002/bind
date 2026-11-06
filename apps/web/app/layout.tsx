@@ -5,6 +5,7 @@ import { listCases, listProperties, listShapes, previewDrafts, stats } from "@bi
 import { Nav } from "@/components/Nav";
 import { ThemeToggle, themeScript } from "@/components/ThemeToggle";
 import { CommandPalette, type PalItem } from "@/components/CommandPalette";
+import { API_URL } from "@/lib/api";
 import { resLabel } from "@/lib/format";
 import "./globals.css";
 
@@ -17,6 +18,7 @@ const plexMono = IBM_Plex_Mono({ subsets: ["latin"], variable: "--f-plex-mono", 
 export const metadata: Metadata = {
   title: { default: "Bind", template: "%s · Bind" },
   description: "A registry of legal–architectural incompatibilities.",
+  alternates: { types: { "application/atom+xml": `${API_URL}/changes.atom` } },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
