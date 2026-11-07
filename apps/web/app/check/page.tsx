@@ -2,7 +2,9 @@ import Link from "next/link";
 import { checkHref, checkQuerySchema, resolveCheckSelection, runCheck, toggleCheck, type CheckSelection } from "@bind/core";
 import { listCheckCases, listJurisdictions, listProperties } from "@bind/db";
 import { Jur, Ord, Res, Tip } from "@/components/marks";
+import { API_URL } from "@/lib/api";
 import { titleCase } from "@/lib/format";
+import { NoteActions } from "./NoteActions";
 
 export const metadata = { title: "Check" };
 
@@ -21,6 +23,7 @@ export default async function Check({ searchParams }: { searchParams: Promise<Pa
   const picked = selection.properties.length + selection.jurisdictions.length;
   const propertyName = (slug: string) => properties.find((p) => p.slug === slug)?.name ?? slug;
   const clear = (dimension: keyof CheckSelection) => checkHref({ ...selection, [dimension]: [] });
+  const noteHref = `${API_URL}/check.md${checkHref(selection).slice("/check".length)}`;
 
   return (
     <div className="wrap index">
@@ -70,14 +73,17 @@ export default async function Check({ searchParams }: { searchParams: Promise<Pa
             Check
             <Tip text="Pick the properties a design relies on and the jurisdictions it runs in. Every published case that hits one of each is listed under its shape." />
           </h1>
-          <div className="page-stats">
-            <div className="page-stat">
-              <b>{count}</b>
-              <span>Cases</span>
-            </div>
-            <div className="page-stat">
-              <b>{groups.length}</b>
-              <span>Shapes</span>
+          <div className="page-side">
+            <NoteActions href={noteHref} />
+            <div className="page-stats">
+              <div className="page-stat">
+                <b>{count}</b>
+                <span>Cases</span>
+              </div>
+              <div className="page-stat">
+                <b>{groups.length}</b>
+                <span>Shapes</span>
+              </div>
             </div>
           </div>
         </header>
