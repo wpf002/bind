@@ -1,9 +1,13 @@
 import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { releasesLedgerSchema, type Release, type ReleasesLedger } from "@bind/shared";
 
-/** Appended by `pnpm release` (prisma/release.ts). Committed, so each version shows in the diff. */
-export const RELEASES_LEDGER_PATH = join(import.meta.dirname, "..", "prisma", "ledger", "releases.json");
+/**
+ * Appended by `pnpm release` (prisma/release.ts). Committed, so each version shows in the diff.
+ * Resolved from import.meta.url, which Next's bundler fills in; import.meta.dirname it leaves undefined.
+ */
+export const RELEASES_LEDGER_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "prisma", "ledger", "releases.json");
 
 /** Every release, oldest first. Read on each call, so a bump shows without a restart. */
 export async function readReleases(path = RELEASES_LEDGER_PATH): Promise<ReleasesLedger> {
