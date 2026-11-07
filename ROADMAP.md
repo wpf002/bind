@@ -24,24 +24,13 @@ made for engineers.
 | Changes feed: publishes, transitions and failed source checks as events, GET /changes, Atom at /changes.atom, Changes page | a5d5559, 7755bb3, c598d4b, d573dc1 |
 | Submit for engineers: building, property, jurisdictions, the required-by and blocked-by rules with sources, workaround; accept opens a draft case with the property linked | 055555c, d85a34e, f739cfa, 82953f3, e379a4f |
 | Instruments: a slug per provision, Instruments index by jurisdiction, one page per instrument with its provisions and cases by role, GET /instruments and GET /instruments/:slug, case page links | eb96962, 7213e39, ef4809a, 0148243 |
+| Corpus versions: releases ledger (`2026.11`, `.2` for a second release in a month), `pnpm release`, `corpus_released` change event, the version in /export/json, /openapi.json, the Atom feed, BibTeX and LaTeX headers, the site footer and GET /version; strong ETags with 304 on the exports, the OpenAPI document and the changes | 1373357, ff0f6fa, 3e9c0be, c4500ec, e95c067 |
 
 ## Next
 
 In order. Each item ships on its own.
 
-### 1. Corpus versions
-
-Integrators pin what they read. Stamp the corpus with a version (`2026.11`,
-bumped by one command that also writes a `corpus_released` change event) and
-carry it in `/export/json`, `/openapi.json`, the Atom feed and the case
-page footer. Serve `ETag` on the exports and the OpenAPI document
-and answer `304` to `If-None-Match`, so a client polling for a new version
-costs nothing until there is one.
-
-Done when: every export names the same version, a bump shows in the Changes
-feed, and a repeated export request with the ETag returns 304.
-
-### 2. Design note
+### 1. Design note
 
 The Check result has to leave the site and land in a design review. Add
 `GET /check.md` and a Copy Note button on the Check page that produce a
