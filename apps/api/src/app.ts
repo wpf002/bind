@@ -11,6 +11,8 @@ import {
   caseTableTeX,
   caseToBibTeX,
   checkQuerySchema,
+  designNote,
+  DESIGN_NOTE_FILENAME,
   resolveCheckSelection,
   runCheck,
   shapeTableTeX,
@@ -34,6 +36,7 @@ import {
   listCases,
   listChanges,
   listCheckCases,
+  listCheckNoteCases,
   listInstruments,
   listJurisdictions,
   listProperties,
@@ -89,6 +92,7 @@ const ATOM_TYPE = "application/atom+xml";
 const BIBTEX_TYPE = "application/x-bibtex";
 const LATEX_TYPE = "application/x-tex";
 const JSON_TYPE = "application/json";
+const MARKDOWN_TYPE = "text/markdown";
 const utf8 = (type: string) => `${type}; charset=utf-8`;
 
 const isZodSchema = (value: unknown): value is z.ZodTypeAny =>
@@ -291,6 +295,36 @@ export async function buildApp(options: AppOptions) {
       });
       const shapes = runCheck(cases, selection);
       return { selection, count: shapes.reduce((n, g) => n + g.cases.length, 0), shapes };
+    }
+  );
+
+  api.get(
+    "/check.md",
+    {
+      config: CACHED,
+      schema: {
+        summary: "The design check as a Markdown note: one section per shape, one per case with citations, workarounds and outcome",
+        querystring: checkQuerySchema,
+        produces: [MARKDOWN_TYPE],
+        response: { 200: z.string(), 400: badRequestSchema },
+      },
+    },
+    async (req, reply) => {
+      const [cases, properties, jurisdictions, current] = await Promise.all([listCheckNoteCases(), listProperties(), listJurisdictions(), release()]);
+      const selection = resolveCheckSelection(req.query, {
+        properties: properties.map((p) => p.slug),
+        jurisdictions: jurisdictions.map((j) => j.code),
+      });
+      const names = {
+        properties: properties.filter((p) => selection.properties.includes(p.slug)).map((p) => p.name),
+        jurisdictions: jurisdictions.filter((j) => selection.jurisdictions.includes(j.code)).map((j) => j.name),
+      };
+      const body = designNote({ selection: names, shapes: runCheck(cases, selection), release: current, siteUrl });
+      return reply
+        .type(utf8(MARKDOWN_TYPE))
+        .header("content-disposition", `inline; filename="${DESIGN_NOTE_FILENAME}"`)
+        .header("cache-control", EXPORT_CACHE_CONTROL)
+        .send(body);
     }
   );
 

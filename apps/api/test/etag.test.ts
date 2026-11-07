@@ -6,7 +6,7 @@ import { FIXTURE_RELEASE, buildTestApp, seedCorpus } from "./fixtures";
 import { ifNoneMatchMatches, strongEtag } from "../src/etag";
 
 /** Every document a client polls for a new corpus version. */
-const CACHED_ROUTES = ["/export/json", "/export/bibtex", "/export/latex", "/openapi.json", "/changes.atom", "/changes", "/version"];
+const CACHED_ROUTES = ["/export/json", "/export/bibtex", "/export/latex", "/openapi.json", "/changes.atom", "/changes", "/version", "/check.md"];
 const SHA256_HEX_LENGTH = 64;
 
 let app: Awaited<ReturnType<typeof buildTestApp>>;
