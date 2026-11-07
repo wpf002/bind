@@ -25,22 +25,11 @@ made for engineers.
 | Submit for engineers: building, property, jurisdictions, the required-by and blocked-by rules with sources, workaround; accept opens a draft case with the property linked | 055555c, d85a34e, f739cfa, 82953f3, e379a4f |
 | Instruments: a slug per provision, Instruments index by jurisdiction, one page per instrument with its provisions and cases by role, GET /instruments and GET /instruments/:slug, case page links | eb96962, 7213e39, ef4809a, 0148243 |
 | Corpus versions: releases ledger (`2026.11`, `.2` for a second release in a month), `pnpm release`, `corpus_released` change event, the version in /export/json, /openapi.json, the Atom feed, BibTeX and LaTeX headers, the site footer and GET /version; strong ETags with 304 on the exports, the OpenAPI document and the changes | 1373357, ff0f6fa, 3e9c0be, c4500ec, e95c067 |
+| Design note: GET /check.md renders the Check selection as GitHub Markdown (one section per shape, one per case with citations by role, workarounds and outcome, the corpus version and date); Copy Note and Download on the Check page; a test asserts the note and GET /check name the same cases for every property and jurisdiction pair | 0be6ff3, f5f1eca, 3b248ac, 613b90b, 7a07f51 |
 
 ## Next
 
-In order. Each item ships on its own.
-
-### 1. Design note
-
-The Check result has to leave the site and land in a design review. Add
-`GET /check.md` and a Copy Note button on the Check page that produce a
-Markdown note for the selection: the properties and jurisdictions picked,
-each shape, each case with its citations, workarounds and outcome, and the
-corpus version and date.
-
-Done when: the note for a selection names the same cases as the page, pastes
-into a GitHub comment without broken formatting, and a test asserts the two
-agree for every property and jurisdiction pair.
+Every planned item has shipped. New items come from submissions and from use of the Check page.
 
 ## Not planned
 
