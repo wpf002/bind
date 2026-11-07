@@ -77,7 +77,11 @@ const citationLine = (i: NoteInstrument) => {
   return `- ${escapeMarkdown(`${i.shortName} ${i.provision}`)}, ${i.role}${source}`;
 };
 
-const workaroundLine = (w: NoteWorkaround) => `- ${escapeMarkdown(w.technique)}: ${escapeMarkdown(w.residual)}`;
+/** A workaround and what it gives up; one with nothing recorded against it is just its technique. */
+const workaroundLine = (w: NoteWorkaround) => {
+  const residual = escapeMarkdown(w.residual);
+  return residual ? `- ${escapeMarkdown(w.technique)}: ${residual}` : `- ${escapeMarkdown(w.technique)}`;
+};
 
 function outcomeLine(c: NoteCase, url: string): string {
   const resolvability = RESOLVABILITY_LABEL[c.resolvability];

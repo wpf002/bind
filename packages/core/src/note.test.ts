@@ -78,6 +78,12 @@ describe("designNote", () => {
     expect(md).toContain("Outcome: Unresolvable. [Case page](https://bind.example/case/bind-0001)");
   });
 
+  it("prints a workaround with nothing recorded against it as its technique alone", () => {
+    const md = note([{ ...ledger, workarounds: [{ technique: "Off-chain storage", residual: "  " }] }]);
+    expect(md).toContain("\n- Off-chain storage\n");
+    expect(md).not.toContain("Off-chain storage:");
+  });
+
   it("names the resolution and who resolved it, and says when nothing is recorded", () => {
     const md = note([keyless]);
     expect(md).toContain("Outcome: Resolvable, Costly. Resolved by engineering (Operator redesign). [Case page](https://bind.example/case/bind-0004)");
