@@ -227,6 +227,29 @@ export async function listCheckCases(opts: { includeDrafts?: boolean } = {}) {
 
 export type CheckCaseRow = Awaited<ReturnType<typeof listCheckCases>>[number];
 
+/**
+ * Every published case with what the design note prints: the check slugs plus title, statement,
+ * instruments by role with their source, workarounds and the resolver. Reads the case page's include,
+ * so the note and the page draw on the same rows. Drafts only with includeDrafts.
+ */
+export async function listCheckNoteCases(opts: { includeDrafts?: boolean } = {}) {
+  const status = (opts.includeDrafts ?? previewDrafts) ? undefined : ("published" as const);
+  const rows = await prisma.case.findMany({ where: { status }, orderBy: { sortKey: "asc" }, include: caseInclude });
+  return rows.map(({ properties, instruments, paperingOvers, ...c }) => ({
+    ...toPropertyCase({ ...c, instruments }),
+    properties: properties.map((x) => x.property.slug).sort(),
+    instruments: instruments.map(({ role, instrument }) => ({
+      role,
+      shortName: instrument.shortName,
+      provision: instrument.provision,
+      sourceUrl: instrument.sourceUrl || null,
+    })),
+    workarounds: paperingOvers.map((w) => ({ technique: w.technique, residual: w.residual })),
+  }));
+}
+
+export type CheckNoteCaseRow = Awaited<ReturnType<typeof listCheckNoteCases>>[number];
+
 const instrumentCaseSelect = {
   id: true,
   slug: true,
