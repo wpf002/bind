@@ -7,6 +7,7 @@ export * from "./resolutions.js";
 export * from "./sourceCheck.js";
 export * from "./properties.js";
 export * from "./check.js";
+export * from "./note.js";
 export * from "./changes.js";
 export * from "./instruments.js";
 export * from "./releases.js";

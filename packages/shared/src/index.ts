@@ -184,6 +184,7 @@ export type ReleasesLedger = z.infer<typeof releasesLedgerSchema>;
 
 /** Enum values the JSON export carries. Each mirrors a Prisma enum of the same name. */
 export const INSTRUMENT_ROLE = ["mandating", "conflicting", "context"] as const;
+export type InstrumentRole = (typeof INSTRUMENT_ROLE)[number];
 export const LEGAL_STANDING = ["untested", "endorsed_by_regulator", "rejected_by_regulator", "litigated_unresolved", "academic_only"] as const;
 export const SOURCE_CHECK = ["current", "changed", "blocked", "unreachable"] as const;
 
