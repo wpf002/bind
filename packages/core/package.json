@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@bind/shared": "workspace:*",
-    "zod": "^3.25.76"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "marked": "18.1.2",
